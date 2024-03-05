@@ -15,12 +15,7 @@ import './signUp.css'
 
 
 function FormSignUp(){
-    useEffect(() => {
-            axios
-            .get('http://127.0.0.1:8000')
-            .then(response => console.log(response.data))
-            .catch(error => console.error(error));
-        }, []);
+
 
     const{
         register,
@@ -30,7 +25,19 @@ function FormSignUp(){
     } = useForm();
 
     const onSubmit = (data) => {
-        console.log(JSON.stringify(data))
+        fetch('http://127.0.0.1:8000/auth/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        })
+        .then(response => {
+        // обработка ответа от сервера
+        })
+        .catch(error => {
+        // обработка ошибки
+        });
     }
 
     return (
@@ -38,10 +45,10 @@ function FormSignUp(){
             <h2>Регистрация</h2>
             <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                 <label for="last-name">Фамилия:</label>
-                <input {...register("lastName")} type="text" id="last-name" required />
+                <input {...register("surname")} type="text" id="last-name" required />
 
                 <label for="first-name">Имя:</label>
-                <input {...register("firstName")} type="text" id="first-name" required />
+                <input {...register("name")} type="text" id="first-name" required />
 
                 <label for="email">Email:</label>
                 <input {...register("email")} type="email" id="email" name="email" required />
@@ -50,7 +57,7 @@ function FormSignUp(){
                 <input {...register("password")} type="password" id="password" name="password" required />
 
                 <label for="confirm-password">Подтверждение пароля:</label>
-                <input {...register("confirmPassword")} type="password" id="confirm-password" required />
+                <input {...register("confirmation_password")} type="password" id="confirm-password" required />
 
                 <button type="submit">Зарегистрироваться</button>
             </form>
