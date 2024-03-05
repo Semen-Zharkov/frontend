@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import styles from'./request.css'
 
 
-const Header = () =>{
+const FormRequest = () =>{
     return (
         <section className={styles.form_question}>
           <Link to="/">UDD LLMM </Link>
@@ -27,4 +27,4 @@ const Header = () =>{
     );
 }
 
-export default Header;
+export default FormRequest;
