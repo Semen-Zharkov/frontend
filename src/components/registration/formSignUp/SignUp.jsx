@@ -33,10 +33,10 @@ function FormSignUp(){
         body: JSON.stringify(data),
         })
         .then(response => {
-        // обработка ответа от сервера
+//             console.log(response.json)
         })
         .catch(error => {
-        // обработка ошибки
+            console.log('perinsffgafg')
         });
     }
 
