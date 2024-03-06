@@ -1,17 +1,6 @@
-import { Link } from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import './signUp.css'
-
-// interface MyForm{
-//     lastName: string;
-//     firstName: string;
-//     email: string;
-//     password: string;
-//     confirmPassword: string;
-
-// }
 
 
 function FormSignUp(){
@@ -33,10 +22,8 @@ function FormSignUp(){
         body: JSON.stringify(data),
         })
         .then(response => {
-//             console.log(response.json)
         })
         .catch(error => {
-            console.log('perinsffgafg')
         });
     }
 

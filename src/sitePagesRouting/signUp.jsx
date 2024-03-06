@@ -4,7 +4,7 @@ import FormSignUp from '../components/registration/formSignUp/SignUp'
 // import MainContent from './MainContent';
 // import Footer from './Footer';
 
-const Main = () => {
+const SingUp = () => {
     return (
         <div>
             <Header />
@@ -13,4 +13,4 @@ const Main = () => {
     );
 }
 
-export default Main;
+export default SingUp;

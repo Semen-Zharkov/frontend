@@ -3,6 +3,7 @@ import axios from 'axios';
 import { BrowserRouter, Routes, Route  } from 'react-router-dom';
 import Main from './sitePagesRouting/main'
 import SignUp from './sitePagesRouting/signUp'
+import LogIn from './sitePagesRouting/logIn'
 // import Header from './components/main/header/Header'
 // import Test from './components/test/formTest/scriptCreateTest'
 // import Request from './components/request/formRequest/Request'
@@ -23,6 +24,7 @@ function App() {
       <Routes>
           <Route path="/" element={<Main /> } />
           <Route path="/signUp" element={<SignUp />} />
+          <Route path="/logIn" element={<LogIn />} />
           {/* <Route path="test" element={<Test />} />
           <Route path="request" element={<Request />} />
           <Route path="signup" element={<S/>} /> */}
