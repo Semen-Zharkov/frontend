@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-import {Table} from 'reactstrap';
 
 
 function checkLogIn(){
-  fetch('http://127.0.0.1:8000/users/me', {
-        method: 'POST',
+  const isAuthenticated = localStorage.getItem('isAuthenticated') === 'true';
+  if (isAuthenticated) {
+    // Пользователь авторизован, выполните необходимые действия
+    fetch('http://127.0.0.1:8000/users/me', {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },
@@ -16,6 +18,11 @@ function checkLogIn(){
         })
         .catch(error => {
         });
+  }
+  else{
+    console.log('Не авторизован')
+  }
+
 }
 
 export default checkLogIn
