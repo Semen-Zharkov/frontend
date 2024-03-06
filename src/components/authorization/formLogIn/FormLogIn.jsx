@@ -12,14 +12,22 @@ function FormLogIn(){
     } = useForm();
 
     const onSubmit = (data) => {
-        fetch('http://127.0.0.1:8000',{
+        fetch('http://127.0.0.1:8000/auth/login',{
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: JSON.stringify(data),
+        body: new URLSearchParams({
+       'grant_type': '',
+       'username': data['username'],
+       'password': data['password'],
+       'scope': '',
+       'client_id': '',
+       'client_secret': '',
+        }),
         })
         .then(response => {
+        console.log(response)
         })
         .catch(error => {
         });
@@ -30,8 +38,8 @@ function FormLogIn(){
         <form class="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
             <h2>Форма авторизации</h2>
 
-            <label for="email">Email:</label>
-            <input {...register("email")} type="email" id="email" name="email" required />
+            <label for="username">Email:</label>
+            <input {...register("username")} type="email" id="username" name="username" required />
 
             <label for="password">Пароль:</label>
             <input {...register("password")} type="password" id="password" name="password" required />
