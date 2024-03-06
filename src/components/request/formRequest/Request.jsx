@@ -1,30 +1,98 @@
-import { Link } from 'react-router-dom';
-import styles from'./request.css'
+import React, {Component} from 'react';
+import axios from 'axios';
+
+import {Table} from 'reactstrap';
 
 
-const FormRequest = () =>{
-    return (
-        <section className={styles.form_question}>
-          <Link to="/">UDD LLMM </Link>
-          <form action="/process_answer_questions" method="post" enctype="multipart/form-data">
-            <p class="form-title"> Введите текст или добавьте файл с Вашего устройства </p>
-            <div class="form-text">
-              <textarea name="text_for_search_answers" placeholder="Текст для генерации"></textarea>
-            </div>
-            <div class="form-text_question">
-              <textarea name="asked_questions_text" placeholder="Пишите каждый вопрос с новой строки"></textarea>
-            </div>
-            <div class="input_file_question">
-              <div class="input-file">
-                <input type="file" name="file" accept=".docx, .doc, .pdf, .txt, .zip"/>
-                <label for="file"><span> Выберите файл </span> </label>
-              </div>
-              <input type="submit" name="send" value="Получить ответ" />
-            </div>
-          </form>
-          <div id="answer_output"></div>
-        </section>
-    );
+function checkLogIn(){
+  fetch('http://127.0.0.1:8000/users/me', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        })
+        .then(response => {
+          console.log(response)
+        })
+        .catch(error => {
+        });
 }
 
-export default FormRequest;
+export default checkLogIn
+// class Newpage extends Component {
+// //   constructor(props){
+// //     super(props);
+
+// //     this.state = {
+// //       token: '',
+// //       items: []
+// //     };
+// //   }
+
+// //   async componentDidMount(){
+// //     const authResponse =  
+// //     fetch('http://127.0.0.1:8000/auth/register', {
+// //       method: 'POST',
+// //       headers: {
+// //           'Content-Type': 'application/json',
+// //       },
+// //         email: 'user1@email.com',
+// //         password: '!password!'
+// //       })
+// //       .then(response => {
+// //       })
+// //       .catch(error => {
+// //       });
+
+// //     const token = authResponse.data.access_token
+
+// //     const articlesResponse =  
+// //     fetch('http://127.0.0.1:8000/auth/register', {
+// //       method: 'POST',
+// //       headers: { 
+// //           'Authorization': 'Cookie ' + token
+// //         }
+// //       }
+// //     );
+
+// //     const items = articlesResponse.data;
+
+// //     this.setState({
+// //       items,
+// //       token
+// //     });
+// //   }
+
+// //   render() {
+// //     const {token, items} = this.state;
+
+// //     return (
+// //       <div>g
+// //         {token}
+// //         <Table>
+// //           <thead>
+// //             <tr>
+// //               <th>#</th>
+// //               <th>Title</th>
+// //               <th>Price</th>
+// //               <th>Actions</th>
+// //             </tr>
+// //           </thead>
+// //           <tbody>
+// //             {
+// //               items.map(item => (
+// //                 <tr key={item.id}>
+// //                   <td>{item.id}</td>
+// //                   <td>{item.name}</td>
+// //                   <td>{item.price}</td>
+// //                 </tr>
+// //               ))
+// //             }
+// //           </tbody>
+// //         </Table>
+// //       </div>
+// //     );
+// //   }
+// // }
+
+// export default Newpage;

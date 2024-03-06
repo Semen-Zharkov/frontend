@@ -1,7 +1,24 @@
 import { Link } from 'react-router-dom';
 import './header.css'
 
+
 const Header = () =>{
+    fetch('http://localhost:8000/users/me', {
+    method: 'GET',
+    headers: {
+        'Authorization': 'Bearer <your_access_token>'
+    }
+    })
+    .then(response => response.json())
+    .then(data => {
+    // Обработка данных об авторизованном пользователе
+    console.log(data);
+    })
+    .catch(error => {
+    console.error('Ошибка:', error);
+    });
+
+
     return (
         <header class="page-header">
             <nav class="main-nav">
