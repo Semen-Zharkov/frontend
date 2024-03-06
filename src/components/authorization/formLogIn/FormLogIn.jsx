@@ -27,7 +27,6 @@ function FormLogIn(){
         }),
         })
         .then(response => {
-            localStorage.setItem('isAuthenticated', 'true');
         })
         .catch(error => {
         });
