@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import './header.css'
-
+import React, { useEffect, useState } from 'react';
+import handleLogout from '../../../scripts/logOut'
 
 const Header = () =>{
     // fetch('http://localhost:8000/users/me', {
@@ -16,7 +17,20 @@ const Header = () =>{
     // })
     // .catch(error => {
     // console.error('Ошибка:', error);
-    // });
+    // // });
+    // const [accessToken, setAccessToken] = useState('yourAccessToken');
+    // fetch('http://127.0.0.1:8000/users/me', {
+    //     method: 'GET',
+    //     headers: {
+    //         'Authorization': Bearer ${accessToken},
+    //     },
+    //     withCredentials: true,
+    //     })
+    //     .then(response => {
+    //         console.log(response)
+    //     })
+    //     .catch(error => {
+    //     });
 
 
     return (
@@ -31,13 +45,16 @@ const Header = () =>{
                     </li>
                     <li>
                         <div class="button">
-                            <Link to="/request" class="btn-request" href='test.html' className="button"> <p>Задать тест</p> </Link>
-                            <Link to="/test" class="btn-test" href='request.html' className="button"> <p>Задать вопрос</p> </Link>
+                            <Link to="/request" class="btn-request" className="button"> <p>Задать тест</p> </Link>
+                            <Link to="/test" class="btn-test" className="button"> <p>Задать вопрос</p> </Link>
                             <Link to="/signUp" class="btn-signUp"  className="button">
                                  <p>Sign Up</p>
                             </Link>
                             <Link to="/logIn" class="btn-signIp"  className="button">
                                  <p>Sign In</p>
+                            </Link>
+                            <Link to="/" class="btn-logOut" onClick={handleLogout}  className="button">
+                                 <p>Log out</p>
                             </Link>
                         </div>
                     </li>

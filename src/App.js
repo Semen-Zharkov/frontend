@@ -27,9 +27,6 @@ function App() {
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/logIn" element={<LogIn />} />
           <Route path="request" element={<Request />} />
-          {/* <Route path="test" element={<Test />} />
-          <Route path="request" element={<Request />} />
-          <Route path="signup" element={<S/>} /> */}
       </Routes>
     </BrowserRouter>
   )

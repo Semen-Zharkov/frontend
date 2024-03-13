@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 import Userfront, { SignupForm } from "@userfront/toolkit/react";
 
 
