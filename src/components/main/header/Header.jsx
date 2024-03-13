@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import './header.css'
 import React, { useEffect, useState } from 'react';
-import handleLogout from '../../../scripts/logOut'
+import {LogoutComponent} from '../../../scripts/logOut'
 
 const Header = () =>{
     // fetch('http://localhost:8000/users/me', {
@@ -53,7 +53,7 @@ const Header = () =>{
                             <Link to="/logIn" class="btn-signIp"  className="button">
                                  <p>Sign In</p>
                             </Link>
-                            <Link to="/" class="btn-logOut" onClick={handleLogout}  className="button">
+                            <Link to="/" class="btn-logOut" onClick={LogoutComponent}  className="button">
                                  <p>Log out</p>
                             </Link>
                         </div>

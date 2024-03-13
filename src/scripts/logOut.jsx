@@ -1,11 +1,11 @@
 import React from 'react';
 
 const LogoutComponent = () => {
-  const handleLogout = () => {
     // Удаляем токен из локального хранилища
-    localStorage.removeItem('token');
-    // Дополнительно можно выполнить какие-то действия, например, перенаправление на страницу входа или обновление интерфейса
-  }
-  return;
+    fetch('https://553f-5-165-8-39.ngrok-free.app/auth/logout', {
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json', // Установка Content-Type на application/json
+      }}
 }
 export default LogoutComponent;
