@@ -1,38 +1,8 @@
 import { Link } from 'react-router-dom';
 import './header.css'
-import React, { useEffect, useState } from 'react';
 import {LogoutComponent} from '../../../scripts/logOut'
 
 const Header = () =>{
-    // fetch('http://localhost:8000/users/me', {
-    // method: 'GET',
-    // headers: {
-    //     'Authorization': 'Bearer <your_access_token>'
-    // }
-    // })
-    // .then(response => response.json())
-    // .then(data => {
-    // // Обработка данных об авторизованном пользователе
-    // console.log(data);
-    // })
-    // .catch(error => {
-    // console.error('Ошибка:', error);
-    // // });
-    // const [accessToken, setAccessToken] = useState('yourAccessToken');
-    // fetch('http://127.0.0.1:8000/users/me', {
-    //     method: 'GET',
-    //     headers: {
-    //         'Authorization': Bearer ${accessToken},
-    //     },
-    //     withCredentials: true,
-    //     })
-    //     .then(response => {
-    //         console.log(response)
-    //     })
-    //     .catch(error => {
-    //     });
-
-
     return (
         <header class="page-header">
             <nav class="main-nav">
@@ -51,7 +21,7 @@ const Header = () =>{
                                  <p>Sign Up</p>
                             </Link>
                             <Link to="/logIn" class="btn-signIp"  className="button">
-                                 <p>Sign In</p>
+                                 <p>Log In</p>
                             </Link>
                             <Link to="/" class="btn-logOut" onClick={LogoutComponent}  className="button">
                                  <p>Log out</p>

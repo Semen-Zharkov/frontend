@@ -17,8 +17,9 @@ export function LogoutComponent(){
         } else {
             console.error('Logout request failed');
         }
-    } catch (error) {
-        console.error('Logout error:', error);
+        } catch (error) {
+            console.error('Logout error:', error);
+        }
     }
-}
+    logout();
 }
