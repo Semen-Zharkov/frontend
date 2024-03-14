@@ -15,7 +15,7 @@ function FormSignUp(){
     } = useForm();
 
     const onSubmit = async (data) => {
-        fetch('http://127.0.0.1:8000/auth/register', {
+        fetch('https://3c59-5-165-8-39.ngrok-free.app/auth/register', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

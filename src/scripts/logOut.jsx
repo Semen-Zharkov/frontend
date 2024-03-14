@@ -5,7 +5,7 @@ export function LogoutComponent(){
     const logout = async () => {
     try {
         // Отправка запроса на выход пользователя
-        const response = await fetch('https://553f-5-165-8-39.ngrok-free.app/auth/logout', {
+        const response = await fetch('https://3c59-5-165-8-39.ngrok-free.app/auth/logout', {
             method: 'POST',
             credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
         });
