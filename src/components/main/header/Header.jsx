@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
 import './header.css'
 import {LogoutComponent} from '../../../scripts/logOut'
+import {RequestUserInformation } from '../../../scripts/userInformation';
 
-const Header = () =>{
+function Header(){
+    RequestUserInformation()
+    // const {isLoggedIn} = RequestUserInformation()
     return (
         <header class="page-header">
             <nav class="main-nav">
@@ -17,9 +20,9 @@ const Header = () =>{
                         <div class="button">
                             <Link to="/request" class="btn-request" className="button"> <p>Задать тест</p> </Link>
                             <Link to="/test" class="btn-test" className="button"> <p>Задать вопрос</p> </Link>
-                            <Link to="/signUp" class="btn-signUp"  className="button">
+                            {(<Link to="/signUp" class="btn-signUp"  className="button">
                                  <p>Sign Up</p>
-                            </Link>
+                            </Link>)}
                             <Link to="/logIn" class="btn-signIp"  className="button">
                                  <p>Log In</p>
                             </Link>
@@ -33,5 +36,4 @@ const Header = () =>{
         </header>
     );
 }
-
 export default Header;
