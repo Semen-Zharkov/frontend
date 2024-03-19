@@ -5,6 +5,8 @@ import './signUp.css'
 
 function FormSignUp(){
 
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const [token, setToken] = useState('');
     const{
         register,
@@ -15,7 +17,7 @@ function FormSignUp(){
     } = useForm();
 
     const onSubmit = async (data) => {
-        fetch('https://f20a-5-165-8-39.ngrok-free.app/auth/register', {
+        fetch(`${apiUrl}/auth/register`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

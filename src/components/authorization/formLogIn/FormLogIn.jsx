@@ -4,10 +4,10 @@ import './formLogIn.css';
 import { RequestUserInformation } from '../../../scripts/userInformation';
 
 function FormLogIn(){
-    const [token, setToken] = useState('');
+    const {isLoggedIn, setIsLoggedIn} = RequestUserInformation()
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
+    const apiUrl = process.env.REACT_APP_API_URL;
     const{
         register,
         reset,
@@ -18,7 +18,7 @@ function FormLogIn(){
 
     const onSubmit = async (data) => {
     // Отправка запроса на вход
-    fetch('https://f20a-5-165-8-39.ngrok-free.app/auth/login',{
+    fetch(`${apiUrl}/auth/login`,{
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -38,8 +38,34 @@ function FormLogIn(){
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
+        // setIsLoggedIn(true);
         // Если запрос на вход выполнен успешно, отправляем запрос на /users/me
-        RequestUserInformation()
+        fetch(`${apiUrl}/users/me`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json', // Установка Content-Type на application/json
+            },
+        }).then(response => {
+            if (!response.ok) {
+            throw new Error('Ошибка HTTP: ' + response.status);
+            }
+
+            setIsLoggedIn(true);
+            // Преобразование ответа в формат JSON
+            return response.json();
+            
+        })
+        .then(data => {
+            // Обработка полученных данных
+            console.log(data)
+            // Здесь вы можете обновить состояние компонента или выполнить другие действия с полученными данными
+
+        })
+        .catch(error => {
+            // Обработка ошибок
+            console.error('Ошибка при выполнении запроса:', error);
+        })
     })
     .then(response => {
         // Обработка ответа на запрос /users/me

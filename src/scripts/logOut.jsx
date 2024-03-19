@@ -1,13 +1,14 @@
-import React from 'react';
+
 import {RequestUserInformation} from './userInformation';
 
 export function LogoutComponent(){
     // const {setIsLoggedIn} = RequestUserInformation();
-    
+    const apiUrl = process.env.REACT_APP_API_URL;
+
     const logout = async () => {
     try {
         // Отправка запроса на выход пользователя
-        const response = await fetch('https://f20a-5-165-8-39.ngrok-free.app/auth/logout', {
+        const response = await fetch(`${apiUrl}/auth/logout`, {
             method: 'POST',
             credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
         });

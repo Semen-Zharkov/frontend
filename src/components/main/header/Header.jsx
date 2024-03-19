@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom';
 import './header.css'
 import {LogoutComponent} from '../../../scripts/logOut'
-import {RequestUserInformation } from '../../../scripts/userInformation';
+import {RequestUserInformation} from '../../../scripts/userInformation';
 
 function Header(){
-    RequestUserInformation()
-    // const {isLoggedIn} = RequestUserInformation()
+    // RequestUserInformation()
+    // const {isLoggedIn, setIsLoggedIn} = RequestUserInformation()
     return (
         <header class="page-header">
             <nav class="main-nav">
