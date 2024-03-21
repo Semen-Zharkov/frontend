@@ -1,13 +1,10 @@
 import {useForm} from 'react-hook-form';
-import React, { useEffect, useState } from 'react';
 import './signUp.css'
 
 
 function FormSignUp(){
 
     const apiUrl = process.env.REACT_APP_API_URL;
-
-    const [token, setToken] = useState('');
     const{
         register,
         reset,

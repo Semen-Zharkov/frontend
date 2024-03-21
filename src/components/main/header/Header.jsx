@@ -1,11 +1,18 @@
 import { Link } from 'react-router-dom';
-import './header.css'
-import {LogoutComponent} from '../../../scripts/logOut'
-import {RequestUserInformation} from '../../../scripts/userInformation';
+import React, { useState } from 'react';
+import './header.css';
+import {LogoutComponent} from '../../../scripts/logOut';
+import FormLogIn from '../../authorization/formLogIn/FormLogIn'
 
 function Header(){
     // RequestUserInformation()
-    // const {isLoggedIn, setIsLoggedIn} = RequestUserInformation()
+    const {isLoggedIn, setIsLoggedIn} = FormLogIn() // Состояние isLoggedIn
+
+    // Вызов функции RequestUserInformation для получения информации о состоянии авторизаци
+    
+    console.log(isLoggedIn)
+
+
     return (
         <header class="page-header">
             <nav class="main-nav">
@@ -18,17 +25,19 @@ function Header(){
                     </li>
                     <li>
                         <div class="button">
-                            <Link to="/request" class="btn-request" className="button"> <p>Задать тест</p> </Link>
+                            <Link to="/upload_file" class="btn-upload" className="button"> <p>Загрузить файл</p> </Link>
+                            <Link to="/request_test" class="btn-request-test" className="button"> <p>Задать тест</p> </Link>
+                            <Link to="/request_answer_questions" class="btn-request-answer" className="button"> <p>Задать вопрос</p> </Link>
                             <Link to="/test" class="btn-test" className="button"> <p>Задать вопрос</p> </Link>
-                            {(<Link to="/signUp" class="btn-signUp"  className="button">
+                            {!isLoggedIn&&(<Link to="/signUp" class="btn-signUp"  className="button">
                                  <p>Sign Up</p>
                             </Link>)}
-                            <Link to="/logIn" class="btn-signIp"  className="button">
+                            {!isLoggedIn&&(<Link to="/logIn" class="btn-signIp"  className="button">
                                  <p>Log In</p>
-                            </Link>
-                            <Link to="/" class="btn-logOut" onClick={LogoutComponent}  className="button">
+                            </Link>)}
+                            {!isLoggedIn&&(<Link to="/" class="btn-logOut" onClick={LogoutComponent}  className="button">
                                  <p>Log out</p>
-                            </Link>
+                            </Link>)}
                         </div>
                     </li>
                 </ul>

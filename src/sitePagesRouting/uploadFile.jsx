@@ -1,16 +1,16 @@
 import React from 'react';
 import Header from '../components/main/header/Header';
-import Requests from '../components/request/formRequest/Request'
+import FormUploadFile from '../components/uploadFile/UploadFile'
 // import MainContent from './MainContent';
 // import Footer from './Footer';
 
-const Request = () => {
+const UploadFile = () => {
     return (
         <div>
             <Header />
-            <Requests />
+            <FormUploadFile />
         </div>
     );
 }
 
-export default Request ;
+export default UploadFile;

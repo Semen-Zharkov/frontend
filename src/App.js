@@ -4,8 +4,9 @@ import { BrowserRouter, Routes, Route  } from 'react-router-dom';
 import Main from './sitePagesRouting/main'
 import SignUp from './sitePagesRouting/signUp'
 import LogIn from './sitePagesRouting/logIn'
-import Request from './sitePagesRouting/request'
-
+import RequestTest from './sitePagesRouting/requestTest'
+import UploadFile from './sitePagesRouting/uploadFile'
+import RequestAnwserQuestions from './sitePagesRouting/requestAnswerQuestion'
 
 function App() {
   
@@ -15,7 +16,9 @@ function App() {
           <Route path="/" element={<Main /> } />
           <Route path="/signUp" element={<SignUp />} />
           <Route path="/logIn" element={<LogIn />} />
-          <Route path="request" element={<Request />} />
+          <Route path="/request_test" element={<RequestTest />} />
+          <Route path="/request_answer_questions" element={<RequestAnwserQuestions />} />
+          <Route path="/upload_file" element={<UploadFile />} />
       </Routes>
     </BrowserRouter>
   )
