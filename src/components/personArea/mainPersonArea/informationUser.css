@@ -1,0 +1,10 @@
+.account-information {
+    padding-top: 100px;
+    color: #000;
+    max-width: 700px;
+    margin: 0 auto;
+}
+.inform-list-item{
+    display: flex;
+    text-align: left;
+}

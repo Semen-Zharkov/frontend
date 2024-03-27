@@ -1,9 +1,8 @@
-import FormLogIn from '../components/authorization/formLogIn/FormLogIn'
+import { RequestUserMe } from "./usersMe";
 
-export function LogoutComponent(){
-    // const {setIsLoggedIn} = RequestUserInformation();
+export const LogoutComponent=() => {
     const apiUrl = process.env.REACT_APP_API_URL;
-    // const {isLoggedIn,setIsLoggedIn} = FormLogIn();
+    
     const logout = async () => {
     try {
         // Отправка запроса на выход пользователя
@@ -14,7 +13,7 @@ export function LogoutComponent(){
         // setIsLoggedIn(false);
         // Проверка успешности выполнения запроса на выход
         if (response.ok) {
-
+            // insStateLogInFalse();
             console.log('User logged out successfully');
             // Выполните здесь необходимые действия после выхода пользователя (например, перенаправление на страницу входа)
         } else {

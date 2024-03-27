@@ -2,12 +2,12 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import './formLogIn.css';
 import axios from 'axios';
+import { useAuth } from '../../../scripts/usersMe';
 
 export default function FormLogIn() {
-    
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isLoggedIn, setIsLoggedIn] = useState('');
+    const {isLoggedIn, insStateLogInTrue } = useAuth(); // Используем хук useAuth здесь
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -29,37 +29,20 @@ export default function FormLogIn() {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-        })
-            .then(response => {
-                setIsLoggedIn('true')
-                // Проверка успешности запроса на вход
-                if (response.status !== 204) {
-                    throw new Error('Network response was not ok');
-                }
-                fetch(`${apiUrl}/users/me`, {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }}).then(response => {
-                        if(response.status!==200){
-                            throw new Error('Network response was not ok');
-                        }
-                        
-                        
-                    }).catch(error => {
-                        console.error('There was a problem with your fetch operation:', error);
-                    })
-
-                // Сброс значений полей
-                reset();
-            })
-            .catch(error => {
-                console.error('There was a problem with your fetch operation:', error);
-            });
+        }).then(response => {
+            // Проверка успешности запроса на вход
+            if (response.status !== 204) {
+                throw new Error('Network response was not ok');
+            }
+            insStateLogInTrue(); // Устанавливаем статус авторизации в true
+            // Сброс значений полей
+            reset();
+        }).catch(error => {
+            console.error('There was a problem with your fetch operation:', error);
+        });
     }
 
-    return(
+    return (
         <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
             <h2>Форма авторизации</h2>
 
@@ -71,6 +54,5 @@ export default function FormLogIn() {
 
             <button type="submit">Войти</button>
         </form>
-    )
+    );
 }
-
