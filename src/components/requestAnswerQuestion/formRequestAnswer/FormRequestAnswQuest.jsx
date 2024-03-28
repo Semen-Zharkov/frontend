@@ -27,9 +27,9 @@ const FormTest = () => {
                     throw new Error('Network response was not ok');
                 }
                 const responseData = await response.json(); // Получение данных из ответа
-                setAswerServer(responseData.result_from_gigachatAPI.result);
+                setAswerServer(responseData.result_from_gigachatAPI);
                 console.log(answerServer)
-                console.log('Ответ от сервера:', responseData.result_from_gigachatAPI.result);
+                console.log('Ответ от сервера:', responseData.result_from_gigachatAPI);
             } catch (error) {
                 console.error('Ошибка при отправке запроса:', error);
             }

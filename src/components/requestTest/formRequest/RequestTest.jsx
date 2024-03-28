@@ -1,58 +1,75 @@
-import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
-import '../../authorization/formLogIn/FormLogIn';
+import { useForm } from 'react-hook-form';
+import './requestTest.css'
 
 const FormTest = () => {
     const [filename, setFilename] = useState('');
     const [queNum, setQueNum] = useState('');
+    const [questionData, setQuestionData] = useState(null);
+    const [selectedAnswer, setSelectedAnswer] = useState('');
+    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
     const [answerServer, setAswerServer] = useState('');
 
     const apiUrl = process.env.REACT_APP_API_URL;
-    const {
-        register,
-        reset,
-        handleSubmit,
-    } = useForm();
+    const { register, handleSubmit } = useForm();
 
-    const onSubmitTest = async (data) => {
-            const formData = new FormData();
-            formData.append('filename', filename); // Добавление файла в FormData
-            formData.append('gue_num', queNum);
-            try {
-                const response = await fetch(`${apiUrl}/get_test?filename=${filename}&que_num=${queNum}`, {
-                    method: 'POST',
-                    credentials: 'include',
+    const onSubmitTest = async () => {
+        try {
+            const response = await fetch(`${apiUrl}/get_test?filename=${filename}&que_num=${queNum}`, {
+                method: 'POST',
+                credentials: 'include',
+            });
 
-                    
-                });
-        
-                if (!response.ok) {
-                    setAswerServer(`Возникла ошибка при обработке запроса: ${response}`)
-                    throw new Error('Network response was not ok');
-                }
-        
-                const responseData = await response.json(); // Получение данных из ответа
-                setAswerServer(responseData.result_from_gigachatAPI.result)
-            } catch (error) {
-                setAswerServer(`Ошибка при отправке запроса:${error}`);
+            if (!response.ok) {
+                throw new Error(`Возникла ошибка при обработке запроса: ${response}`);
             }
 
-    }
+            const responseData = await response.json();
+            setQuestionData(responseData['result_1']);
+            console.log(questionData)
+            setSelectedAnswer('');
+            setIsAnswerCorrect(null);
+        } catch (error) {
+            setAswerServer(`Ошибка при отправке запроса: ${error}`);
+        }
+    };
+
+    const handleAnswerSelection = (answer) => {
+        setSelectedAnswer(answer);
+        setIsAnswerCorrect(answer === questionData['right answer']);
+    };
 
     return (
         <>
-            <form class='form-container' action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
+            <form className='form-container' onSubmit={handleSubmit(onSubmitTest)}>
                 <label htmlFor="filename">Название файла:</label>
-                <input
-                    {...register("filename")} type="text" value={filename} onChange={(e) => setFilename(e.target.value)} id="filename" name="filename" required />
+                <input {...register("filename")} type="text" value={filename} onChange={(e) => setFilename(e.target.value)} id="filename" name="filename" required />
+
                 <label htmlFor="que_num">Количество вопросов:</label>
-                <input
-                    {...register("que_num")} type="numder" value={queNum} onChange={(e) => setQueNum(e.target.value)} id="que_num" name="que_num" required
-                />
+                <input {...register("que_num")} type="number" value={queNum} onChange={(e) => setQueNum(e.target.value)} id="que_num" name="que_num" required />
+
                 <button type="submit">Отправить</button>
             </form>
-            {answerServer &&(<div className='answer'>{answerServer}</div>)}
+
+            {questionData && (
+                <div className='question-container'>
+                    <h3>Вопрос:</h3>
+                    <p>{questionData.question}</p>
+
+                    <h3>Варианты ответов:</h3>
+                    <ul>
+                        {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
+                            <li key={index} onClick={() => handleAnswerSelection(questionData[optionKey])} style={{ cursor: 'pointer', backgroundColor: selectedAnswer === questionData[optionKey] ? (isAnswerCorrect ? 'green' : 'red') : 'transparent' }}>
+                                {questionData[optionKey]}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            )}
+
+            {answerServer && (<div className='answer'>{answerServer}</div>)}
         </>
     );
 };
+
 export default FormTest;

@@ -1,7 +1,10 @@
+*{
+    list-style: none;
+}
 .form_question{
     display: flex;
 }
-.form-container {
+.question-container{
     font-family: Arial, sans-serif;
     margin: 100px auto 0px;
     padding: 0;

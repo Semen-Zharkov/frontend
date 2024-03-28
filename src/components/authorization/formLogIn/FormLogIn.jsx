@@ -2,9 +2,12 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import './formLogIn.css';
 import axios from 'axios';
+import { Link, Route} from 'react-router-dom';
 import { useAuth } from '../../../scripts/usersMe';
+import { Redirect } from 'react-router-dom';
 
 export default function FormLogIn() {
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const {isLoggedIn, insStateLogInTrue } = useAuth(); // Используем хук useAuth здесь
@@ -14,6 +17,7 @@ export default function FormLogIn() {
         reset,
         handleSubmit,
     } = useForm();
+
 
     const onSubmit = async (data) => {
         // Отправка запроса на вход
