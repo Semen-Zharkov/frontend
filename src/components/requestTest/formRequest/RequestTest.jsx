@@ -15,7 +15,7 @@ const FormTest = () => {
 
     const onSubmitTest = async () => {
         try {
-            const response = await fetch(`${apiUrl}/get_test?filename=${filename}&que_num=${queNum}`, {
+            const response = await fetch(`${apiUrl}/get_test?filename=${filename}`, {
                 method: 'POST',
                 credentials: 'include',
             });
@@ -25,7 +25,7 @@ const FormTest = () => {
             }
 
             const responseData = await response.json();
-            setQuestionData(responseData['result_1']);
+            setQuestionData(responseData['result']);
             console.log(questionData)
             setSelectedAnswer('');
             setIsAnswerCorrect(null);
@@ -44,9 +44,6 @@ const FormTest = () => {
             <form className='form-container' onSubmit={handleSubmit(onSubmitTest)}>
                 <label htmlFor="filename">Название файла:</label>
                 <input {...register("filename")} type="text" value={filename} onChange={(e) => setFilename(e.target.value)} id="filename" name="filename" required />
-
-                <label htmlFor="que_num">Количество вопросов:</label>
-                <input {...register("que_num")} type="number" value={queNum} onChange={(e) => setQueNum(e.target.value)} id="que_num" name="que_num" required />
 
                 <button type="submit">Отправить</button>
             </form>

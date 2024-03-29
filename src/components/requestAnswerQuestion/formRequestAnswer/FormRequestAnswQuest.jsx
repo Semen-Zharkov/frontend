@@ -18,9 +18,7 @@ const FormTest = () => {
             try {
                 const response = await fetch(`${apiUrl}/get_answer?filename=${filename}&question=${question}`, {
                     method: 'POST',
-                    credentials: 'include',
-
-                    
+                    credentials: 'include',                   
                 });
                 
                 if (!response.ok) {

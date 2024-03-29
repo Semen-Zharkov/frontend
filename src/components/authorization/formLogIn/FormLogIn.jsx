@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import './formLogIn.css';
 import axios from 'axios';
-import { Link, Route} from 'react-router-dom';
+import { Link, Route, Navigate} from 'react-router-dom';
 import { useAuth } from '../../../scripts/usersMe';
 import { Redirect } from 'react-router-dom';
 
@@ -40,12 +40,13 @@ export default function FormLogIn() {
             }
             insStateLogInTrue(); // Устанавливаем статус авторизации в true
             // Сброс значений полей
-            reset();
         }).catch(error => {
             console.error('There was a problem with your fetch operation:', error);
         });
     }
-
+    if (isLoggedIn) {
+        return <Navigate to="/" replace />;
+    }
     return (
         <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
             <h2>Форма авторизации</h2>

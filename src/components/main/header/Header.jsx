@@ -31,7 +31,7 @@ function Header(){
                         {!isLoggedIn &&(<Link to="/logIn" class="btn-signIp"  className="button">
                                 <p>Log In</p>
                         </Link>)}
-                        {isLoggedIn &&(<Link to="/" class="btn-logOut" onClick={LogoutComponent}  className="button">
+                        {!isLoggedIn &&(<Link class="btn-logOut" onClick={LogoutComponent}  className="button">
                                 <p>Log out</p>
                         </Link>)}
                         {isLoggedIn &&(<Link to="/person_account" class="btn-user-lk"  className="button">
