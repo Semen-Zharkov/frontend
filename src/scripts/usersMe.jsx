@@ -4,15 +4,7 @@ export const useAuth = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState('');
-
-
-    const insStateLogInTrue = () => {
-        setIsLoggedIn(true);
-    };
-
-    const insStateLogInFalse = () => {
-        setIsLoggedIn(false);
-    };
+    const [isAuthChecked, setIsAuthChecked] = useState(false); // Добавляем состояние для проверки завершения запроса на авторизацию
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -29,10 +21,12 @@ export const useAuth = () => {
                 }
                 const userData = await response.json();
                 setUserData(userData);
-                insStateLogInTrue();
-                console.log("User data:", userData); // Вывод данных пользователя в консоль
+                setIsLoggedIn(true);
+                console.log()
             } catch (error) {
                 console.error("Error fetching user data:", error);
+            } finally {
+                setIsAuthChecked(true); // Устанавливаем состояние завершения проверки авторизации в true вне зависимости от результата запроса
             }
         };
 
@@ -41,5 +35,5 @@ export const useAuth = () => {
         }
     }, []);
 
-    return { isLoggedIn, userData, insStateLogInFalse, insStateLogInTrue};
+    return { isLoggedIn, userData, isAuthChecked }; // Возвращаем также состояние isAuthChecked
 };

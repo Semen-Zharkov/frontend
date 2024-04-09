@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import { BrowserRouter, Routes, Route  } from 'react-router-dom';
 import Main from './sitePagesRouting/main';
 import SignUp from './sitePagesRouting/signUp';
@@ -8,9 +7,9 @@ import RequestTest from './sitePagesRouting/requestTest';
 import UploadFile from './sitePagesRouting/uploadFile';
 import RequestAnwserQuestions from './sitePagesRouting/requestAnswerQuestion';
 import PersonArea from './sitePagesRouting/personArea';
+import {PrivateRoute} from './scripts/PrivateRoute';
 
-function App() {
-  
+function App() {  
   return (
     <BrowserRouter>
       <Routes>
@@ -19,8 +18,11 @@ function App() {
           <Route path="/logIn" element={<LogIn />} />
           <Route path="/request_test" element={<RequestTest />} />
           <Route path="/request_answer_questions" element={<RequestAnwserQuestions />} />
-          <Route path="/upload_file" element={<UploadFile />} />
-          <Route path="/person_account" element={<PersonArea />} />
+          <Route element={<PrivateRoute />} >
+            <Route path="/upload_file" element={<UploadFile />} />
+            <Route path="/person_account" element={<PersonArea />} />
+            <Route path="/signUp" element={<SignUp />} />
+          </Route>
       </Routes>
     </BrowserRouter>
   )

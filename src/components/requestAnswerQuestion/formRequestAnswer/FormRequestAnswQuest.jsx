@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import './formRequestAnswQuest.css';
 
 const FormTest = () => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const param = searchParams.get('documentation');
     const [filename, setFilename] = useState('');
     const [question, setQuestion] = useState('');
     const [answerServer, setAswerServer] = useState('');
@@ -16,7 +18,7 @@ const FormTest = () => {
 
     const onSubmitTest = async () => {
             try {
-                const response = await fetch(`${apiUrl}/get_answer?filename=${filename}&question=${question}`, {
+                const response = await fetch(`${apiUrl}/get_answer?filename=${param}&question=${question}`, {
                     method: 'POST',
                     credentials: 'include',                   
                 });
@@ -25,9 +27,7 @@ const FormTest = () => {
                     throw new Error('Network response was not ok');
                 }
                 const responseData = await response.json(); // Получение данных из ответа
-                setAswerServer(responseData.result_from_gigachatAPI);
-                console.log(answerServer)
-                console.log('Ответ от сервера:', responseData.result_from_gigachatAPI);
+                setAswerServer(responseData)
             } catch (error) {
                 console.error('Ошибка при отправке запроса:', error);
             }
@@ -38,9 +38,7 @@ const FormTest = () => {
     return (
         <>
             <form class='form-container' action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
-                <label htmlFor="filename">Название файла:</label>
-                <input
-                    {...register("filename")} type="text" value={filename} onChange={(e) => {setFilename(e.target.value)}} id="filename" name="filename" required />
+                <div htmlFor="filename">Ответ создаётся на основе документации {param}</div>
                 <label htmlFor="question">Ваш вопрос:</label>
                 <input
                     {...register("question")} type="text" value={question} onChange={(e) => setQuestion(e.target.value)} id="question" name="question" required
@@ -49,7 +47,14 @@ const FormTest = () => {
             </form>
             {answerServer && (
                 <div className="answer">
-                    <p>Ответ от сервера: {answerServer}</p>
+                    <div className="questions-container">
+                        <p>Ваш вопрос:</p>
+                        <p>{answerServer.question}</p>
+                    </div>
+                    <div className="answer-container">
+                        <p>Ответ:</p>
+                        <p>{answerServer.answer}</p>
+                    </div>
                 </div>
             )}
             

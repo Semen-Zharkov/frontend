@@ -4,12 +4,13 @@ import './formLogIn.css';
 import axios from 'axios';
 import { Link, Route, Navigate} from 'react-router-dom';
 import { useAuth } from '../../../scripts/usersMe';
-import { Redirect } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function FormLogIn() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
     const {isLoggedIn, insStateLogInTrue } = useAuth(); // Используем хук useAuth здесь
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
@@ -39,13 +40,16 @@ export default function FormLogIn() {
                 throw new Error('Network response was not ok');
             }
             insStateLogInTrue(); // Устанавливаем статус авторизации в true
+            navigate('/');
+            redirectLogin();
+            props.history.push('/')
             // Сброс значений полей
         }).catch(error => {
             console.error('There was a problem with your fetch operation:', error);
         });
     }
-    if (isLoggedIn) {
-        return <Navigate to="/" replace />;
+    const redirectLogin = () => {
+        navigate('/');
     }
     return (
         <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>

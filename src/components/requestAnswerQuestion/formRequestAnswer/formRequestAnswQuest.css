@@ -1,6 +1,9 @@
 .answer{
-    padding-top: 100px;
+    padding-top: 20px;
     color:black;
     margin: 0 auto;
     max-width: 1000px;
+}
+.answer-container{
+    margin-top: 20px;
 }
