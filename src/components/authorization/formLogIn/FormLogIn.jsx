@@ -1,8 +1,7 @@
 import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import './formLogIn.css';
-import axios from 'axios';
-import { Link, Route, Navigate} from 'react-router-dom';
+import { Link, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../../../scripts/usersMe';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,8 +9,6 @@ export default function FormLogIn() {
 
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const navigate = useNavigate();
-    const {isLoggedIn, insStateLogInTrue } = useAuth(); // Используем хук useAuth здесь
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -19,37 +16,35 @@ export default function FormLogIn() {
         handleSubmit,
     } = useForm();
 
+    const navigate = useNavigate();
 
     const onSubmit = async (data) => {
-        // Отправка запроса на вход
-        axios.post(`${apiUrl}/auth/login`, new URLSearchParams({
-            'grant_type': '',
-            'username': data['username'],
-            'password': data['password'],
-            'scope': '',
-            'client_id': '',
-            'client_secret': '',
-        }), {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-        }).then(response => {
-            // Проверка успешности запроса на вход
-            if (response.status !== 204) {
+        try {
+            const response = await fetch(`${apiUrl}/auth/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: new URLSearchParams({
+                    'grant_type': '',
+                    'username': data['username'],
+                    'password': data['password'],
+                    'scope': '',
+                    'client_id': '',
+                    'client_secret': '',
+                }).toString(),
+                credentials: 'include',
+            });
+
+            if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            insStateLogInTrue(); // Устанавливаем статус авторизации в true
             navigate('/');
-            redirectLogin();
-            // Сброс значений полей
-        }).catch(error => {
+        } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
-        });
+        }
     }
-    const redirectLogin = () => {
-        navigate('/');
-    }
+
     return (
         <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
             <h2>Форма авторизации</h2>

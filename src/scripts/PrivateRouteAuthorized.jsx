@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Navigate, Outlet} from 'react-router-dom';
 import { useAuth } from './usersMe';
 
-export const PrivateRoute = () => {
+export const PrivateRouteAuthorized = () => {
   // Проверяем аутентификацию пользователя
   
     const { isLoggedIn, isAuthChecked } = useAuth();
@@ -11,6 +11,6 @@ export const PrivateRoute = () => {
         return null;
     }
     return(
-        isLoggedIn? <Outlet /> : <Navigate to="/logIn" />
+        !isLoggedIn? <Outlet /> : <Navigate to="/person_account" />
     );
 }

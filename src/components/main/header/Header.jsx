@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import React from 'react';
 import './header.css';
-import { LogoutComponent } from '../../../scripts/logOut';
+import { logout } from '../../../scripts/logOut';
 import { useAuth } from '../../../scripts/usersMe';
 
 function Header() {
@@ -31,7 +31,7 @@ function Header() {
                                 <Link to="/person_account" className="btn-user-lk button">
                                     <p>Личный кабинет</p>
                                 </Link>
-                                <Link className="btn-logOut button" onClick={LogoutComponent}>
+                                <Link className="btn-logOut button" onClick={logout}>
                                     <p>Log out</p>
                                 </Link>
                             </>
