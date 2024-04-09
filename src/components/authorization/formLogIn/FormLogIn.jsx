@@ -42,7 +42,6 @@ export default function FormLogIn() {
             insStateLogInTrue(); // Устанавливаем статус авторизации в true
             navigate('/');
             redirectLogin();
-            props.history.push('/')
             // Сброс значений полей
         }).catch(error => {
             console.error('There was a problem with your fetch operation:', error);
