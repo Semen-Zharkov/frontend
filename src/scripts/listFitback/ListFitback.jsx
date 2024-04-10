@@ -1,11 +1,9 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
-import './seachForDocumentation.css';
-import {useAuth} from '../../scripts/usersMe'
-import {RemovingDocumentation} from '../../scripts/removingDocumentation'
+import '../../components/personArea/mainPersonArea/informationUser.css';
+import { FitbackViewed } from './FitbackViewed';
 
-const SeachForDocumentation = ({ onClick }) => {
-    const { userData } = useAuth(); // Состояние isLoggedIn
+const ListFitback = () => {
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -17,20 +15,13 @@ const SeachForDocumentation = ({ onClick }) => {
         handleSubmit,
     } = useForm();
 
-    const copyTextToClipboard = async (text) => {
-        try {
-            await navigator.clipboard.writeText(text);
-        } catch (err) {
-            console.error('Ошибка:', err);
-        }
-    };
 
-    const toggleDropdown = async () => {
+    const toggleDropdown = async (flag) => {
         if (!isOpen) {
             try {
                 // Отправка запроса при открытии списка
-                const response = await fetch(`${apiUrl}/docks/my`, {
-                    method: 'GET',
+                const response = await fetch(`${apiUrl}/admin/get_feedback?all_feedbacks=${flag}`, {
+                    method: 'POST',
                     credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
                 });
                 if (response.ok) {
@@ -45,31 +36,36 @@ const SeachForDocumentation = ({ onClick }) => {
         setIsOpen(!isOpen);
     };
 
-    const removingDoc =(doc_name)=>{
-        RemovingDocumentation(doc_name)
+    const fitbackViewed = (id) => {
+        FitbackViewed(id);
     }
+
 
     return (
         <div className="dropdown-container">
+            <div>Фитбеки</div>
             <div className="dropdown">
-                <button onClick={toggleDropdown}>Открыть список</button>
+                <div className='btn-feedback-container'>
+                    <button onClick={() => (toggleDropdown(true))}>Все фитбеки</button>
+                    <button onClick={() => (toggleDropdown(false))}>Не просмотрененные фитбеки</button>
+                </div>
                 {isOpen && data.length > 0 && (
                     <ul>
                         {data.map((item, index) => (
                             <li key={index}>
-                                {item['name']}
-                                <button onClick={() => copyTextToClipboard(`${apiUrlFront}/request_documentation?documentation=${item['name']}`)}>URL для запросов</button>
-                                <button onClick={() => removingDoc(item['name'])}>Удалить документацию</button>
+                                {item['value']} {item['user_comment']} <br/>
+                                {item['llm_response']}
+                                <button fitbackViewed={ () => (fitbackViewed(item['id'])) }>Просмотрено</button>
                             </li>
                         ))}
                     </ul>
                 )}
                 {isOpen && data.length === 0 && (
-                    <div>Вы не добавили ни одной документации</div>
+                    <div>Нет пользователей на верефикацию</div>
                 )}
             </div>
         </div>
     );
 }
 
-export default SeachForDocumentation;
+export default ListFitback;

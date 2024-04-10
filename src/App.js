@@ -3,9 +3,8 @@ import { BrowserRouter, Routes, Route  } from 'react-router-dom';
 import Main from './sitePagesRouting/main';
 import SignUp from './sitePagesRouting/signUp';
 import LogIn from './sitePagesRouting/logIn';
-import RequestTest from './sitePagesRouting/requestTest';
+import RequestDocumentation from './sitePagesRouting/requestDocumentation';
 import UploadFile from './sitePagesRouting/uploadFile';
-import RequestAnwserQuestions from './sitePagesRouting/requestAnswerQuestion';
 import PersonArea from './sitePagesRouting/personArea';
 import {PrivateRouteUnauthorized} from './scripts/PrivateRouteUnauthorized';
 import { PrivateRouteAuthorized } from './scripts/PrivateRouteAuthorized';
@@ -15,8 +14,7 @@ function App() {
     <BrowserRouter>
       <Routes>
           <Route path="/" element={<Main /> } />
-          <Route path="/request_test" element={<RequestTest />} />
-          <Route path="/request_answer_questions" element={<RequestAnwserQuestions />} />
+          <Route path="/request_documentation" element={<RequestDocumentation />} />
           <Route element={<PrivateRouteUnauthorized />} >
             <Route path="/upload_file" element={<UploadFile />} />
             <Route path="/person_account" element={<PersonArea />} />

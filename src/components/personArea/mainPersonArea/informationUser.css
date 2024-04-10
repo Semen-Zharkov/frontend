@@ -5,6 +5,9 @@
     margin: 0 auto;
 }
 .inform-list-item{
-    display: flex;
     text-align: left;
+}
+.account-information {
+    display: flex;
+    flex-direction: column;
 }

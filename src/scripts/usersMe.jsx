@@ -22,7 +22,6 @@ export const useAuth = () => {
                 const userData = await response.json();
                 setUserData(userData);
                 setIsLoggedIn(true);
-                console.log()
             } catch (error) {
                 console.error("Error fetching user data:", error);
             } finally {
@@ -34,6 +33,5 @@ export const useAuth = () => {
             fetchUserData();
         }
     }, []);
-
-    return { isLoggedIn, userData, isAuthChecked }; // Возвращаем также состояние isAuthChecked
+    return { isLoggedIn, userData, isAuthChecked}; // Возвращаем также состояние isAuthChecked
 };

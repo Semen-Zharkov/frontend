@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import React, { useState } from 'react';
 import './formRequestAnswQuest.css';
 
-const FormTest = () => {
+const RequestsAnswer = () => {
     const searchParams = new URLSearchParams(window.location.search);
     const param = searchParams.get('documentation');
     const [filename, setFilename] = useState('');
@@ -61,4 +61,4 @@ const FormTest = () => {
         </>
     );
 };
-export default FormTest;
+export default RequestsAnswer;

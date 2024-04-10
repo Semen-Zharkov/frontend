@@ -7,7 +7,6 @@ const PersonArea = () => {
     return (
         <div>
             <Header />
-            <SeachForDocumentation/>
             <InformationUser/>
         </div>
     );

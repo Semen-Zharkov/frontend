@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import './requestTest.css';
-import DataProvider from '../../userComments/UserComments';
+import '../requestDocumentation/requestDocumentation/requestDocumentation.css'
 
-const FormTest = () => {
+const RequestsTest = () =>{
     const searchParams = new URLSearchParams(window.location.search);
     const param = searchParams.get('documentation');
     const [questionData, setQuestionData] = useState(null);
@@ -60,33 +59,34 @@ const FormTest = () => {
             });
         }
     };
-    return (
-        <>
-            <form className='form-container' onSubmit={handleSubmit(onSubmitTest)} >
-                <div htmlFor="filename">Тест получается на основе документации {param}</div>
 
-                <button type="submit">Отправить</button>
-            </form>
+    return(
+        <div>
+                <form className='form-container' onSubmit={handleSubmit(onSubmitTest)} >
+                    <div htmlFor="filename">Тест получается на основе документации {param}</div>
 
-            {questionData && (
-                <div className='question-container'>
-                    <h3>Вопрос:</h3>
-                    <p>{questionData.question}</p>
+                    <button type="submit">Отправить</button>
+                </form>
 
-                    <h3>Варианты ответов:</h3>
-                    <ul>
-                        {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
-                            <li key={index} onClick={() => handleAnswerSelection(questionData[optionKey])} style={{ cursor: 'pointer', backgroundColor: selectedAnswer === questionData[optionKey] ? (isAnswerCorrect ? 'green' : 'red') : 'transparent' }} className="option">
-                                {questionData[optionKey]}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
+                {questionData && (
+                    <div className='question-container'>
+                        <h3>Вопрос:</h3>
+                        <p>{questionData.question}</p>
 
-            <DataProvider asd id={id} result={result}/>
-        </>
-    );
-};
+                        <h3>Варианты ответов:</h3>
+                        <ul>
+                            {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
+                                <li key={index} onClick={() => handleAnswerSelection(questionData[optionKey])} style={{ cursor: 'pointer', backgroundColor: selectedAnswer === questionData[optionKey] ? (isAnswerCorrect ? 'green' : 'red') : 'transparent' }} className="option">
+                                    {questionData[optionKey]}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                )}
 
-export default FormTest;
+                {/* <DataProvider id={id} result={result}/> */}
+        </div>
+    )
+}
+
+export default RequestsTest;

@@ -26,8 +26,6 @@ function Header() {
                         {isLoggedIn ? (
                             <>
                                 <Link to="/upload_file" className="btn-upload button"> <p>Загрузить файл</p> </Link>
-                                <Link to="/request_test" className="btn-request-test button"> <p>Задать тест</p> </Link>
-                                <Link to="/request_answer_questions" className="btn-request-answer button"> <p>Задать вопрос</p> </Link>
                                 <Link to="/person_account" className="btn-user-lk button">
                                     <p>Личный кабинет</p>
                                 </Link>
