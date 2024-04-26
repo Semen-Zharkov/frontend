@@ -75,7 +75,7 @@ const UserComments=(props)=>{
             />
         </div>
 
-        <label htmlFor="fitbackText">Обратная связь:</label>
+        <label htmlFor="fitbackText">Обратная связь: </label>
         <input
             {...register("fitbackText")}
             type="text"
@@ -85,7 +85,7 @@ const UserComments=(props)=>{
             name="fitbackText"
             required
         />
-        <button type="button" onClick={fetchData}>Отправить фитбек</button>
+        <button onClick={fetchData} type="button">Отправить фитбек</button>
     </form>
     );
 }
