@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import Header from '../components/main/header/Header';
-import RequestDocumentation from '../components/requestDocumentation/requestDocumentation/RequestDocumentation'
-
+import React from 'react';
+import { FlagProvider } from '../flagContext';
+import RequestDocumentation from '../components/requestDocumentation/RequestDocumentation';
 
 const Request = () => {
-    return (
-        <div>
-            <Header />
-            <RequestDocumentation />
-            
-        </div>
-    );
-}
+  return (
+    <FlagProvider>
+      
+        <RequestDocumentation />
+    </FlagProvider>
+  );
+};
 
-export default Request ;
+export default Request;

@@ -1,43 +1,79 @@
 .form-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
     font-family: Arial, sans-serif;
     margin: 100px auto 0px;
-    padding: 0;
-    display: flex;
+    padding: 32px 0px;
     color: #000;
-    flex-direction: column;
-    max-width: 400px;
-    justify-content: start;
-    align-items: center;
-}
-
-.form-container {
-    padding: 20px;
+    max-width: 416px;
+    text-align: center;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+.form-container-brim {
+    width: 369px;
+    margin-bottom: 16px;
+}
+
+.form-container-brim div {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container-brim label {
+    display: flex;
+}
+button.btn__pass.js-btn-password {
+    position: absolute;
+    top: 30px;
+    right: 12px;
+    background-color: white;
+}
 
 .form-container h2 {
-    text-align: center;
+    position: absolute;
+    top: -48px;
 }
 
 .form-container input {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+    max-width: 344px;
+    padding: 8px 12px;
+    margin: 4px 0px 16px;
+    border: 1px solid rgba(0,0,0,0.15);
+    border-radius: 5px;
 }
 
-.form-container button {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
+.submit-form {
+    min-width: 200px;
+    padding: 10px 0px;
+    background-color: #31D9AF;
     color: #fff;
-    border: none;
-    border-radius: 3px;
+    border-radius: 5px;
+    /* border-radius: 3px; */
     cursor: pointer;
 }
 
-.form-container button:hover {
-    background-color: #0056b3;
+
+.submit-form:hover {
+    opacity: 0.6;
+}
+
+.btn-forgot {
+    margin-bottom: 12px;
+}
+.block-registr{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn__pass{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    top: 27px;
+    right: 12px;
 }

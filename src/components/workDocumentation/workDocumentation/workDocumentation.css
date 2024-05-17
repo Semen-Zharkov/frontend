@@ -1,0 +1,84 @@
+/* @font-face {
+    font-family: 'Montserrat';
+    src: url() format('ttf');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'Montserrat';
+    src: url(/react/src/assets/fonts/static/Montserrat-Regular.ttf) format('ttf');
+    font-weight: 400;
+} */
+
+section.container-documentation {
+    max-width: 848px;
+    margin: 0 auto;
+    margin-top: 48px;
+}
+
+.block-all-documentation{
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+
+}
+
+.container-documentation-btn {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-add{
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    width: 200px;
+    padding: 10px 0;
+    background: #31D9AF;
+    border-radius: 5px;
+    color: #FFFFFF;
+    border: none;
+}
+
+.container-list-btn {
+    display: flex;
+    min-width: 192px;
+    background: #2432;
+    padding: 8px 0;
+    justify-content: center;
+    border-radius: 3px;
+}
+
+.btn-download {
+    display: flex;
+    gap: 10px;
+}
+
+ul.documentation-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+li.documentation-list-item {
+    display: flex;
+    gap: 20px;
+    flex-direction: column;
+    padding: 32px 24px;
+    background: #FAF7F6;
+}
+
+li.documentation-list-item .title{
+    font-family: Montserrat;
+    font-weight: 500;
+    font-size: 18px;
+
+}
+
+li.documentation-list-item .description{
+    font-family: Montserrat;
+    font-weight: 400;
+    font-size: 16px;
+    
+}

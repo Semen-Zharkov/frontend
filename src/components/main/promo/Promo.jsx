@@ -3,7 +3,7 @@ import './promo.css'
 
 const Header = () =>{
     return (
-        <section class="page-header">
+        <section class="main-container">
             <h1>Promo</h1>
         </section>
     );

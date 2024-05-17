@@ -40,10 +40,11 @@ const FormTest = () => {
     return (
         <>
             <form class='form-container' action="#" method="POST" onSubmit={handleSubmit(onSubmitDock)}>
-                <label htmlFor="dockName">Название файла:</label>
+                <h2>Добавление документации</h2>
+                <label htmlFor="dockName">Название</label>
                 <input
                     {...register("dockName")} type="text" value={dockName} onChange={(e) => setDockName(e.target.value)} id="dock_name" name="dock_name" required />
-                <label htmlFor="dockDescription">Описание файла:</label>
+                <label htmlFor="dockDescription">Описание</label>
                 <input
                     {...register("dockDescription")} type="text" value={dockDescription} accept=".pdf,.doc,.docx,.txt,.zip" onChange={(e) => setDockDescription(e.target.value)} id="dock_description" name="dock_description" required
                 />

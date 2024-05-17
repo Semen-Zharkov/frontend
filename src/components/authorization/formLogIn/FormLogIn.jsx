@@ -4,11 +4,17 @@ import './formLogIn.css';
 import { Link, Route, Navigate } from 'react-router-dom';
 import { useAuth } from '../../../scripts/usersMe';
 import { useNavigate } from 'react-router-dom';
+import btnPass from '../../../img/icons/password/Visibility=True.svg'
+import btnPassVisib from '../../../img/icons/password/Visibility=False.svg'
 
 export default function FormLogIn() {
-
+    const [currentImage, setCurrentImage] = useState(btnPass);
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [inputType, setInputType] = useState('password');
+
+    const inputPass = document.querySelector('.js-input-password')
+
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -18,6 +24,11 @@ export default function FormLogIn() {
 
     const navigate = useNavigate();
 
+    const onClickEye = () =>{
+        setCurrentImage(currentImage === btnPass ? (btnPassVisib): (btnPass));
+        setInputType(inputType === 'text' ? 'password' : 'text');
+    }
+    
     const onSubmit = async (data) => {
         try {
             const response = await fetch(`${apiUrl}/auth/login`, {
@@ -47,15 +58,25 @@ export default function FormLogIn() {
 
     return (
         <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-            <h2>Форма авторизации</h2>
-
-            <label htmlFor="username">Email:</label>
-            <input {...register("username")} type="email" value={username} onChange={(e) => setUsername(e.target.value)} id="username" name="username" required />
-
-            <label htmlFor="password">Пароль:</label>
-            <input {...register("password")} type="password" value={password} onChange={(e) => setPassword(e.target.value)} id="password" name="password" required />
-
-            <button type="submit">Войти</button>
+            <h2>Вход</h2>
+            <div className='form-container-brim'>
+                <div className='block-username'>
+                    <label className='username' htmlFor="username">Почта</label>
+                    <input {...register("username")} type="email" value={username} onChange={(e) => setUsername(e.target.value)} id="username" name="username" required />
+                </div>
+                <div className='block-password'>
+                    <label htmlFor="password">Пароль</label>
+                    <input {...register("password")} class='js-input-password' type={inputType} value={password} onChange={(e) => setPassword(e.target.value)} id="password" name="password" required />
+                    
+                    <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt='' fill='none'/>
+                </div>
+                <button className='submit-form' type="submit">Войти</button>
+            </div>
+            <Link to="/forgot_password" className="btn-forgot"> <p>Не помню пароль</p> </Link>
+            <div className='block-registr'>
+                <p>Нет аккаунта?</p>
+                <Link to="/signUp" className="btn-registr"> <p>Зарегистрируйтесь</p> </Link>
+            </div>
         </form>
     );
 }

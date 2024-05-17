@@ -1,13 +1,46 @@
-.account-information {
-    padding-top: 100px;
-    color: #000;
-    max-width: 700px;
+section.container-person-area {
+    max-width: 632px;
     margin: 0 auto;
+    margin-top: 48px;
 }
-.inform-list-item{
-    text-align: left;
+
+.person-area-user {
+    display: flex;
+    background: #f213;
+    padding: 32px 24px;
+    border-radius: 5px;
+    margin-top: 24px;
 }
-.account-information {
+
+
+.user-information {
+    display: flex;
+    gap: 24px;
+}
+
+.user-img {
+    background-color: #D9D9D9;
+    border-radius: 13px;
+    width: 80px;
+    height: 80px;
+}
+
+ul.inform-list {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+}
+
+.user-edit {
+    padding: 32px 24px;
+    background: #3213;
+    margin-top: 48px;
+    display: flex;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.container-edit-info p{
+    margin-top: 8px;
 }

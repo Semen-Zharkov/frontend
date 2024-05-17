@@ -1,25 +1,21 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import '../requestDocumentation/requestDocumentation/requestDocumentation.css'
+import '../workDocumentation/workDocumentation/workDocumentation.css';
 
-const RequestsTest = () =>{
-    const searchParams = new URLSearchParams(window.location.search);
-    const param = searchParams.get('documentation');
+const RequestsTest = (props) => {
     const [questionData, setQuestionData] = useState(null);
     const [selectedAnswer, setSelectedAnswer] = useState('');
     const [id, setId] = useState('');
-    const [result, setResult] = useState('')
+    const [result, setResult] = useState('');
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
-    const [answerServer, setAswerServer] = useState('');
-
-    
+    const [answerServer, setAnswerServer] = useState('');
 
     const apiUrl = process.env.REACT_APP_API_URL;
-    const { register, handleSubmit } = useForm();
+    const { handleSubmit } = useForm();
 
     const onSubmitTest = async () => {
         try {
-            const response = await fetch(`${apiUrl}/get_test?filename=${param}`, {
+            const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
                 method: 'POST',
                 credentials: 'include',
             });
@@ -30,63 +26,47 @@ const RequestsTest = () =>{
 
             const responseData = await response.json();
             setQuestionData(responseData['result']);
-            setId(responseData['request_id'])
-            setResult(responseData['result'])
+            setId(responseData['request_id']);
+            setResult(responseData['result']);
             setSelectedAnswer('');
             setIsAnswerCorrect(null);
         } catch (error) {
-            setAswerServer(`Ошибка при отправке запроса: ${error}`);
+            setAnswerServer(`Ошибка при отправке запроса: ${error}`);
         }
     };
 
     const handleAnswerSelection = (answer) => {
-        // Проверяем, правильный ли ответ
         const isCorrect = answer === questionData['right answer'];
-        
-        // Обновляем состояние isAnswerCorrect
         setIsAnswerCorrect(isCorrect);
-    
         setSelectedAnswer(answer);
-        
-        // Если ответ неправильный, подсвечиваем правильный ответ зеленым
-        if (!isCorrect) {
-            const correctOption = Object.values(questionData).find(val => val === questionData['right answer']);
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => {
-                if (option.textContent === correctOption) {
-                    option.style.backgroundColor = 'green';
-                }
-            });
-        }
     };
 
-    return(
+    return (
         <div>
-                <form className='form-container' onSubmit={handleSubmit(onSubmitTest)} >
-                    <div htmlFor="filename">Тест получается на основе документации {param}</div>
-
-                    <button type="submit">Отправить</button>
-                </form>
-
+            <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>
+                <div>Тесты на основе документации {props.param}</div>
+                <button className='btn-add' type="submit">Сгенерировать тест</button>
                 {questionData && (
                     <div className='question-container'>
-                        <h3>Вопрос:</h3>
                         <p>{questionData.question}</p>
-
-                        <h3>Варианты ответов:</h3>
-                        <ul>
+                        <ul className='test-list'>
                             {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
-                                <li key={index} onClick={() => handleAnswerSelection(questionData[optionKey])} style={{ cursor: 'pointer', backgroundColor: selectedAnswer === questionData[optionKey] ? (isAnswerCorrect ? 'green' : 'red') : 'transparent' }} className="option">
+                                <li
+                                    key={index}
+                                    className={`test-list-item ${selectedAnswer ? (questionData[optionKey] === questionData['right answer'] ? 'answer-right' : (selectedAnswer === questionData[optionKey] ? 'answer-wrong' : '')) : ''}`}
+                                    onClick={() => handleAnswerSelection(questionData[optionKey])}
+                                    style={{ cursor: 'pointer' }}
+                                >
                                     {questionData[optionKey]}
                                 </li>
                             ))}
                         </ul>
                     </div>
                 )}
-
-                {/* <DataProvider id={id} result={result}/> */}
+            </form>
+            {answerServer && <div>{answerServer}</div>}
         </div>
-    )
-}
+    );
+};
 
 export default RequestsTest;
