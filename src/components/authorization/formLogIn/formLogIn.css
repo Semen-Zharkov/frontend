@@ -23,7 +23,7 @@
     flex-direction: column;
 }
 
-.form-container-brim label {
+.form-container label {
     display: flex;
 }
 button.btn__pass.js-btn-password {
@@ -39,7 +39,7 @@ button.btn__pass.js-btn-password {
 }
 
 .form-container input {
-    max-width: 344px;
+    min-width: 344px;
     padding: 8px 12px;
     margin: 4px 0px 16px;
     border: 1px solid rgba(0,0,0,0.15);
@@ -56,6 +56,12 @@ button.btn__pass.js-btn-password {
     cursor: pointer;
 }
 
+.form-container {
+    display: flex;
+    flex-direction: column;
+
+
+}
 
 .submit-form:hover {
     opacity: 0.6;

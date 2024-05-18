@@ -9,7 +9,7 @@ import PersonArea from './sitePagesRouting/personArea';
 import {PrivateRouteUnauthorized} from './scripts/PrivateRouteUnauthorized';
 import { PrivateRouteAuthorized } from './scripts/PrivateRouteAuthorized';
 import FormForgotPassword from './sitePagesRouting/forgotPassword';
-import FormResetPassword from './components/forgotPassword/resetPassword/FormResetPassword';
+import FormResetPassword from './sitePagesRouting/resetPassword';
 import WorkDocumentation from './sitePagesRouting/WorkDocumentation'
 import { FlagProvider } from './flagContext';
 

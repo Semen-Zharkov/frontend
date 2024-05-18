@@ -31,15 +31,16 @@ function FormForgotPassword(){
     }
 
     return (
-        <div class="container">
-            <h2>Восстановление пароля</h2>
-            <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                <label for="email">Email:</label>
-                <input {...register("email")} type="email" id="email" name="email" required />
-
-                <button type="submit">Восстановить пароль</button>
+        <section className="container">
+            <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <h2>Восстановление пароля</h2>
+                <div>
+                    <label for="email">Email</label>
+                    <input {...register("email")} type="email" id="email" name="email" required />
+                </div>
+                <button className='submit-form' type="submit">Восстановить пароль</button>
             </form>
-        </div>
+        </section>
     );
 }
 

@@ -36,18 +36,21 @@ function FormResetPassword(){
     }
 
     return (
-        <div class="container">
-            <h2>Изменение пароля</h2>
-            <form action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                <label for="password">Пароль:</label>
-                <input {...register("password")} type="password" id="password" name="password" required />
+        <section class="container">
+            <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                <h2>Изменение пароля</h2>
+                <div className='password'>
+                    <label for="password">Пароль:</label>
+                    <input {...register("password")} type="password" id="password" name="password" required />
+                </div>
+                <div className='confrirm-password'>
+                    <label for="confirm-password">Подтверждение пароля:</label>
+                    <input {...register("confirmation_password")} type="password" id="confirm-password" required />
+                </div>
 
-                <label for="confirm-password">Подтверждение пароля:</label>
-                <input {...register("confirmation_password")} type="password" id="confirm-password" required />
-
-                <button type="submit">Изменить пароль</button>
+                <button className='submit-form' type="submit">Изменить пароль</button>
             </form>
-        </div>
+        </section>
     );
 }
 

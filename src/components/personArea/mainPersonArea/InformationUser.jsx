@@ -52,7 +52,9 @@ const InformationUser = () => {
                     <p>Последние изменения 13 янв. 2024 г.</p>
                 </div>
                 <div className='container-edit-btn'>
-                    <button className='edit-password button'>Изменить</button>
+                    <button className='edit-password button'>
+                        <Link to="/forgot_password" className="btn-forgot-person"> <p>Изменить</p> </Link>
+                    </button>
                 </div>
             </div>
         </section>
