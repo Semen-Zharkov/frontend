@@ -5,10 +5,9 @@ import { useAuth } from '../../scripts/usersMe';
 import { RemovingDocumentation } from '../../scripts/removingDocumentation';
 
 const SeachForDocumentation = ({ onClick }) => {
-    const { userData } = useAuth(); // Состояние isLoggedIn
+    const { userData, isAuthChecked } = useAuth(); // Состояние isLoggedIn
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(true);
-
     const apiUrl = process.env.REACT_APP_API_URL;
     const apiUrlFront = process.env.REACT_APP_API_FRONT_URL;
     const { register, reset, handleSubmit } = useForm();
@@ -21,30 +20,41 @@ const SeachForDocumentation = ({ onClick }) => {
         }
     };
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Отправка запроса при загрузке страницы
-                const response = await fetch(`${apiUrl}/docks/my`, {
-                    method: 'GET',
-                    credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
-                });
-                if (response.ok) {
-                    setData(await response.json());
-                } else {
-                    console.error('Проблема поиска');
-                }
-            } catch (error) {
-                console.error('Ошибка:', error);
-            }
-        };
+    let userUrl = 'my';
+    if (userData.is_superuser) {
+        userUrl = 'all';
+    }
 
-        fetchData();
-    }, [apiUrl]);
+    useEffect(() => {
+        if (isAuthChecked) {
+            const fetchData = async () => {
+                try {
+                    // Отправка запроса при загрузке страницы
+                    const response = await fetch(`${apiUrl}/docks/${userUrl}`, {
+                        method: 'GET',
+                        credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
+                    });
+                    if (response.ok) {
+                        setData(await response.json());
+                    } else {
+                        console.error('Проблема поиска');
+                    }
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                }
+            };
+
+            fetchData();
+        }
+    }, [isAuthChecked, apiUrl, userUrl]);
 
     const removingDoc = (doc_name) => {
         RemovingDocumentation(doc_name);
     };
+
+    if (!isAuthChecked) {
+        return null;
+    }
 
     return (
         <div className="dropdown-container">

@@ -67,6 +67,7 @@ li.documentation-list-item {
     flex-direction: column;
     padding: 32px 24px;
     background: #FAF7F6;
+    min-width: 584px;
 }
 
 li.documentation-list-item .title{
