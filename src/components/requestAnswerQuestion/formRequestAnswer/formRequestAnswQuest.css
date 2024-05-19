@@ -26,9 +26,11 @@ form.form-container-test{
     gap:24px;
 }
 .block-input {
-    display: flex;
+    position: fixed;
     align-items: center;
+    display: flex;
     gap: 4px;
+    bottom: 40px;
 }
 input#question {
     min-width: 642px;
@@ -92,5 +94,6 @@ input#question {
 
 .answers-list {
     width: 100%;
+    padding-right: 30px;
     margin-bottom: auto;
 }

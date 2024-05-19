@@ -49,7 +49,7 @@ const InformationUser = () => {
             <div className='user-edit'>
                 <div className='container-edit-info'>
                     <h3>Пароль</h3>
-                    <p>Последние изменения 13 янв. 2024 г.</p>
+                    {/* <p>Последние изменения 13 янв. 2024 г.</p> */}
                 </div>
                 <div className='container-edit-btn'>
                     <button className='edit-password button'>

@@ -3,7 +3,12 @@ section.container-person-area {
     margin: 0 auto;
     margin-top: 48px;
 }
-
+.answer, form.block-form-request {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    max-height: 100%;
+}
 .person-area-user {
     display: flex;
     background: #f213;
