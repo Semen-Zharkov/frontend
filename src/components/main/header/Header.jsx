@@ -64,7 +64,10 @@ function Header() {
                 <>
                   <div className='container-lk'>
                     <div className="btn-user-lk" onClick={clickArrowLk}>
-                      <p>{userData.surname} {userData.name}</p>
+                      <div className='user-FIO'>
+                        <p>{userData.surname}</p>
+                        <p>{userData.name}</p>
+                      </div>
                       <img className='btn-arrow' src={arrow} alt='' ref={arrowClickRef} />
                     </div>
                     <div className='nav-lk' ref={visibilityListRef}>

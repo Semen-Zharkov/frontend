@@ -1,6 +1,71 @@
-.fitback-container{
-    margin: 0 auto;
-    margin-top: 70px;
-    max-width: 600px;
+.feedback-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 16px;
     color: #000;
 }
+
+.form-grade {
+    display: flex;
+    gap: 20px;
+}
+.form-feedback{
+    position: absolute;
+    left: 16%;
+    top: 110%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    z-index: 10;
+    background: #FFFFFF;
+    border-radius: 6px;
+    padding: 24px;
+    box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
+}
+textarea#feedbackText {
+    width: 450px;
+    height: 105px;
+    padding: 10px 12px;
+    resize: none;
+}
+.form-feedback-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.container-button {
+    display: flex;
+    gap: 16px;
+}
+
+.form-feedback-block-title {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close-icon{
+    padding-right: 4px;
+}
+/* .close-button {
+    position: absolute;
+    cursor: pointer;
+    right: 45px;
+    top: 35px;
+}
+
+.close-button:before, .close-button:after {
+    content: "";
+    position: absolute; 
+    width: 24px; 
+    height: 4px; 
+    background: gray;
+}
+
+.close-button:before {
+    transform: rotate(45deg);
+}
+
+.close-button:after {
+    transform: rotate(-45deg);
+} */

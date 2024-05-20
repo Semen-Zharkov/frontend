@@ -1,6 +1,6 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const FitbackViewed = async (id) =>{
+export const feedbackViewed = async (id) =>{
     try {
         const response = await fetch(`${apiUrl}/admin/set_viewed?feedback_id=${id}`, {
             method: "POST",

@@ -3,9 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import './informationUser.css';
 import {useAuth} from '../../../scripts/usersMe'
-import UserVerification from '../../../scripts/verification/userVerification';
-import ListFitback from '../../../scripts/listFitback/ListFitback'
-import SeachForDocumentation from '../../seachForDocumentation/SeachForDocumentation';
+import ListFeedback from '../../../scripts/listFeedback/ListFeedback'
+import UserVerification from '../../../scripts/verification/userVerification'
 
 const InformationUser = () => {
 
@@ -30,7 +29,7 @@ const InformationUser = () => {
                     </ul>
                     {/* <SeachForDocumentation />
                     <UserVerification /> */}
-                    {/* <ListFitback /> */}
+                    {/* <Listfeedback /> */}
                 </div>)
             :(
                 <div className='user-information'>
@@ -56,6 +55,10 @@ const InformationUser = () => {
                         <Link to="/forgot_password" className="btn-forgot-person"> <p>Изменить</p> </Link>
                     </button>
                 </div>
+            </div>
+            <div className='verification-container'>
+                <UserVerification />
+
             </div>
         </section>
     )   

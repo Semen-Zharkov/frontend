@@ -70,3 +70,10 @@
     padding: 12px 0px;
     padding-left: 30px;
 }
+.user-FIO {
+    display: flex;
+    justify-content: start;
+    max-width: 170px;
+    flex-wrap: wrap;
+    gap: 5px;
+}

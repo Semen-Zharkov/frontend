@@ -49,15 +49,24 @@ const UserVerification = ({ onClick }) => {
     return (
         <div className="dropdown-container">
             <div className="dropdown">
-                <button onClick={toggleDropdown}>Пользователи на верефикацию</button>
+                <button className='user-verification' onClick={toggleDropdown}>Пользователи на верификацию</button>
                 {isOpen && data.length > 0 && (
-                    <ul>
+                    <ul className='verf-list'>
                         {data.map((item, index) => (
-                            <li key={index}>
-                                {item['info'].name} {item['info'].surname} <br/>
-                                {item['info'].email}
-                                <button onClick={()=>(acceptRequest(item['id']))}>Принять</button>
-                                <button onClick={()=>(rejectRequest(item['id']))}>Отклонить</button>
+                            <li  className='verf-list-item' key={index}>
+                                <div className='verf-item-inform'>
+                                    <div className='inform-user'>
+                                        <p>{item['info'].name}</p>
+                                        <p>{item['info'].surname}</p>
+                                    </div>
+                                    <div className='verf-item-email'>
+                                        <p>{item['info'].email}</p>
+                                    </div>
+                                </div>  
+                                <div className='verf-item-block-btn container-button'>
+                                    <button className='button' onClick={()=>(acceptRequest(item['id']))}>Принять</button>
+                                    <button className='button' onClick={()=>(rejectRequest(item['id']))}>Отклонить</button>
+                                </div>
                             </li>
                         ))}
                     </ul>

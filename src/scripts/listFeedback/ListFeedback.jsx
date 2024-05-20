@@ -1,9 +1,9 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import '../../components/personArea/mainPersonArea/informationUser.css';
-import { FitbackViewed } from './FitbackViewed';
+import { feedbackViewed } from './FeedbackViewed';
 
-const ListFitback = () => {
+const ListFeedback = () => {
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
 
@@ -36,8 +36,8 @@ const ListFitback = () => {
         setIsOpen(!isOpen);
     };
 
-    const fitbackViewed = (id) => {
-        FitbackViewed(id);
+    const feedbackViewed = (id) => {
+        feedbackViewed(id);
     }
 
 
@@ -55,7 +55,7 @@ const ListFitback = () => {
                             <li key={index}>
                                 {item['value']} {item['user_comment']} <br/>
                                 {item['llm_response']}
-                                <button fitbackViewed={ () => (fitbackViewed(item['id'])) }>Просмотрено</button>
+                                <button feedbackViewed={ () => (feedbackViewed(item['id'])) }>Просмотрено</button>
                             </li>
                         ))}
                     </ul>
@@ -68,4 +68,4 @@ const ListFitback = () => {
     );
 }
 
-export default ListFitback;
+export default ListFeedback;

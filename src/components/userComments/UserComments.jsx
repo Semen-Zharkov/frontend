@@ -1,23 +1,25 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import './userComments.css';
-import likeIcon from '../../img/likeIcon.svg';
-import dislikeIcon from '../../img/dislikeIcon.svg';
+import likeIcon from '../../img/like.svg';
+import dislikeIcon from '../../img/dislike.svg';
+import closeForm from '../../img/close.svg'
 
-const UserComments=(props)=>{
-    const [fitbackText, setFitbackText] = useState('');
+export const UserComments=(props)=>{
+    const [feedbackText, setfeedbackText] = useState('');
     const [data, setData] = useState([]);
-    const [fitback,setFitback] = useState('');
+    const [feedback,setfeedback] = useState('');
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
-
+    const [showForm, setShowForm] = useState(false);
+    const [statusRequest, setStatusRequest] = useState('');
     const [nameDoc, setNameDoc] = useState('')
 
     const requestData = {
-        value: fitback,
+        value: feedback,
         llm_response: JSON.stringify(props.result),
-        user_comment: fitbackText,
-        request_id: props.id
+        user_comment: feedbackText,
+        request_id: props.request_id
 
     }
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -28,14 +30,32 @@ const UserComments=(props)=>{
     } = useForm();
 
     const  handlOnClickLike = () => {
-        setFitback('like')
+        setfeedback('like')
         setLikeClicked(!likeClicked);
+        setShowForm(true);
     }
 
     const handlOnClickDislike = () => {
-        setFitback('dislike')
+        setfeedback('dislike')
         setDislikeClicked(!dislikeClicked);
+        setShowForm(true);
     }
+
+    const handlOnClickClose = () => {
+        setDislikeClicked(false);
+        setLikeClicked(false);
+        setShowForm(false);
+        handleCancel();
+    }
+
+    const handleCancel = () => {
+        reset({
+            feedbackText: '',
+        });
+        setfeedbackText(null);
+        setStatusRequest('');
+    };
+
     const fetchData = async () => {
         try {
             // Отправка запроса на выход пользователя
@@ -51,42 +71,58 @@ const UserComments=(props)=>{
             // Проверка успешности выполнения запроса на выход
             if (response.ok) {
                 setData(await response.json());
+                handlOnClickClose();
                 // Выполните здесь необходимые действия после выхода пользователя (например, перенаправление на страницу входа)
             } else {
-                console.error('Fitback request failed');
+                console.error('feedback request failed');
             }
         } catch (error) {
-            console.error('Fitback error:', error);
+            console.error('feedback error:', error);
         }
     }
 
     return (
-        <form className="fitback-container" onSubmit={handleSubmit(fetchData)}>
-        <div>
-            <img alt="like"
-                src={likeIcon}
-                onClick={handlOnClickLike}
-                style={{ filter: likeClicked ? 'invert(100%)' : 'none' }}
-            />
-            <img alt="dislike"
-                src={dislikeIcon}
-                onClick={handlOnClickDislike}
-                style={{ filter: dislikeClicked ? 'invert(100%)' : 'none' }}
-            />
-        </div>
-
-        <label htmlFor="fitbackText">Обратная связь: </label>
-        <input
-            {...register("fitbackText")}
-            type="text"
-            value={fitbackText}
-            onChange={(e) => setFitbackText(e.target.value)}
-            id="fitbackText"
-            name="fitbackText"
-            required
-        />
-        <button onClick={fetchData} type="button">Отправить фитбек</button>
-    </form>
+        <form className="feedback-container" action="#" method="POST">
+            <div className='form-grade'>
+                <img alt="like"
+                    src={likeIcon}
+                    onClick={handlOnClickLike}
+                    style={{ filter: likeClicked ? 'none' : 'invert(70%)' }}
+                />
+                <img alt="dislike"
+                    src={dislikeIcon}
+                    onClick={handlOnClickDislike}
+                    style={{ filter: dislikeClicked ? 'none' : 'invert(70%)' }}
+                />
+            </div>
+            {showForm && (
+                
+                <div className='form-feedback'>
+                    <div className='form-feedback-block'>
+                        <div className='form-feedback-block-title'>
+                            <div className="feedbackText">Обратная связь </div>
+                            <img alt='close-icon'
+                                src={closeForm}
+                                onClick={handlOnClickClose}
+                            />
+                        </div>
+                        <textarea
+                            {...register("feedbackText")}
+                            type="text"
+                            value={feedbackText}
+                            onChange={(e) => setfeedbackText(e.target.value)}
+                            id="feedbackText"
+                            name="feedbackText"
+                            required
+                        />
+                    </div>
+                    <div className='container-button'>
+                        <button type='button' className="btn-add" onClick={fetchData}>Отправить</button>
+                        <button type='button' className="button" onClick={handleCancel}>Отменить</button>
+                    </div>
+                </div>
+            )}
+            
+        </form>
     );
 }
-export default UserComments;

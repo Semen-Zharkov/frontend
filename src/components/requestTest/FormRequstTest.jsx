@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../workDocumentation/workDocumentation/workDocumentation.css';
+import {UserComments} from '../userComments/UserComments'
 
 const RequestsTest = (props) => {
     const [questionData, setQuestionData] = useState(null);
@@ -61,6 +62,7 @@ const RequestsTest = (props) => {
                                 </li>
                             ))}
                         </ul>
+                        <UserComments request_id={id} result={result}/>
                     </div>
                 )}
             </form>

@@ -65,10 +65,12 @@ const SeachForDocumentation = ({ onClick }) => {
                             <li key={index} className='documentation-list-item'>
                                 <h3 className='title'>{item['name']}</h3>
                                 <p className='description'>{item['description']}</p>
-                                <button className='btn-add' onClick={() => copyTextToClipboard(`${apiUrlFront}/request_documentation?documentation=${item['name']}`)}>
-                                    Получить ссылку
-                                </button>
-                                {/* <button onClick={() => removingDoc(item['name'])}>Удалить документацию</button> */}
+                                <div className='container-button'>
+                                    <button className='btn-add' onClick={() => copyTextToClipboard(`${apiUrlFront}/request_documentation?documentation=${item['name']}`)}>
+                                        Получить ссылку
+                                    </button>
+                                    <button className="button" onClick={() => removingDoc(item['name'])}>Удалить документацию</button>
+                                </div>
                             </li>
                         ))}
                     </ul>

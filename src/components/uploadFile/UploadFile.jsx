@@ -4,6 +4,9 @@ import './uploadFile.css';
 import axios from 'axios';
 
 const FormTest = () => {
+    const [dockName, setDockName] = useState('');
+    const [dockDescription, setDockDescription] = useState('');
+    const [files, setFiles] = useState('');
     const [statusRequest, setStatusRequest] = useState('');
 
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -17,11 +20,12 @@ const FormTest = () => {
     const onSubmitDock = async (data) => {
         const formDatas = new FormData();
         formDatas.append('file', data.files[0]);
+        console.log(data.files[0])
         try {
-            const response = await fetch(`${apiUrl}/docks/upload-dock?dock_name=${data.dockName}&dock_description=${data.dockDescription}`, {
+            const response = await fetch(`${apiUrl}/docks/upload-dock?dock_name=${dockName}&dock_description=${dockDescription}`, {
                 method: 'POST',
                 credentials: 'include',
-                body: formDatas,
+                body: formDatas
             });
 
             if (!response.ok) {
@@ -53,18 +57,18 @@ const FormTest = () => {
                 <div className='upload-name'>
                     <label htmlFor="dockName">Название</label>
                     <input
-                        {...register("dockName")} type="text" id="dock_name" name="dock_name" required />
+                       {...register("dockName")} type="text" value={dockName} onChange={(e) => setDockName(e.target.value)} id="dock_name" name="dock_name" required />
                 </div>
                 <div className='upload-description'>
                     <label htmlFor="dockDescription">Описание</label>
                     <textarea
-                        {...register("dockDescription")} id="dock_description" name="dock_description" required
+                        {...register("dockDescription")} type="text" value={dockDescription} accept=".pdf,.doc,.docx,.txt,.zip" onChange={(e) => setDockDescription(e.target.value)} id="dock_description" name="dock_description" required
                     />
                 </div>
                 <div className='upload-file'>
                     <input
-                        {...register("files")} type="file" accept=".pdf,.doc,.docx,.txt,.zip" id="files" name="files" required
-                    />
+                        {...register("files")} type="file" value={files} accept=".txt,.zip" onChange={(e) => setFiles(e.target.value)} id="files" name="files" required
+                        />
                 </div>
                 <div className='container-button'>
                     <button type="submit" className="btn-add">Отправить</button>

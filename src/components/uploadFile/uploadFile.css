@@ -32,12 +32,13 @@
 .upload-description textarea{
     resize: none;
     padding: 8px 12px;
-    min-width: 584px;
+    min-width: 572px;
     min-height: 136px;
 }
-.form-container-upload .container-button{
+.form-container-upload .container-button {
     display: flex;
-    gap: 24px
+    flex-direction: row;
+    gap: 24px;
 }
 .answer, form.block-form-request {
     display: flex;
