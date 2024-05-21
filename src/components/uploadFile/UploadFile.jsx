@@ -34,7 +34,8 @@ const FormTest = () => {
             }
 
             const responseData = await response.json();
-            setStatusRequest('Файл успешно добавлен в базу данных');
+            alert('Файл успешно добавлен в базу данных');
+            handleCancel();
             console.log('Ответ от сервера:', responseData);
         } catch (error) {
             setStatusRequest(`Ошибка при отправке запроса: ${error}`);

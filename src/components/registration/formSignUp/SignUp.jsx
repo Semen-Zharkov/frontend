@@ -43,8 +43,13 @@ function FormSignUp(){
         },
         body: JSON.stringify(data),
         }).then(response => {
-            alert('Вы успешно зарегистрировались')
-            reset()
+            if (response.ok) {
+                alert('Ваша заявка отправлена на верификацию');
+                reset();
+            }
+            else{
+                alert('Ошибка при регистрации');
+            }
             
           })
         .catch (error => {
@@ -75,12 +80,12 @@ function FormSignUp(){
                     <div className='block-password'>
                         <label for="password">Пароль</label>
                         <input {...register("password")} className='js-input-password' type={inputType}  id="password" name="password" required />
-                        <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt=''/>
+                        <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt='' file='none'/>
                     </div>
                     <div className='block-confirm-password'>
                         <label for="confirm-password">Повторите пароль</label>
                         <input {...register("confirmation_password")} className='js-input-confirm-password' type={inputConfirmType} id="confirm-password" required />
-                        <img onClick={onClickConfirmEye} className='btn__pass js-btn-password' src={currentConfirmImage} alt=''/>
+                        <img onClick={onClickConfirmEye} className='btn__pass js-btn-password' src={currentConfirmImage} alt='' fill='none'/>
                     </div>
                     <button className='submit-form' type="submit">Зарегистрироваться</button>
                 </div>

@@ -16,34 +16,38 @@ const InformationUser = () => {
                 <h2>Личные данные</h2>
             </div>
             <div className='person-area-user'>
-            <>
-            {userData.is_superuser?(
-                <div className='user-information'>
-                    <div className='user-img'>
+                <>
+                    {userData.is_superuser?(
+                        <div className='admin-panel'>
+                            <div className='user-information'>
+                                <div className='user-img'>
 
-                    </div>
-                    <ul class='inform-list'>
-                        <li class='inform-list-item'> {userData.name} {userData.surname} </li>
-                        <li class='inform-list-item'> {userData.email} </li>
-                        <li class='inform-list-item'> Админ</li>
-                    </ul>
-                    {/* <SeachForDocumentation />
-                    <UserVerification /> */}
-                    {/* <Listfeedback /> */}
-                </div>)
-            :(
-                <div className='user-information'>
-                    <div className='user-img'>
+                                </div>
+                                <ul class='inform-list'>
+                                    <li class='inform-list-item'> {userData.name} {userData.surname} </li>
+                                    <li class='inform-list-item'> {userData.email} </li>
+                                    <li class='inform-list-item'> Админ</li>
+                                </ul>
+                            </div>
+                            <div className='verification-container'>
+                                <UserVerification />
+                            </div>
+                            
+                        </div>
+                    )
+                    :(
+                        <div className='user-information'>
+                            <div className='user-img'>
 
-                    </div>
-                    <ul class='inform-list'>
-                        <li class='inform-list-item'> {userData.name} {userData.surname} </li>
-                        <li class='inform-list-item'> {userData.email} </li>
-                        <li class='inform-list-item'> Сотрудник компании </li>
-                    </ul>
-                    {/* <SeachForDocumentation /> */}
-                </div>)}
-            </>
+                            </div>
+                            <ul class='inform-list'>
+                                <li class='inform-list-item'> {userData.name} {userData.surname} </li>
+                                <li class='inform-list-item'> {userData.email} </li>
+                                <li class='inform-list-item'> Сотрудник компании </li>
+                            </ul>
+                            {/* <SeachForDocumentation /> */}
+                        </div>)}
+                </>
             </div>
             <div className='user-edit'>
                 <div className='container-edit-info'>
@@ -55,10 +59,6 @@ const InformationUser = () => {
                         <Link to="/forgot_password" className="btn-forgot-person"> <p>Изменить</p> </Link>
                     </button>
                 </div>
-            </div>
-            <div className='verification-container'>
-                <UserVerification />
-
             </div>
         </section>
     )   

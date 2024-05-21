@@ -11,6 +11,7 @@
 form.block-form-request {
     display: flex;
     flex-direction: column;
+    gap: 40px;
     max-width: 740px;
     margin: 0 auto;
 
@@ -19,17 +20,16 @@ form.block-form-request {
 }
 form.form-container-question {
     justify-content: space-between;
-    min-height: 800px;
+    height: 85vh;
 }
 
 form.form-container-test{
     gap:24px;
 }
 .block-input {
-    position: fixed;
     display: flex;
     gap: 4px;
-    bottom: 40px;
+    margin-bottom: 60px;
 }
 textarea#question {
     min-width: 642px;
@@ -94,12 +94,20 @@ textarea#question {
 
 .answers-list {
     margin-bottom: auto;
+    max-height: 70vh;
     padding-right: 30px;
     width: 100%;
-    height: 60vh;
     overflow-y: scroll;
 }
 
 .block-input button{
     background: rgba(0,0,0,0);
+}
+
+.iconSubmitQuest:hover{
+    opacity: 0.9;
+}
+
+.iconSubmitQuest:active{
+    opacity: 0.6;
 }

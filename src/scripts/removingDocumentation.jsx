@@ -12,6 +12,7 @@ export const RemovingDocumentation = async (doc_name) => {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
+        window.location.reload();
 
     } catch (error) {
         console.error("Error fetching user data:", error);

@@ -43,14 +43,6 @@ const WorkDocumentation = () => {
                     <SeachForDocumentation />
                 </div>
             </div>
-            {/* <div className='btn-container'>
-                <button className="btn-request-test button" onClick={onClickTest}> Создать тест </button>
-                <button className="btn-request-answer button" onClick={onClickAnswer}> Задать вопрос </button>
-            </div> */}
-            
-            {/* {!flagTestOrAnswer && <RequestsTest />}
-            {flagTestOrAnswer && <RequestsAnswer />}
-            <DataProvider id={id} result={result}/> */}
         </section>
     );
 };

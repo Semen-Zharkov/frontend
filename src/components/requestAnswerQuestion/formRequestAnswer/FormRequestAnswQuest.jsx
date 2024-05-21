@@ -31,6 +31,13 @@ const RequestsAnswer = (props) => {
         setMassivAnswer((prevItems) => [...prevItems, newItem]);
     };
 
+    const handleCancel = () => {
+        reset({
+            question: '',
+        });
+        setQuestion(''); 
+    };
+    
     const onSubmitTest = async () => {
         try {
             const response = await fetch(`${apiUrl}/get_answer?filename=${props.param}&question=${question}`, {
@@ -42,6 +49,7 @@ const RequestsAnswer = (props) => {
                 throw new Error('Network response was not ok');
             }
             const responseData = await response.json();
+            handleCancel(); 
             addItem(responseData['result']); // Получение данных из ответа
             setAswerServer(responseData);
             setId(responseData['request_id']);
