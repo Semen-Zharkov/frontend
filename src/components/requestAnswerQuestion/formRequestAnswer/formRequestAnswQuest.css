@@ -41,6 +41,7 @@ textarea#question {
     padding: 12px 26px;
     background-color: #31D9AF;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .question-container {

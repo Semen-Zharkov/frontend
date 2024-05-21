@@ -9,13 +9,17 @@
     display: flex;
     gap: 20px;
 }
+
+.form-grade img{
+    cursor: pointer;
+}
+
 .form-feedback{
-    position: absolute;
-    left: 16%;
-    top: 110%;
+    position: fixed;
     display: flex;
     flex-direction: column;
     gap: 20px;
+    top: 40%;
     z-index: 10;
     background: #FFFFFF;
     border-radius: 6px;
@@ -46,6 +50,16 @@ textarea#feedbackText {
 
 .close-icon{
     padding-right: 4px;
+}
+.popup-user-comment {
+    position: fixed;
+    top: 50%;
+    left: 42%;
+    background: #00A87B;
+    color: #FFFFFF;
+    padding: 10px 30px;
+    font-size: 20px;
+    border-radius: 7px;
 }
 /* .close-button {
     position: absolute;

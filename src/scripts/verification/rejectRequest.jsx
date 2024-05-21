@@ -12,6 +12,10 @@ export const RejectRequest = async (id) =>{
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
+        else{
+            alert('Заявка отклонена')
+            window.location.reload();
+        }
 
     } catch (error) {
         console.error("Error fetching user data:", error);

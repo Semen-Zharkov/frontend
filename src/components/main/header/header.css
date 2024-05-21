@@ -47,6 +47,7 @@
 .btn-user-lk {
     display: flex;
     gap: 6px;
+    cursor: pointer;
 }
 .container-lk {
     position: relative;

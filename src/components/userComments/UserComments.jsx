@@ -3,114 +3,109 @@ import React, { useState, useEffect } from 'react';
 import './userComments.css';
 import likeIcon from '../../img/like.svg';
 import dislikeIcon from '../../img/dislike.svg';
-import closeForm from '../../img/close.svg'
+import closeForm from '../../img/close.svg';
 
-export const UserComments=(props)=>{
-    const [feedbackText, setfeedbackText] = useState('');
+export const UserComments = (props) => {
+    const [feedbackText, setFeedbackText] = useState('');
     const [data, setData] = useState([]);
-    const [feedback,setfeedback] = useState('');
+    const [feedback, setFeedback] = useState('');
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
     const [showForm, setShowForm] = useState(false);
     const [statusRequest, setStatusRequest] = useState('');
-    const [nameDoc, setNameDoc] = useState('')
+    const [showPopup, setShowPopup] = useState(false);
 
     const requestData = {
         value: feedback,
         llm_response: JSON.stringify(props.result),
         user_comment: feedbackText,
         request_id: props.request_id
+    };
 
-    }
     const apiUrl = process.env.REACT_APP_API_URL;
-    const {
-        register,
-        reset,
-        handleSubmit,
-    } = useForm();
+    const { register, reset, handleSubmit } = useForm();
 
-    const  handlOnClickLike = () => {
-        setfeedback('like')
+    const handleOnClickLike = () => {
+        setFeedback('like');
         setLikeClicked(!likeClicked);
         setShowForm(true);
-    }
+    };
 
-    const handlOnClickDislike = () => {
-        setfeedback('dislike')
+    const handleOnClickDislike = () => {
+        setFeedback('dislike');
         setDislikeClicked(!dislikeClicked);
         setShowForm(true);
-    }
+    };
 
-    const handlOnClickClose = () => {
+    const handleOnClickClose = () => {
         setDislikeClicked(false);
         setLikeClicked(false);
         setShowForm(false);
         handleCancel();
-    }
+    };
 
     const handleCancel = () => {
         reset({
             feedbackText: '',
         });
-        setfeedbackText(null);
+        setFeedbackText('');
         setStatusRequest('');
     };
 
     const fetchData = async () => {
         try {
-            // Отправка запроса на выход пользователя
             const response = await fetch(`${apiUrl}/send_feedback`, {
-                method: 'POST', // установите метод POST
-                credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
+                method: 'POST',
+                credentials: 'include',
                 body: JSON.stringify(requestData),
                 headers: {
-                    'Content-Type': 'application/json', // Установите заголовок Content-Type
+                    'Content-Type': 'application/json',
                 },
             });
-            // setIsLoggedIn(false);
-            // Проверка успешности выполнения запроса на выход
             if (response.ok) {
                 setData(await response.json());
-                handlOnClickClose();
-                // Выполните здесь необходимые действия после выхода пользователя (например, перенаправление на страницу входа)
+                handleOnClickClose();
+                setShowPopup(true);
+                setTimeout(() => {
+                    setShowPopup(false);
+                }, 3000); // Hide the popup after 3 seconds
             } else {
-                console.error('feedback request failed');
+                console.error('Feedback request failed');
             }
         } catch (error) {
-            console.error('feedback error:', error);
+            console.error('Feedback error:', error);
         }
-    }
+    };
 
     return (
         <form className="feedback-container" action="#" method="POST">
             <div className='form-grade'>
                 <img alt="like"
                     src={likeIcon}
-                    onClick={handlOnClickLike}
+                    onClick={handleOnClickLike}
                     style={{ filter: likeClicked ? 'none' : 'invert(70%)' }}
                 />
                 <img alt="dislike"
                     src={dislikeIcon}
-                    onClick={handlOnClickDislike}
+                    onClick={handleOnClickDislike}
                     style={{ filter: dislikeClicked ? 'none' : 'invert(70%)' }}
                 />
             </div>
             {showForm && (
-                
                 <div className='form-feedback'>
                     <div className='form-feedback-block'>
                         <div className='form-feedback-block-title'>
-                            <div className="feedbackText">Обратная связь </div>
+                            <div className="feedbackText">Обратная связь</div>
                             <img alt='close-icon'
                                 src={closeForm}
-                                onClick={handlOnClickClose}
+                                onClick={handleOnClickClose}
                             />
                         </div>
                         <textarea
                             {...register("feedbackText")}
                             type="text"
                             value={feedbackText}
-                            onChange={(e) => setfeedbackText(e.target.value)}
+                            onChange={(e) => setFeedbackText(e.target.value)}
                             id="feedbackText"
                             name="feedbackText"
                             required
@@ -122,7 +117,11 @@ export const UserComments=(props)=>{
                     </div>
                 </div>
             )}
-            
+            {showPopup && (
+                <div className="popup-user-comment">
+                    Спасибо за вашу оценку
+                </div>
+            )}
         </form>
     );
-}
+};

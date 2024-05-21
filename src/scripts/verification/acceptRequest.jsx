@@ -12,6 +12,10 @@ export const AcceptRequest = async (id) =>{
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
+        else{
+            alert('Заявка принята')
+            window.location.reload();
+        }
 
     } catch (error) {
         console.error("Error fetching user data:", error);
