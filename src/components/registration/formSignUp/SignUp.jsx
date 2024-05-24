@@ -1,6 +1,6 @@
 import {useForm} from 'react-hook-form';
 import React, { useState } from 'react';
-import { Link} from 'react-router-dom';
+import { Link, useNavigate} from 'react-router-dom';
 import '../../authorization/formLogIn/formLogIn.css'
 import btnPass from '../../../img/icons/password/Visibility=True.svg'
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg'
@@ -8,7 +8,7 @@ import btnPassVisib from '../../../img/icons/password/Visibility=False.svg'
 function FormSignUp(){
 
     const apiUrl = process.env.REACT_APP_API_URL;
-
+    const navigate = useNavigate();
     const [currentImage, setCurrentImage] = useState(btnPass);
     const [inputType, setInputType] = useState('password');
 
@@ -46,6 +46,7 @@ function FormSignUp(){
             if (response.ok) {
                 alert('Ваша заявка отправлена на верификацию');
                 reset();
+                navigate('/logIn');
             }
             else{
                 alert('Ошибка при регистрации');
@@ -58,6 +59,7 @@ function FormSignUp(){
     }
 
     return (
+        <section className='container-sign-up'>
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Регистрация</h2>
                 <div className='form-container-brim'>
@@ -94,6 +96,7 @@ function FormSignUp(){
                     <Link to="/logIn" className="btn-registr"> <p>Войдите</p> </Link>
                 </div>
             </form>
+        </section>
     );
 }
 

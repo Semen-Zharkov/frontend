@@ -4,6 +4,12 @@ import './formRequestAnswQuest.css';
 import icomSubmitQuest from '../../../img/icons/Icon-color.svg';
 import { UserComments } from '../../userComments/UserComments';
 
+const Spinner = () => (
+    <div className="spinner-container">
+        <div className="spinner"></div>
+    </div>
+);
+
 const RequestsAnswer = (props) => {
     const formRef = useRef(null);
     const [massivAnswer, setMassivAnswer] = useState([]);
@@ -12,20 +18,11 @@ const RequestsAnswer = (props) => {
     const [filename, setFilename] = useState('');
     const [question, setQuestion] = useState('');
     const [answerServer, setAswerServer] = useState('');
+    const [loading, setLoading] = useState(false);
     const textareaRef = useRef(null);
 
-    const handleIconClick = () => {
-        if (formRef.current) {
-            formRef.current.submit();
-        }
-    }
-
     const apiUrl = process.env.REACT_APP_API_URL;
-    const {
-        register,
-        reset,
-        handleSubmit,
-    } = useForm();
+    const { register, reset, handleSubmit } = useForm();
 
     const addItem = (newItem) => {
         setMassivAnswer((prevItems) => [...prevItems, newItem]);
@@ -39,6 +36,7 @@ const RequestsAnswer = (props) => {
     };
     
     const onSubmitTest = async () => {
+        setLoading(true); // Показываем спиннер
         try {
             const response = await fetch(`${apiUrl}/get_answer?filename=${props.param}&question=${question}`, {
                 method: 'POST',
@@ -56,8 +54,11 @@ const RequestsAnswer = (props) => {
             setResult(responseData['result']);
         } catch (error) {
             console.error('Ошибка при отправке запроса:', error);
+        } finally {
+            setLoading(false); // Скрываем спиннер
         }
     };
+
     useEffect(() => {
         if (textareaRef.current) {
             textareaRef.current.style.height = '22px'; // Сброс высоты для вычисления
@@ -74,7 +75,7 @@ const RequestsAnswer = (props) => {
     }, [question]);
 
     return (
-        <div>
+        <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
                 <div>Ответы на основе документации {props.param}</div>
                 <div className="answers-list">
@@ -101,12 +102,13 @@ const RequestsAnswer = (props) => {
                         name="question"
                         required
                     />
-                    <button type='submit'>
+                    <button type='submit' disabled={loading} style={{ display: loading ? 'none' : 'block' }}>
                         <img src={icomSubmitQuest} className='iconSubmitQuest' alt='' />
                     </button>
+                    {loading && <Spinner />}
                 </div>
             </form>
-        </div>
+        </section>
     );
 };
 

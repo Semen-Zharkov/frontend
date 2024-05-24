@@ -4,7 +4,7 @@ import './promo.css'
 const Header = () =>{
     return (
         <section class="main-container">
-            <h1>Promo</h1>
+            <h1></h1>
         </section>
     );
 }

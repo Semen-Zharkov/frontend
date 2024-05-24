@@ -52,7 +52,7 @@ const FormTest = () => {
     };
 
     return (
-        <>
+        <section className='container-upload'>
             <form className='form-container-upload' action="#" method="POST" onSubmit={handleSubmit(onSubmitDock)}>
                 <h2>Добавление документации</h2>
                 <div className='upload-name'>
@@ -63,7 +63,7 @@ const FormTest = () => {
                 <div className='upload-description'>
                     <label htmlFor="dockDescription">Описание</label>
                     <textarea
-                        {...register("dockDescription")} type="text" value={dockDescription} accept=".pdf,.doc,.docx,.txt,.zip" onChange={(e) => setDockDescription(e.target.value)} id="dock_description" name="dock_description" required
+                        {...register("dockDescription")} type="text" value={dockDescription} onChange={(e) => setDockDescription(e.target.value)} id="dock_description" name="dock_description" required
                     />
                 </div>
                 <div className='upload-file'>
@@ -77,7 +77,7 @@ const FormTest = () => {
                 </div>
             </form>
             {statusRequest && (<div className='answer'>{statusRequest}</div>)}
-        </>
+        </section>
     );
 };
 

@@ -8,7 +8,19 @@
     src: url(/react/src/assets/fonts/static/Montserrat-Regular.ttf) format('ttf');
     font-weight: 400;
 } */
-
+.container-documentation::after{
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../../../img/тесты.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: -1;
+}
 section.container-documentation {
     max-width: 848px;
     margin: 0 auto;
@@ -40,6 +52,10 @@ section.container-documentation {
     color: #FFFFFF;
     border: none;
 }
+.button-test{
+    margin-bottom: 20px;
+}
+
 .btn-add:hover{
     opacity: 0.8;
 }
@@ -79,7 +95,8 @@ li.documentation-list-item {
     gap: 20px;
     flex-direction: column;
     padding: 32px 24px;
-    background: #FAF7F6;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     min-width: 584px;
 }
 
@@ -95,4 +112,28 @@ li.documentation-list-item .description{
     font-weight: 400;
     font-size: 16px;
     
+}
+
+.spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border-left-color: #09f;
+    animation: spin 1s ease infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }

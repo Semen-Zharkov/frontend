@@ -1,9 +1,10 @@
 import {useForm} from 'react-hook-form';
-
+import {useNavigate } from 'react-router-dom';
 
 
 function FormForgotPassword(){
-
+    
+    const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
     const{
         register,
@@ -21,8 +22,11 @@ function FormForgotPassword(){
         },
         body: JSON.stringify(data),
         }).then(response => {
-            alert('Проверьте почту')
-            reset()
+            if(response.ok){
+                alert('Проверьте почту')
+                reset()
+                navigate('/');
+            }
             
           })
         .catch (error => {
@@ -31,7 +35,7 @@ function FormForgotPassword(){
     }
 
     return (
-        <section className="container">
+        <section className="container-forgot-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Восстановление пароля</h2>
                 <div>

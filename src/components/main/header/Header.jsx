@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import React, { useRef, useContext } from 'react';
 import './header.css';
 import { logout } from '../../../scripts/logOut';
@@ -8,6 +8,7 @@ import arrow from '../../../img/icons/arrow_drop_down.svg';
 import { FlagContext } from '../../../flagContext';
 
 function Header() {
+  const location = useLocation(); // Получение текущего пути
   const { isLoggedIn, isAuthChecked, userData } = useAuth();
   const { setFlagBtn } = useContext(FlagContext);
   const arrowClickRef = useRef(null);
@@ -53,12 +54,16 @@ function Header() {
           </div>
           <div className='site-navigation-item'>
             <div className="buttons">
-              <Link className="btn-question button button-header" onClick={(e) => handleButtonClick(e, true)} ref={btnQuestionRef}>
-                <p>Задать вопрос</p>
-              </Link>
-              <Link className="btn-test button button-header" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
-                <p>Пройти тест</p>
-              </Link>
+              {location.pathname === '/request_documentation' && (
+                <>
+                  <Link className="btn-question button button-header" onClick={(e) => handleButtonClick(e, true)} ref={btnQuestionRef}>
+                    <p>Задать вопрос</p>
+                  </Link>
+                  <Link className="btn-test button button-header" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
+                    <p>Пройти тест</p>
+                  </Link>
+                </>
+              )}
               {isLoggedIn ? (
                 <div className='container-lk'>
                   <div className="btn-user-lk" onClick={clickArrowLk}>
@@ -71,7 +76,7 @@ function Header() {
                   <div className='nav-lk' ref={visibilityListRef}>
                     <Link to="/person_account" className="btn-signUp button-header"><p> Личные данные </p></Link>
                     <Link to="/work_documentation" className="btn-signUp button-header"><p> Документация </p></Link>
-                    <Link className="btn-logOut" onClick={logout}><p> Выйти </p></Link>
+                    <Link className="btn-logOut button-header" onClick={logout}><p> Выйти </p></Link>
                   </div>
                 </div>
               ) : (

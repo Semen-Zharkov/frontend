@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import '../workDocumentation/workDocumentation/workDocumentation.css';
-import {UserComments} from '../userComments/UserComments'
+import { UserComments } from '../userComments/UserComments';
+
+const Spinner = () => (
+    <div className="spinner-container">
+        <div className="spinner"></div>
+    </div>
+);
 
 const RequestsTest = (props) => {
     const [questionData, setQuestionData] = useState(null);
@@ -10,11 +16,13 @@ const RequestsTest = (props) => {
     const [result, setResult] = useState('');
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
     const [answerServer, setAnswerServer] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const apiUrl = process.env.REACT_APP_API_URL;
     const { handleSubmit } = useForm();
 
     const onSubmitTest = async () => {
+        setLoading(true); // Показываем spinner
         try {
             const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
                 method: 'POST',
@@ -33,6 +41,8 @@ const RequestsTest = (props) => {
             setIsAnswerCorrect(null);
         } catch (error) {
             setAnswerServer(`Ошибка при отправке запроса: ${error}`);
+        } finally {
+            setLoading(false); // Скрываем spinner
         }
     };
 
@@ -43,10 +53,13 @@ const RequestsTest = (props) => {
     };
 
     return (
-        <div>
+        <section className='container-work-documentation'>
             <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>
                 <div>Тесты на основе документации {props.param}</div>
-                <button className='btn-add' type="submit">Сгенерировать тест</button>
+                <button className='btn-add button-test' type="submit" disabled={loading}>
+                    Сгенерировать тест
+                </button>
+                {loading && <Spinner />}
                 {questionData && (
                     <div className='question-container'>
                         <p>{questionData.question}</p>
@@ -62,12 +75,12 @@ const RequestsTest = (props) => {
                                 </li>
                             ))}
                         </ul>
-                        <UserComments request_id={id} result={result}/>
+                        <UserComments request_id={id} result={result} />
                     </div>
                 )}
             </form>
             {answerServer && <div>{answerServer}</div>}
-        </div>
+        </section>
     );
 };
 
