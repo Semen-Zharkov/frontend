@@ -12,6 +12,7 @@ const Spinner = () => (
 
 const RequestsAnswer = (props) => {
     const formRef = useRef(null);
+    const answersListRef = useRef(null); // Reference for the answers list
     const [massivAnswer, setMassivAnswer] = useState([]);
     const [id, setId] = useState('');
     const [result, setResult] = useState('');
@@ -34,7 +35,17 @@ const RequestsAnswer = (props) => {
         });
         setQuestion(''); 
     };
-    
+
+    const formatAnswer = (answer) => {
+        if (answer.includes('\n\n')) {
+            const steps = answer.split('\n').map((step, index) => {
+                return <p key={index}>{step}</p>;
+            });
+            return <div className="formatted-answer">{steps}</div>;
+        }
+        return <p>{answer}</p>;
+    };
+
     const onSubmitTest = async () => {
         setLoading(true); // Показываем спиннер
         try {
@@ -64,8 +75,8 @@ const RequestsAnswer = (props) => {
             textareaRef.current.style.height = '22px'; // Сброс высоты для вычисления
             let newHeight = textareaRef.current.scrollHeight - 20;
 
-            if (newHeight > 250) {
-                textareaRef.current.style.height = '250px';
+            if (newHeight > 450) {
+                textareaRef.current.style.height = '450px';
                 textareaRef.current.style.overflowY = 'auto'; // Добавляем вертикальный скролл
             } else {
                 textareaRef.current.style.height = `${newHeight}px`;
@@ -74,21 +85,27 @@ const RequestsAnswer = (props) => {
         }
     }, [question]);
 
+    useEffect(() => {
+        if (answersListRef.current) {
+            answersListRef.current.scrollTop = answersListRef.current.scrollHeight;
+        }
+    }, [massivAnswer]); // Scroll to bottom whenever massivAnswer changes
+
     return (
         <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
                 <div>Ответы на основе документации {props.param}</div>
-                <div className="answers-list">
+                <div className="answers-list" ref={answersListRef}>
                     {massivAnswer.map((item, index) => (
-                        <div key={index} className="answer">
+                        <>
                             <div className="questions-container">
                                 <p>{item.question}</p>
                             </div>
                             <div className="answer-container">
-                                <p>{item.answer}</p>
+                                {formatAnswer(item.answer)}
                                 <UserComments request_id={id} result={result} />
                             </div>
-                        </div>
+                        </>
                     ))}
                 </div>
                 <div className='block-input'>

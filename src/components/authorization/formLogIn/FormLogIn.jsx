@@ -2,9 +2,19 @@ import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import './formLogIn.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import { useAuth } from '../../../scripts/usersMe';
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
+import { emailRegistrationValidator } from '../../../scripts/validation/email';
+
+const schema = yup.object().shape({
+    email: emailRegistrationValidator,
+    password: yup
+    .string()
+    .required('Пароль обязателен')    
+});
 
 async function verifyToken(token) {
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -30,6 +40,7 @@ async function verifyToken(token) {
     return false;
 }
 
+
 function VerifyUserComponent({ token, onVerificationComplete }) {
     useEffect(() => {
         const validate = async () => {
@@ -54,12 +65,15 @@ export default function FormLogIn() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [inputType, setInputType] = useState('password');
-
+    const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
+        formState: { errors },
         handleSubmit,
-    } = useForm();
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const navigate = useNavigate();
 
@@ -69,6 +83,7 @@ export default function FormLogIn() {
     };
 
     const onSubmit = async (data) => {
+        setServerError('');
         try {
             const response = await fetch(`${apiUrl}/auth/login`, {
                 method: 'POST',
@@ -77,7 +92,7 @@ export default function FormLogIn() {
                 },
                 body: new URLSearchParams({
                     'grant_type': '',
-                    'username': data.username,
+                    'username': data.email,
                     'password': data.password,
                     'scope': '',
                     'client_id': '',
@@ -85,11 +100,12 @@ export default function FormLogIn() {
                 }).toString(),
                 credentials: 'include',
             });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if(response.ok){
+                navigate('/');
             }
-            navigate('/');
+            else if (response.status===400) {
+                setServerError(`Неверная почта или пароль`)
+            }
         } catch (error) {
             console.error('There was a problem with your fetch operation:', error);
         }
@@ -107,14 +123,17 @@ export default function FormLogIn() {
                 <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                     <h2>Вход</h2>
                     <div className='form-container-brim'>
-                        <div className='block-username'>
-                            <label className='username' htmlFor="username">Почта</label>
-                            <input {...register("username")} type="email" value={username} onChange={(e) => setUsername(e.target.value)} id="username" name="username" required />
+                        <div className='block-email'>
+                            <label className='email' htmlFor="email">Почта</label>
+                            <input {...register("email")} type="email" id="email" />
+                            {errors.email && <p className='form-validation' style={{ color: 'red' }}>{errors.email.message}</p>}
                         </div>
                         <div className='block-password'>
                             <label htmlFor="password">Пароль</label>
-                            <input {...register("password")} className='js-input-password' type={inputType} value={password} onChange={(e) => setPassword(e.target.value)} id="password" name="password" required />
+                            <input {...register("password")} className='js-input-password' type={inputType} id="password" />
                             <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt='' fill='none' />
+                            {errors.password && <p className='form-validation' style={{ color: 'red' }}>{errors.password.message}</p>}
+                            {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                         </div>
                         <button className='submit-form' type="submit">Войти</button>
                     </div>

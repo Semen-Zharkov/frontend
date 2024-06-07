@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-
+import { useState } from 'react';
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ResetPasswordLK = async (data) => {
-    console.log(data)
     try {
         const response = await fetch(`${apiUrl}/users/me`, {
             method: "PATCH",
@@ -14,13 +13,23 @@ export const ResetPasswordLK = async (data) => {
             body: JSON.stringify(data)
         });
         if (!response.ok) {
+            const errorData = await response.json();
+            console.log(errorData.detail)
+            if (response.status === 400) {
+                if (errorData.detail === 'UPDATE_USER_EMAIL_ALREADY_EXISTS') {
+                    return { error: 'Данный email уже зарегистрирован' };
+                }
+                if (errorData.detail.code === 'UPDATE_USER_INVALID_PASSWORD') {
+                    return { error: 'Введён неверный пароль' };
+                }
+            }
             throw new Error("Network response was not ok");
-        } else {
-            alert('Данные успешно изменены')
-            window.location.reload();
         }
+        window.location.reload();
+        alert('Данные успешно изменены');
     } catch (error) {
         console.error("Error fetching user data:", error);
+        return { error: error.message };
     }
     return null;
 };

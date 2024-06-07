@@ -3,12 +3,17 @@ import React, { useState } from 'react';
 import './uploadFile.css';
 import axios from 'axios';
 
+const Spinner = () => (
+    <div className="spinner-container">
+        <div className="spinner"></div>
+    </div>
+);
 const FormTest = () => {
     const [dockName, setDockName] = useState('');
     const [dockDescription, setDockDescription] = useState('');
-    const [files, setFiles] = useState('');
     const [statusRequest, setStatusRequest] = useState('');
-
+    const [loading, setLoading] = useState(false);
+    const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -18,9 +23,10 @@ const FormTest = () => {
     } = useForm();
 
     const onSubmitDock = async (data) => {
+        setServerError('')
         const formDatas = new FormData();
         formDatas.append('file', data.files[0]);
-        console.log(data.files[0])
+        setLoading(true); // Показываем spinner
         try {
             const response = await fetch(`${apiUrl}/docks/upload-dock?dock_name=${dockName}&dock_description=${dockDescription}`, {
                 method: 'POST',
@@ -29,8 +35,7 @@ const FormTest = () => {
             });
 
             if (!response.ok) {
-                setStatusRequest(`Возникла ошибка при обработке запроса: ${response.status}`);
-                throw new Error('Network response was not ok');
+                setServerError(`Возникла ошибка при загрузке документации, повторите загрузку`)
             }
 
             const responseData = await response.json();
@@ -39,6 +44,8 @@ const FormTest = () => {
             console.log('Ответ от сервера:', responseData);
         } catch (error) {
             setStatusRequest(`Ошибка при отправке запроса: ${error}`);
+        } finally {
+            setLoading(false); // Скрываем spinner
         }
     };
 
@@ -48,7 +55,10 @@ const FormTest = () => {
             dockDescription: '',
             files: null
         });
+        setDockName('');
+        setDockDescription('');
         setStatusRequest('');
+        document.getElementById('files').value = '';
     };
 
     return (
@@ -68,15 +78,16 @@ const FormTest = () => {
                 </div>
                 <div className='upload-file'>
                     <input
-                        {...register("files")} type="file" value={files} accept=".txt,.zip" onChange={(e) => setFiles(e.target.value)} id="files" name="files" required
-                        />
+                        {...register("files")} type="file" accept=".txt,.zip" id="files" name="files" required
+                    />
                 </div>
+                {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <div className='container-button'>
                     <button type="submit" className="btn-add">Отправить</button>
-                    <button type="button" className="button" onClick={handleCancel}>Отменить</button>
+                    <button type="button" className="button" onClick={handleCancel}>Отчистить</button>
+                    {loading && <Spinner />}
                 </div>
             </form>
-            {statusRequest && (<div className='answer'>{statusRequest}</div>)}
         </section>
     );
 };

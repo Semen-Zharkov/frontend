@@ -17,11 +17,12 @@ const RequestsTest = (props) => {
     const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
     const [answerServer, setAnswerServer] = useState('');
     const [loading, setLoading] = useState(false);
-
+    const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const { handleSubmit } = useForm();
 
     const onSubmitTest = async () => {
+        setServerError('')
         setLoading(true); // Показываем spinner
         try {
             const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
@@ -30,7 +31,7 @@ const RequestsTest = (props) => {
             });
 
             if (!response.ok) {
-                throw new Error(`Возникла ошибка при обработке запроса: ${response}`);
+                setServerError('Произошла ошибка при генерации теста, попробуйте сгенерировать заново')
             }
 
             const responseData = await response.json();
@@ -40,7 +41,7 @@ const RequestsTest = (props) => {
             setSelectedAnswer('');
             setIsAnswerCorrect(null);
         } catch (error) {
-            setAnswerServer(`Ошибка при отправке запроса: ${error}`);
+            setServerError(`Произошла ошибка при генерации теста, попробуйте сгенерировать заново`);
         } finally {
             setLoading(false); // Скрываем spinner
         }
@@ -56,6 +57,7 @@ const RequestsTest = (props) => {
         <section className='container-work-documentation'>
             <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>
                 <div>Тесты на основе документации {props.param}</div>
+                {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <button className='btn-add button-test' type="submit" disabled={loading}>
                     Сгенерировать тест
                 </button>

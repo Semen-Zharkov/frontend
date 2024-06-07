@@ -1,8 +1,17 @@
 import {useForm} from 'react-hook-form';
 import { useState } from 'react';
 import {useNavigate } from 'react-router-dom';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
 import btnPass from '../../../img/icons/password/Visibility=True.svg'
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg'
+import { confirmPasswordValidator } from '../../../scripts/validation/password';
+import { passwordValidator } from '../../../scripts/validation/password';
+
+const schema = yup.object().shape({
+    password: passwordValidator,
+    confirmation_password: confirmPasswordValidator   
+});
 
 function FormResetPassword(){
 
@@ -18,13 +27,14 @@ function FormResetPassword(){
     const [currentConfirmImage, setCurrentConfirmImage] = useState(btnPass);
     const [inputConfirmType, setInputConfirmType] = useState('password');
 
-    const{
+    const {
         register,
         reset,
-        formState:{errors,
-        },
+        formState: { errors },
         handleSubmit,
-    } = useForm();
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
 
     const onClickEye = () =>{
         setCurrentImage(currentImage === btnPass ? (btnPassVisib): (btnPass));
@@ -53,7 +63,6 @@ function FormResetPassword(){
                 navigate('/logIn');
                 reset()
             }
-            
           })
         .catch (error => {
           console.error('Ошибка при изменение пароля:', error);
@@ -64,18 +73,22 @@ function FormResetPassword(){
         <section class="container-reset-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
                 <h2>Изменение пароля</h2>
-                <div className='block-password password'>
-                    <label for="password">Новый пароль</label>
-                    <input {...register("password")} className='js-input-password' value={password} onChange={(e) => setPassword(e.target.value)} type={inputType}  id="password" name="password" required />
-                    <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt='' file='none'/>
-                </div>
-                <div className='block-confirm-password password'>
-                    <label for="confirmation_password}">Повторите новый пароль</label>
-                    <input {...register("confirmation_password")} className='js-input-confirm-password'  value={confirmation_password} onChange={(e) => setConfirmPassword(e.target.value)} type={inputConfirmType} id="confirm-password" required />
-                    <img onClick={onClickConfirmEye} className='btn__pass js-btn-password' src={currentConfirmImage} alt='' fill='none'/>
-                </div>
+                <div className='form-container-brim'>
+                    <div className='block-password password'>
+                        <label for="password">Новый пароль</label>
+                        <input {...register("password")} className='js-input-password' value={password} onChange={(e) => setPassword(e.target.value)} type={inputType}  id="password" name="password" />
+                        <img onClick={onClickEye} className='btn__pass js-btn-password' src={currentImage} alt='' file='none'/>
+                        {errors.password && <p className='form-validation' style={{ color: 'red' }}>{errors.password.message}</p>}
+                    </div>
+                    <div className='block-confirm-password password'>
+                        <label for="confirmation_password}">Повторите новый пароль</label>
+                        <input {...register("confirmation_password")} className='js-input-confirm-password'  value={confirmation_password} onChange={(e) => setConfirmPassword(e.target.value)} type={inputConfirmType} id="confirm-password" />
+                        <img onClick={onClickConfirmEye} className='btn__pass js-btn-password' src={currentConfirmImage} alt='' fill='none'/>
+                        {errors.confirmation_password && <p className='form-validation' style={{ color: 'red' }}>{errors.confirmation_password.message}</p>}
+                    </div>
 
-                <button className='submit-form' type="submit">Изменить пароль</button>
+                    <button className='submit-form' type="submit">Изменить пароль</button>
+                </div>
             </form>
         </section>
     );

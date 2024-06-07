@@ -141,7 +141,9 @@ form.edit-form{
     padding: 32px 24px;
     margin: 0;
 }
-
+form.password-form{
+    margin-top: 48px;
+}
 form.edit-form input{
     min-width: 542px;
 }

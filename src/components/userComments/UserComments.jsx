@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import './userComments.css';
 import likeIcon from '../../img/like.svg';
 import dislikeIcon from '../../img/dislike.svg';
@@ -15,6 +15,10 @@ export const UserComments = (props) => {
     const [statusRequest, setStatusRequest] = useState('');
     const [showPopup, setShowPopup] = useState(false);
 
+    const [position, setPosition] = useState({ x: 100, y: 100 });
+    const [isDragging, setIsDragging] = useState(false);
+    const offset = useRef({ x: 0, y: 0 });
+
     const requestData = {
         value: feedback,
         llm_response: JSON.stringify(props.result),
@@ -23,7 +27,7 @@ export const UserComments = (props) => {
     };
 
     const apiUrl = process.env.REACT_APP_API_URL;
-    const { register, reset, handleSubmit } = useForm();
+    const { register, reset } = useForm();
 
     const handleOnClickLike = () => {
         setFeedback('like');
@@ -77,6 +81,26 @@ export const UserComments = (props) => {
         }
     };
 
+    const handleMouseDown = (e) => {
+        offset.current = {
+            x: e.clientX - position.x,
+            y: e.clientY - position.y
+        };
+        setIsDragging(true);
+    };
+
+    const handleMouseMove = (e) => {
+        if (!isDragging) return;
+        setPosition({
+            x: e.clientX - offset.current.x,
+            y: e.clientY - offset.current.y
+        });
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
     return (
         <form className="feedback-container" action="#" method="POST">
             <div className='form-grade'>
@@ -92,7 +116,14 @@ export const UserComments = (props) => {
                 />
             </div>
             {showForm && (
-                <div className='form-feedback'>
+                <div
+                    className='form-feedback'
+                    style={{ top: `${position.y}px`, left: `${position.x}px`, position: 'absolute' }}
+                    onMouseDown={handleMouseDown}
+                    onMouseMove={handleMouseMove}
+                    onMouseUp={handleMouseUp}
+                    onMouseLeave={handleMouseUp}
+                >
                     <div className='form-feedback-block'>
                         <div className='form-feedback-block-title'>
                             <div className="feedbackText">Обратная связь</div>
@@ -113,7 +144,7 @@ export const UserComments = (props) => {
                     </div>
                     <div className='container-button'>
                         <button type='button' className="btn-add" onClick={fetchData}>Отправить</button>
-                        <button type='button' className="button" onClick={handleCancel}>Отменить</button>
+                        <button type='button' className="button" onClick={handleCancel}>Отчистить</button>
                     </div>
                 </div>
             )}
