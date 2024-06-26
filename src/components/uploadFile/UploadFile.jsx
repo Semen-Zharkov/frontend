@@ -33,15 +33,15 @@ const FormTest = () => {
                 credentials: 'include',
                 body: formDatas
             });
-
+            const responseData = await response.json();
+            console.log('Ответ от сервера:', responseData);
             if (!response.ok) {
                 setServerError(`Возникла ошибка при загрузке документации, повторите загрузку`)
             }
-
-            const responseData = await response.json();
-            alert('Файл успешно добавлен в базу данных');
-            handleCancel();
-            console.log('Ответ от сервера:', responseData);
+            else if(response.ok){
+                alert('Файл успешно добавлен в базу данных');
+                handleCancel();
+            }
         } catch (error) {
             setStatusRequest(`Ошибка при отправке запроса: ${error}`);
         } finally {
@@ -84,7 +84,7 @@ const FormTest = () => {
                 {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <div className='container-button'>
                     <button type="submit" className="btn-add">Отправить</button>
-                    <button type="button" className="button" onClick={handleCancel}>Отчистить</button>
+                    <button type="button" className="button" onClick={handleCancel}>Очистить</button>
                     {loading && <Spinner />}
                 </div>
             </form>

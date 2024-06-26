@@ -9,6 +9,8 @@ const SeachForDocumentation = ({ onClick }) => {
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(true);
     const [popupInform, setPopupInform] = useState(''); // Добавленное состояние для попапа
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [docToDelete, setDocToDelete] = useState(null);
     const apiUrl = process.env.REACT_APP_API_URL;
     const apiUrlFront = process.env.REACT_APP_API_FRONT_URL;
     const { register, reset, handleSubmit } = useForm();
@@ -57,8 +59,20 @@ const SeachForDocumentation = ({ onClick }) => {
         }
     }, [isAuthChecked, apiUrl, userUrl]);
 
-    const removingDoc = (doc_name) => {
-        RemovingDocumentation(doc_name);
+    const confirmDelete = (doc_name) => {
+        setDocToDelete(doc_name);
+        setShowConfirmation(true);
+    };
+
+    const handleDelete = () => {
+        RemovingDocumentation(docToDelete);
+        setShowConfirmation(false);
+        setDocToDelete(null);
+    };
+
+    const handleCancelDelete = () => {
+        setShowConfirmation(false);
+        setDocToDelete(null);
     };
 
     if (!isAuthChecked) {
@@ -79,7 +93,7 @@ const SeachForDocumentation = ({ onClick }) => {
                                     <button className='btn-add' onClick={() => clickLink(item)}>
                                         Получить ссылку
                                     </button>
-                                    <button className="button" onClick={() => removingDoc(item['name'])}>Удалить документацию</button>
+                                    <button className="button" onClick={() => confirmDelete(item['name'])}>Удалить документацию</button>
                                 </div>
                             </li>
                         ))}
@@ -88,6 +102,17 @@ const SeachForDocumentation = ({ onClick }) => {
                     <div>Вы не добавили ни одной документации</div>
                 )}
             </div>
+            {showConfirmation && (
+                <div className="confirmation-popup">
+                    <div className="confirmation-content">
+                        <p>Вы уверены, что хотите удалить эту документацию?</p>
+                        <div className='container-button'> 
+                            <button className="confirm-button button" onClick={handleDelete}>Да</button>
+                            <button className="cancel-button button" onClick={handleCancelDelete}>Отмена</button>
+                        </div> 
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

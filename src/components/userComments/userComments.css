@@ -13,7 +13,17 @@
 .form-grade img{
     cursor: pointer;
 }
-
+.textarea-container {
+    position: relative;
+}
+  
+.char-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    font-size: 12px;
+    color: gray;
+}
 .form-feedback{
     position: absolute;
     left: 50%;

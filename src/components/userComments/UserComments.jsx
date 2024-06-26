@@ -1,12 +1,20 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useRef } from 'react';
 import './userComments.css';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+
 import likeIcon from '../../img/like.svg';
 import dislikeIcon from '../../img/dislike.svg';
 import closeForm from '../../img/close.svg';
 
+const schema = yup.object().shape({
+    feedbackText: yup.string()
+    .max(100, 'Максимальная длина 100 символов'),
+});
+
 export const UserComments = (props) => {
-    const [feedbackText, setFeedbackText] = useState('');
+    const [feedbackTexts, setFeedbackTexts] = useState('');
     const [data, setData] = useState([]);
     const [feedback, setFeedback] = useState('');
     const [likeClicked, setLikeClicked] = useState(false);
@@ -22,22 +30,30 @@ export const UserComments = (props) => {
     const requestData = {
         value: feedback,
         llm_response: JSON.stringify(props.result),
-        user_comment: feedbackText,
+        user_comment: feedbackTexts,
         request_id: props.request_id
     };
 
     const apiUrl = process.env.REACT_APP_API_URL;
-    const { register, reset } = useForm();
+    const {
+        register,
+        reset,
+        formState: { errors },
+      } = useForm({
+        resolver: yupResolver(schema),
+      });
 
     const handleOnClickLike = () => {
         setFeedback('like');
         setLikeClicked(!likeClicked);
+        setDislikeClicked(false);
         setShowForm(true);
     };
 
     const handleOnClickDislike = () => {
         setFeedback('dislike');
         setDislikeClicked(!dislikeClicked);
+        setLikeClicked(false);
         setShowForm(true);
     };
 
@@ -50,9 +66,9 @@ export const UserComments = (props) => {
 
     const handleCancel = () => {
         reset({
-            feedbackText: '',
+            feedbackTexts: '',
         });
-        setFeedbackText('');
+        setFeedbackTexts('');
         setStatusRequest('');
     };
 
@@ -126,25 +142,32 @@ export const UserComments = (props) => {
                 >
                     <div className='form-feedback-block'>
                         <div className='form-feedback-block-title'>
-                            <div className="feedbackText">Обратная связь</div>
+                            <div className="feedbackText" htmlFor="feedbackText">Обратная связь</div>
                             <img alt='close-icon'
                                 src={closeForm}
                                 onClick={handleOnClickClose}
                             />
                         </div>
-                        <textarea
-                            {...register("feedbackText")}
-                            type="text"
-                            value={feedbackText}
-                            onChange={(e) => setFeedbackText(e.target.value)}
-                            id="feedbackText"
-                            name="feedbackText"
-                            required
-                        />
+                        <div className="textarea-container">
+                            <textarea
+                                {...register("feedbackText")}
+                                type="text"
+                                value={feedbackTexts}
+                                onChange={(e) => setFeedbackTexts(e.target.value)}
+                                id="feedbackText"
+                                name="feedbackText"
+                                maxLength="100"
+                                required
+                            />
+                            <div className="char-count">
+                                {feedbackTexts.length}/100
+                            </div>
+                        </div>
+                        {errors.feedbackText && <p className='form-validation' style={{ color: 'red' }}>{errors.feedbackText.message}</p>}
                     </div>
                     <div className='container-button'>
                         <button type='button' className="btn-add" onClick={fetchData}>Отправить</button>
-                        <button type='button' className="button" onClick={handleCancel}>Отчистить</button>
+                        <button type='button' className="button" onClick={handleCancel}>Очистить</button>
                     </div>
                 </div>
             )}

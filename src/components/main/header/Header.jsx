@@ -59,7 +59,7 @@ function Header() {
                   <Link className="btn-question button button-header" onClick={(e) => handleButtonClick(e, true)} ref={btnQuestionRef}>
                     <p>Задать вопрос</p>
                   </Link>
-                  <Link className="btn-test button button-header" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
+                  <Link className="btn-test button button-header btn-add" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
                     <p>Пройти тест</p>
                   </Link>
                 </>
