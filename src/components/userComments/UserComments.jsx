@@ -29,7 +29,6 @@ export const UserComments = (props) => {
 
     const requestData = {
         value: feedback,
-        llm_response: JSON.stringify(props.result),
         user_comment: feedbackTexts,
         request_id: props.request_id
     };

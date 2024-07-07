@@ -9,6 +9,7 @@ import UserVerification from '../../../scripts/verification/userVerification';
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
 import btnEdit from '../../../img/edit.svg';
+import Leaderboard from '../leaderboard/Leaderboard';
 import { ResetPasswordLK } from '../../forgotPassword/resetPassword/ResetPasswordLK';
 import { surnameValidator } from '../../../scripts/validation/surname';
 import { nameValidator } from '../../../scripts/validation/name';
@@ -236,6 +237,7 @@ const InformationUser = () => {
                     </div>
                 </form>
             )}
+            <Leaderboard />
         </section>
     );
 };
