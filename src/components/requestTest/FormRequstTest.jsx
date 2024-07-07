@@ -22,7 +22,7 @@ const RequestsTest = (props) => {
     const { handleSubmit } = useForm();
 
     const onSubmitTest = async () => {
-        setServerError('')
+        setServerError('');
         setLoading(true); // Показываем spinner
         try {
             const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
@@ -31,7 +31,7 @@ const RequestsTest = (props) => {
             });
 
             if (!response.ok) {
-                setServerError('Произошла ошибка при генерации теста, попробуйте сгенерировать заново')
+                throw new Error('Произошла ошибка при генерации теста, попробуйте сгенерировать заново');
             }
 
             const responseData = await response.json();
@@ -41,16 +41,42 @@ const RequestsTest = (props) => {
             setSelectedAnswer('');
             setIsAnswerCorrect(null);
         } catch (error) {
-            setServerError(`Произошла ошибка при генерации теста, попробуйте сгенерировать заново`);
+            setServerError(error.message);
         } finally {
             setLoading(false); // Скрываем spinner
         }
     };
 
-    const handleAnswerSelection = (answer) => {
-        const isCorrect = answer === questionData['right answer'];
-        setIsAnswerCorrect(isCorrect);
+    const handleAnswerSelection = async (answer) => {
         setSelectedAnswer(answer);
+        setLoading(true);
+        setServerError('');
+
+        try {
+            const response = await fetch(`${apiUrl}/check_test`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    request_id: id,
+                    selected_option: answer,
+                }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Произошла ошибка при проверке ответа');
+            }
+
+            const responseData = await response.json();
+            setIsAnswerCorrect(responseData['right answer'] === answer);
+            setAnswerServer(responseData['right answer']);
+        } catch (error) {
+            setServerError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -69,7 +95,7 @@ const RequestsTest = (props) => {
                             {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
                                 <li
                                     key={index}
-                                    className={`test-list-item ${selectedAnswer ? (questionData[optionKey] === questionData['right answer'] ? 'answer-right' : (selectedAnswer === questionData[optionKey] ? 'answer-wrong' : '')) : ''}`}
+                                    className={`test-list-item ${selectedAnswer ? (questionData[optionKey] === answerServer ? 'answer-right' : (selectedAnswer === questionData[optionKey] ? 'answer-wrong' : '')) : ''}`}
                                     onClick={() => handleAnswerSelection(questionData[optionKey])}
                                     style={{ cursor: 'pointer' }}
                                 >
@@ -81,7 +107,7 @@ const RequestsTest = (props) => {
                     </div>
                 )}
             </form>
-            {answerServer && <div>{answerServer}</div>}
+            {answerServer && <div>Правильный ответ: {answerServer}</div>}
         </section>
     );
 };
