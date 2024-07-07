@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import { useRequastLeaderboard } from "./requestLeaderboard"
-import axios from 'axios';
-import './leaderboard.css'
+import React from 'react';
+import { useRequastLeaderboard } from "./requestLeaderboard";
+import './leaderboard.css';
 
-const Leaderboard = () => {
-  const {userData} = useRequastLeaderboard();
-
+function Leaderboard() {
+  const { userData } = useRequastLeaderboard();
 
   return (
     <div>
@@ -19,7 +17,7 @@ const Leaderboard = () => {
           </tr>
         </thead>
         <tbody>
-          {userData.map((item, index) => (
+          {userData.map((item) => (
             <tr key={item.id}>
               <td>{item.place}</td>
               <td>{item.name}</td>
