@@ -102,7 +102,7 @@ const RequestsTest = (props) => {
                                 <li
                                     key={index}
                                     className={`test-list-item ${
-                                        selectedAnswer
+                                        answerServer
                                             ? questionData[optionKey] === answerServer
                                                 ? 'answer-right'
                                                 : selectedAnswer === questionData[optionKey]
@@ -121,9 +121,9 @@ const RequestsTest = (props) => {
                     </div>
                 )}
             </form>
-            {answerServer && <div>Правильный ответ: {answerServer}</div>}
         </section>
     );
 };
 
 export default RequestsTest;
+
