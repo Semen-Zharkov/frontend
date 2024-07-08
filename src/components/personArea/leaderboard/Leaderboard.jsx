@@ -7,9 +7,11 @@ export default function Leaderboard(){
             <table>
                 <thead>
                 <tr>
-                    <th>Rank</th>
-                    <th>Name</th>
-                    <th>Score</th>
+                    <th>Место</th>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Кол-во пройденных тестов</th>
+                    <th>Кол-во очков</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -17,7 +19,9 @@ export default function Leaderboard(){
                     <tr key={item.id}>
                     <td>{item.place}</td>
                     <td>{item.name}</td>
+                    <td>{item.surname}</td>
                     <td>{item.points}</td>
+                    <td>{item.total_tests}</td>
                     </tr>
                 ))}
                 </tbody>
