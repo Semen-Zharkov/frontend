@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
-export const useRequastLeaderboard = () => {
+export const useRequastLeaderboard = (docName) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const [userData, setUserData] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  console.log(docName, '3')
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/contest/leaderboard`, {
+        const response = await fetch(`${apiUrl}/contest/leaderboard/${docName}`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -18,6 +18,7 @@ export const useRequastLeaderboard = () => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+        console.log(docName, '3')
         const data = await response.json();
         setUserData(data);
         setIsLoggedIn(true);
@@ -26,10 +27,8 @@ export const useRequastLeaderboard = () => {
       }
     };
 
-    if (!isLoggedIn) {
-      fetchUserData();
-    }
-  }, [isLoggedIn, apiUrl]);
+    fetchUserData();
+  }, [apiUrl, docName]); // Добавляем docName в зависимости useEffect
 
-  return { userData };
+  return { userData, isLoggedIn };
 };

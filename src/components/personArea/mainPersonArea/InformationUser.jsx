@@ -45,7 +45,6 @@ const InformationUser = () => {
     const [inputConfirmType, setInputConfirmType] = useState('password');
     const [serverErrorEmail, setServerErrorEmail] = useState('');
     const [serverErrorPassword, setServerErrorPassword] = useState('');
-
     const {
       register: registerEdit,
       handleSubmit: handleSubmitEdit,

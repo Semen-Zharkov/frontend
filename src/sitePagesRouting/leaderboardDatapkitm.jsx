@@ -1,9 +1,9 @@
 import React from 'react';
-import Header from '../components/main/header/Header';
+import Header from '../components/main/header/Header.jsx';
 import Leaderboard from '../components/leaderboard/Leaderboard.jsx';
 
 
-const LeaderboardPage = () => {
+const LeaderboardDatapkitmPage = () => {
     console.log('leaderboard')
     return (
         <div>
@@ -13,4 +13,4 @@ const LeaderboardPage = () => {
     );
 }
 
-export default LeaderboardPage;
+export default LeaderboardDatapkitmPage;

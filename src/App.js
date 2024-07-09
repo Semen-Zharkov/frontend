@@ -12,7 +12,8 @@ import FormForgotPassword from './sitePagesRouting/forgotPassword';
 import FormResetPassword from './sitePagesRouting/resetPassword';
 import WorkDocumentation from './sitePagesRouting/WorkDocumentation'
 import { FlagProvider } from './flagContext';
-import LeaderboardPage from './sitePagesRouting/leaderboard';
+import LeaderboardDatapkPage from './sitePagesRouting/leaderboardDatapk';
+import LeaderboardDatapkitmPage from './sitePagesRouting/leaderboardDatapkitm';
 
 function App() {  
   return (
@@ -32,7 +33,8 @@ function App() {
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/logIn" element={<LogIn />} />
             </Route>
-            <Route path='/leaderboard' element={<LeaderboardPage />} />
+            <Route path='/leaderboard/datapk-itm'  element={<LeaderboardDatapkPage data='datapk-itm'  />} />
+            <Route path='/leaderboard/datapk'  element={<LeaderboardDatapkPage data='datapk'  />} />
         </Routes>
       </BrowserRouter>
     </FlagProvider>

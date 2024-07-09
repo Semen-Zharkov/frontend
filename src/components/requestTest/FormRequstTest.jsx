@@ -19,45 +19,45 @@ const RequestsTest = (props) => {
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
+
     const { handleSubmit } = useForm();
 
     const onSubmitTest = async () => {
         setServerError('');
-        setLoading(true); // Показываем spinner
+        setLoading(true);
+
         try {
-            const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
-                method: 'POST',
-                credentials: 'include',
-            });
+             // Отправляем запрос только если данные еще не загружены
+                const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                });
 
-            if (!response.ok) {
-                throw new Error('Произошла ошибка при генерации теста, попробуйте сгенерировать заново');
-            }
+                if (!response.ok) {
+                    throw new Error('Произошла ошибка при генерации теста, попробуйте сгенерировать заново');
+                }
 
-            const responseData = await response.json();
-            setQuestionData(responseData['result']);
-            setId(responseData['request_id']);
-            setResult(responseData['result']);
-            setSelectedAnswer('');
-            setIsAnswerCorrect(null);
-            setAnswerServer(''); // Сбрасываем предыдущий правильный ответ
+                const responseData = await response.json();
+                setQuestionData(responseData.result);
+                setId(responseData.request_id);
+                setResult(responseData.result);
+                setSelectedAnswer('');
+                setIsAnswerCorrect(null);
+                setAnswerServer('');
+            
         } catch (error) {
             setServerError(error.message);
         } finally {
-            setLoading(false); // Скрываем spinner
+            setLoading(false);
         }
     };
 
     const handleAnswerSelection = async (answer) => {
-        if (answerServer) {
-            setSelectedAnswer(answer);
-            setIsAnswerCorrect(answer === answerServer);
-        } else {
-            setSelectedAnswer(answer);
-            setLoading(true);
-            setServerError('');
+        setSelectedAnswer(answer);
+        setServerError('');
 
-            try {
+        try {
+            if (!answerServer) { // Используем хранящийся правильный ответ, если он уже есть
                 const response = await fetch(`${apiUrl}/check_test`, {
                     method: 'POST',
                     credentials: 'include',
@@ -75,13 +75,14 @@ const RequestsTest = (props) => {
                 }
 
                 const responseData = await response.json();
-                setIsAnswerCorrect(responseData['right answer'] === answer);
-                setAnswerServer(responseData['right answer']);
-            } catch (error) {
-                setServerError(error.message);
-            } finally {
-                setLoading(false);
+                setIsAnswerCorrect(responseData.right_answer === answer);
+                setAnswerServer(responseData.right_answer);
+            } else {
+                setIsAnswerCorrect(answerServer === answer);
             }
+        } catch (error) {
+            setServerError(error.message);
+        } finally {
         }
     };
 
@@ -102,13 +103,8 @@ const RequestsTest = (props) => {
                                 <li
                                     key={index}
                                     className={`test-list-item ${
-                                        answerServer
-                                            ? questionData[optionKey] === answerServer
-                                                ? 'answer-right'
-                                                : selectedAnswer === questionData[optionKey]
-                                                ? 'answer-wrong'
-                                                : ''
-                                            : ''
+                                        answerServer === questionData[optionKey] ? 'answer-right' :
+                                        selectedAnswer === questionData[optionKey] ? 'answer-wrong' : ''
                                     }`}
                                     onClick={() => handleAnswerSelection(questionData[optionKey])}
                                     style={{ cursor: 'pointer' }}

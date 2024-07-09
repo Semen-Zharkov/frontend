@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 
-export const useRequastLeaderboardMe = () => {
+export const useRequestLeaderboardMe = () => {
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [userData, setUserData] = useState([]);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({ datapk_itm: [], datapk: [] });
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${apiUrl}/contest/leaderboard/me`, {
+        const response = await fetch(`${apiUrl}/contest/leaderboard_me`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -20,16 +20,15 @@ export const useRequastLeaderboardMe = () => {
         }
         const data = await response.json();
         setUserData(data);
-        setIsLoggedIn(true);
       } catch (error) {
         console.error("Error fetching user data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
-    if (!isLoggedIn) {
-      fetchUserData();
-    }
-  }, [isLoggedIn, apiUrl]);
+    fetchUserData();
+  }, [apiUrl]);
 
-  return { userData };
+  return { userData, isLoading }
 };
