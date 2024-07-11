@@ -33,8 +33,8 @@ function App() {
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/logIn" element={<LogIn />} />
             </Route>
-            <Route path='/leaderboard/datapk-itm'  element={<LeaderboardDatapkPage data='datapk-itm'  />} />
-            <Route path='/leaderboard/datapk'  element={<LeaderboardDatapkPage data='datapk'  />} />
+            <Route path='/leaderboard/new_datapk1000'  element={<LeaderboardDatapkPage data='new_datapk1000'  />} />
+            <Route path='/leaderboard/new_datapk800'  element={<LeaderboardDatapkPage data='new_datapk800'  />} />
         </Routes>
       </BrowserRouter>
     </FlagProvider>

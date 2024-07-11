@@ -12,13 +12,8 @@ const RequestDocumentation = () => {
     const param = searchParams.get('documentation');
     return (
         <>
-            {/* <div className='btn-container'>
-                <button className="btn-request-test button" onClick={onClickTest}> Создать тест </button>
-                <button className="btn-request-answer button" onClick={onClickAnswer}> Задать вопрос </button>
-            </div> */}
             <Header />
             {!flagBtn ? <RequestsTest param={param}/> : <RequestsAnswer param={param}/>}
-            {/* <DataProvider id={id} result={result}/> */}
         </>
     );
 }

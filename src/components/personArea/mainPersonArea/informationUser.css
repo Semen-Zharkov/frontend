@@ -11,11 +11,15 @@
     background-repeat: no-repeat;
     z-index: -1
 }
-
+.container-person-area button{
+    font-size: 16px;
+}
 section.container-person-area {
     max-width: 632px;
     margin: 0 auto;
-    margin-top: 48px;
+    gap: 48px;
+    display: flex;
+    flex-direction: column;
 }
 .person-area-title {
     margin-bottom: 24px;
@@ -72,7 +76,6 @@ section.container-person-area {
     padding: 32px 24px;
     background: #FFFFFF;
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-    margin-top: 48px;
     display: flex;
     flex-direction: colum;
     border-radius: 5px;
@@ -89,7 +92,7 @@ section.container-person-area {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     padding: 32px 24px;
-    margin: 48px 0px;
+    margin-top: 48px;
 }
 
 .dropdown {
@@ -158,5 +161,45 @@ form.edit-form input{
 }
 .leaderboard {
     color: black
+}
+.container_leaderboard{
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    max-width: 632px;
+}
+.leaderboard_page .container_leaderboard{
+    max-width: 632px; 
+    margin: 0 auto;
+}
+.table-leaderboard{
+    width: 100%;
+    border-radius: 5px;
+    box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+}
+table td, table th{
+    padding: 16px 0px;
+}
+th:nth-child(2), td:nth-child(2){
+    text-align: start;
+}
+.link-leaderboard {
+    text-align: center;
+    color: #000000;
+    text-decoration: underline;
+}
+tr {
+    text-align: center;
+    background-color: #ffffff;
+}
+
+tbody tr:first-child {
+    box-shadow: 0 -1px 0 0 #c9cfda;
+}
+tbody tr:nth-child(n+2) {
+    box-shadow: 0 -1px 0 0 #DFE2E9;
+}
+tbody tr:nth-child(2n) {
+    background-color: #FAFAFA;
 }
 

@@ -93,7 +93,9 @@ const SeachForDocumentation = ({ onClick }) => {
                                     <button className='btn-add' onClick={() => clickLink(item)}>
                                         Получить ссылку
                                     </button>
-                                    <button className="button" onClick={() => confirmDelete(item['name'])}>Удалить документацию</button>
+                                    <button className="button" onClick={() => confirmDelete(item['name'])}>
+                                        Удалить документацию
+                                    </button>
                                 </div>
                             </li>
                         ))}
@@ -107,8 +109,12 @@ const SeachForDocumentation = ({ onClick }) => {
                     <div className="confirmation-content">
                         <p>Вы уверены, что хотите удалить эту документацию?</p>
                         <div className='container-button'> 
-                            <button className="confirm-button button" onClick={handleDelete}>Да</button>
-                            <button className="cancel-button button" onClick={handleCancelDelete}>Отмена</button>
+                            <button className="confirm-button button" onClick={handleDelete}>
+                                Да
+                            </button>
+                            <button className="cancel-button button" onClick={handleCancelDelete}>
+                                Отмена
+                            </button>
                         </div> 
                     </div>
                 </div>

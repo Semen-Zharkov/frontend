@@ -56,12 +56,12 @@ function Header() {
             <div className="buttons">
               {location.pathname === '/request_documentation' && (
                 <>
-                  <Link className="btn-question button button-header" onClick={(e) => handleButtonClick(e, true)} ref={btnQuestionRef}>
-                    <p>Задать вопрос</p>
-                  </Link>
-                  <Link className="btn-test button button-header btn-add" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
-                    <p>Пройти тест</p>
-                  </Link>
+                  <button className="btn-question button button-header" onClick={(e) => handleButtonClick(e, true)} ref={btnQuestionRef}>
+                    Задать вопрос
+                  </button>
+                  <button className="btn-test button button-header btn-add" onClick={(e) => handleButtonClick(e, false)} ref={btnTestRef}>
+                    Пройти тест
+                  </button>
                 </>
               )}
               {isLoggedIn ? (
@@ -74,16 +74,16 @@ function Header() {
                     <img className='btn-arrow' src={arrow} alt='' ref={arrowClickRef} />
                   </div>
                   <div className='nav-lk' ref={visibilityListRef}>
-                    <Link to="/person_account" className="btn-signUp button-header"><p> Личные данные </p></Link>
-                    <Link to="/work_documentation" className="btn-signUp button-header"><p> Документация </p></Link>
-                    <Link className="btn-logOut button-header" onClick={logout}><p> Выйти </p></Link>
+                    <Link to="/person_account" className="btn-signUp button-header">Личные данные</Link>
+                    <Link to="/work_documentation" className="btn-signUp button-header">Документация</Link>
+                    <Link className="btn-logOut button-header" onClick={logout}>Выйти</Link>
                   </div>
                 </div>
               ) : (
                 <div className='auth-container'>
-                  <Link to="/logIn" className="btn-signUp button-header"><p> Войти </p></Link>
+                  <Link to="/logIn" className="btn-signUp button-header">Войти</Link>
                   <p> | </p>
-                  <Link to="/signUp" className="btn-signIp button-header"><p> Регистрация</p></Link>
+                  <Link to="/signUp" className="btn-signIp button-header">Регистрация</Link>
                 </div>
               )}
             </div>

@@ -31,13 +31,13 @@ const WorkDocumentation = () => {
             <h2>Мои документации</h2>
             <div className='block-all-documentation'>
                 <div className='container-documentation-btn'>
-                    <button className='btn-download btn-add' onClick={handleUploadClick}>
+                    <a className='btn-download btn-add' onClick={handleUploadClick}>
                         <img src={iconAdd} alt=''/>
-                        <p>Загрузить</p>
-                    </button>
-                    <div className='container-list-btn'>
-                        <p>Загруженные</p>
-                    </div>
+                        Загрузить
+                    </a>
+                    <a className='container-list-btn'>
+                        Загруженные
+                    </a>
                 </div>
                 <div className='list-documentation'>
                     <SeachForDocumentation />

@@ -83,8 +83,12 @@ const FormTest = () => {
                 </div>
                 {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <div className='container-button'>
-                    <button type="submit" className="btn-add">Отправить</button>
-                    <button type="button" className="button" onClick={handleCancel}>Очистить</button>
+                    <button type="submit" className="btn-add button">
+                        Отправить
+                    </button>
+                    <button type="button" className="button" onClick={handleCancel}>
+                        Очистить
+                    </button>
                     {loading && <Spinner />}
                 </div>
             </form>

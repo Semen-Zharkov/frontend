@@ -145,9 +145,9 @@ const InformationUser = () => {
                                             <div>{userData.email}</div>
                                             <div>Админ</div>
                                         </div>
-                                        <button onClick={handleEditClickSave}>
+                                        <a onClick={handleEditClickSave}>
                                             <img src={btnEdit} alt='Edit' />
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                                 <div className='verification-container'>
@@ -163,9 +163,9 @@ const InformationUser = () => {
                                         <div>{userData.email}</div>
                                         <div>Сотрудник компании</div>
                                     </div>
-                                    <button onClick={handleEditClickSave}>
+                                    <a onClick={handleEditClickSave}>
                                         <img src={btnEdit} alt='Edit' />
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
                         )}
@@ -202,7 +202,7 @@ const InformationUser = () => {
                     <h3>Пароль</h3>
                     <div className='container-edit-btn'>
                         <button className='edit-password button' onClick={handleEditClick}>
-                            <p>Изменить</p>
+                            Изменить
                         </button>
                     </div>
                 </div>

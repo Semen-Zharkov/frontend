@@ -2,7 +2,7 @@ h1 {
     padding: 40px;
     font-size: 50px;
 }
-.main-container{
+.main-container::after{
     content: '';
     position: fixed;
     top: 0;
@@ -14,4 +14,13 @@ h1 {
     background-position: center;
     background-repeat: no-repeat;
     z-index: -1;
+}
+
+.main-container{
+    color: black;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 632px;
+    margin: 50px auto;
 }

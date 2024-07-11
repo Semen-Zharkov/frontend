@@ -46,8 +46,8 @@ const ListFeedback = () => {
             <div>Фитбеки</div>
             <div className="dropdown">
                 <div className='btn-feedback-container'>
-                    <button onClick={() => (toggleDropdown(true))}>Все фитбеки</button>
-                    <button onClick={() => (toggleDropdown(false))}>Не просмотрененные фитбеки</button>
+                    <a onClick={() => (toggleDropdown(true))}>Все фитбеки</a>
+                    <a onClick={() => (toggleDropdown(false))}>Не просмотрененные фитбеки</a>
                 </div>
                 {isOpen && data.length > 0 && (
                     <ul>
