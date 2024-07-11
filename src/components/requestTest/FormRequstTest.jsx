@@ -33,8 +33,11 @@ const RequestsTest = (props) => {
                     credentials: 'include',
                 });
 
-                if (!response.ok) {
-                    throw new Error('Произошла ошибка при генерации теста, попробуйте сгенерировать заново');
+                if(response.status===401){
+                    setServerError('Чтобы сгенировать тест авторизируйтесь');
+                }
+                else if (response.status===502) {
+                    setServerError('Произошла ошибка при генерации теста, попробуйте заново');
                 }
 
                 const responseData = await response.json();
@@ -89,7 +92,7 @@ const RequestsTest = (props) => {
     return (
         <section className='container-work-documentation'>
             <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>
-                <div>Тесты на основе документации {props.param}</div>
+                <h2>Тесты на основе документации <span>{props.param}</span></h2>
                 {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <button className='btn-add button-test' type="submit" disabled={loading}>
                     Сгенерировать тест
@@ -97,7 +100,7 @@ const RequestsTest = (props) => {
                 {loading && <Spinner />}
                 {questionData && (
                     <div className='question-container'>
-                        <p>{questionData.question}</p>
+                        <h3>{questionData.question}</h3>
                         <ul className='test-list'>
                             {['1 option', '2 option', '3 option', '4 option'].map((optionKey, index) => (
                                 <li

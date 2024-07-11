@@ -21,7 +21,7 @@ const RequestsAnswer = (props) => {
     const [answerServer, setAswerServer] = useState('');
     const [loading, setLoading] = useState(false);
     const textareaRef = useRef(null);
-
+    const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const { register, reset, handleSubmit } = useForm();
 
@@ -47,16 +47,20 @@ const RequestsAnswer = (props) => {
     };
 
     const onSubmitTest = async () => {
+        setServerError('');
         setLoading(true); // Показываем спиннер
         try {
             const response = await fetch(`${apiUrl}/get_answer?filename=${props.param}&question=${question}`, {
                 method: 'POST',
                 credentials: 'include',
             });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            if(response.status===401){
+                setServerError('Чтобы сгенировать тест авторизируйтесь');
             }
+            else if (!response.ok) {
+                setServerError('Произошла ошибка при генерации теста, попробуйте заново');
+            }
+            
             const responseData = await response.json();
             handleCancel(); 
             addItem(responseData['result']); // Получение данных из ответа
@@ -64,7 +68,7 @@ const RequestsAnswer = (props) => {
             setId(responseData['request_id']);
             setResult(responseData['result']);
         } catch (error) {
-            console.error('Ошибка при отправке запроса:', error);
+            setServerError(error.message);
         } finally {
             setLoading(false); // Скрываем спиннер
         }
@@ -94,8 +98,10 @@ const RequestsAnswer = (props) => {
     return (
         <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
-                <div>Ответы на основе документации {props.param}</div>
+                <h2>Ответы на основе документации <span>{props.param}</span></h2>
+                
                 <div className="answers-list" ref={answersListRef}>
+                {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                     {massivAnswer.map((item, index) => (
                         <>
                             <div className="questions-container">

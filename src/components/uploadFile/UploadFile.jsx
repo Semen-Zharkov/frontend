@@ -1,7 +1,9 @@
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import './uploadFile.css';
 import axios from 'axios';
+import { Popup } from '../../scripts/popup';
 
 const Spinner = () => (
     <div className="spinner-container">
@@ -14,6 +16,9 @@ const FormTest = () => {
     const [statusRequest, setStatusRequest] = useState('');
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState('');
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [message, setMessage] = useState('');
+    const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -39,8 +44,13 @@ const FormTest = () => {
                 setServerError(`Возникла ошибка при загрузке документации, повторите загрузку`)
             }
             else if(response.ok){
-                alert('Файл успешно добавлен в базу данных');
-                handleCancel();
+                setIsPopupOpen(true);
+                setMessage('Файл успешно добавлен в базу данных!');
+                setTimeout(() => {
+                    handleCancel();
+                    navigate('/upload_file');
+                      // Переход после закрытия попапа
+                }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
             }
         } catch (error) {
             setStatusRequest(`Ошибка при отправке запроса: ${error}`);
@@ -61,10 +71,15 @@ const FormTest = () => {
         document.getElementById('files').value = '';
     };
 
+    const handleClose = () => {
+        setIsPopupOpen(false);
+    };
+    
     return (
         <section className='container-upload'>
             <form className='form-container-upload' action="#" method="POST" onSubmit={handleSubmit(onSubmitDock)}>
                 <h2>Добавление документации</h2>
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} />}
                 <div className='upload-name'>
                     <label htmlFor="dockName">Название</label>
                     <input

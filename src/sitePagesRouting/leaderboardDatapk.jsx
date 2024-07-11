@@ -7,7 +7,6 @@ const LeaderboardDatapkPage = (props) => {
     return (
 
         <div>
-            {console.log(props, '1')}
             <Header />
             <Leaderboard data={props.data}/>
         </div>

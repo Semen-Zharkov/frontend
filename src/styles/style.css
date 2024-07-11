@@ -26,7 +26,7 @@ footer, header, hgroup, menu, nav, section {
 @font-face {
 	font-family: 'Montserrat-Regular';
 	src: url('../assets/fonts/static/Montserrat-Regular.ttf') format('ttf');
-	font-weight: normal;
+	font-weight: 400;
 	font-style: normal;
 
 }
@@ -41,6 +41,9 @@ button{
 	font-size: 18px;
 	border: none;
 	cursor: pointer;
+}
+p {
+	font-family: 'Montserrat-Regular';
 }
 body {
 	line-height: 1;
@@ -62,4 +65,12 @@ q:before, q:after {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+h2{
+	font-family: 'Montserrat-Medium';
+	font-size: 26px;
+}
+h3{
+	font-family: 'Montserrat-Medium';
+	font-size: 16px;
 }

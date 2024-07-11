@@ -129,10 +129,8 @@ const InformationUser = () => {
 
     return (
         <section className='container-person-area'>
-            <div className='person-area-title'>
-                <h2>Личные данные</h2>
-            </div>
             <div className='person-area-user'>
+                <h2>Личные данные</h2>
                 {!isEditingSave ? (
                     <>
                         {userData.is_superuser ? (

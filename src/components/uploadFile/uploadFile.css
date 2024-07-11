@@ -1,6 +1,9 @@
 .form_question{
     display: flex;
 }
+.container-upload .popup{
+    text-align: center;
+}
 .container-upload::after {
     content: '';
     position: fixed;

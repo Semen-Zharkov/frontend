@@ -16,7 +16,7 @@
 }
 section.container-person-area {
     max-width: 632px;
-    margin: 0 auto;
+    margin: 40px auto;
     gap: 48px;
     display: flex;
     flex-direction: column;
@@ -62,7 +62,9 @@ section.container-person-area {
     flex-direction: column;
     gap: 12px;
 }
-
+.person-area-user h2{
+    margin-bottom: 24px;
+}
 .user-information button {
     display: flex;
     align-items: center;
@@ -202,4 +204,15 @@ tbody tr:nth-child(n+2) {
 tbody tr:nth-child(2n) {
     background-color: #FAFAFA;
 }
+.popup {
+    position: fixed;
+    border-radius: 5px;
+    padding: 40px 30px;
+    background: #fafafa;
+    box-shadow: 0 2px 4px #0000001a;
+    top: 8%;
+    font-size: 20px;
+    z-index: 5;
+}
+
 

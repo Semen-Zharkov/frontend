@@ -12,6 +12,7 @@ import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
 import { nameCompanyValidator } from '../../../scripts/validation/nameCompany';
+import { Popup } from '../../../scripts/popup';
 
 // Определение схемы валидации с использованием yup
 const schema = yup.object().shape({
@@ -28,10 +29,10 @@ function FormSignUp() {
   const navigate = useNavigate();
   const [currentImage, setCurrentImage] = useState(btnPass);
   const [inputType, setInputType] = useState('password');
-
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [message, setMessage] = useState('');
   const [currentConfirmImage, setCurrentConfirmImage] = useState(btnPass);
   const [inputConfirmType, setInputConfirmType] = useState('password');
-
   const [serverError, setServerError] = useState('');
 
   const {
@@ -64,23 +65,29 @@ function FormSignUp() {
     })
       .then((response) => {
         if (response.ok) {
-          alert('Ваша заявка отправлена на верификацию');
+          setIsPopupOpen(true);
+          setMessage('Ваша заявка отправлена на верификацию!');
+          setTimeout(() => {
+            navigate('/logIn'); // Переход на страницу входа после закрытия попапа
+          }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
           reset();
-          navigate('/logIn');
         } else if(response.status===400) {
             setServerError('Эта почта уже зарегистрирована');
-
         }
       })
       .catch((error) => {
         console.error('Ошибка при регистрации:', error);
       });
   };
+  const handleClose = () => {
+    setIsPopupOpen(false);
+  };
 
   return (
     <section className='container-sign-up'>
       <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
         <h2>Регистрация</h2>
+        {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} />}
         <div className='form-container-brim'>
           <div className='block-surname'>
             <label htmlFor="last-name">Фамилия</label>
