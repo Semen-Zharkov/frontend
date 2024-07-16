@@ -3,7 +3,9 @@ import React, { useState, useEffect } from 'react';
 import './seachForDocumentation.css';
 import { useAuth } from '../../scripts/usersMe';
 import { RemovingDocumentation } from '../../scripts/removingDocumentation';
-
+import btnEdit from '../../img/edit.svg';
+import FormEditDocumentation from '../workDocumentation/editDocumentation/FormEditDocumentation';
+import { AddDocumentation } from '../workDocumentation/editDocumentation/addDocumentation/addDocumentation';
 const SeachForDocumentation = ({ onClick }) => {
     const { userData, isAuthChecked } = useAuth(); // Состояние isLoggedIn
     const [data, setData] = useState([]);
@@ -11,9 +13,12 @@ const SeachForDocumentation = ({ onClick }) => {
     const [popupInform, setPopupInform] = useState(''); // Добавленное состояние для попапа
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [docToDelete, setDocToDelete] = useState(null);
+    const [fileName, setFileName] = useState();
     const apiUrl = process.env.REACT_APP_API_URL;
     const apiUrlFront = process.env.REACT_APP_API_FRONT_URL;
     const { register, reset, handleSubmit } = useForm();
+    const [isEditingSave, setIsEditingSave] = useState(false);
+    const [addFile, setAddFile] = useState(false);
 
     const copyTextToClipboard = async (text) => {
         try {
@@ -74,7 +79,16 @@ const SeachForDocumentation = ({ onClick }) => {
         setShowConfirmation(false);
         setDocToDelete(null);
     };
-
+    const handleEditClickSave = (flagWindowEdit, fileName) => {
+        console.log("search")
+        setIsEditingSave(flagWindowEdit)
+        setFileName(fileName)
+    }
+    const handleAddClickSave = (flagWindowAdd, fileName) => {
+        console.log("add")
+        setFileName(fileName)
+        setAddFile(flagWindowAdd)
+    }
     if (!isAuthChecked) {
         return null;
     }
@@ -87,16 +101,29 @@ const SeachForDocumentation = ({ onClick }) => {
                         {popupInform && <div className='document-popup'>{popupInform}</div>}
                         {data.map((item, index) => (
                             <li key={index} className='documentation-list-item'>
-                                <h3 className='title'>{item['name']}</h3>
+                                <div className='container-edit-file'>
+                                    <h3 className='title'>{item['name']}</h3>
+                                    <a onClick={() => handleEditClickSave(true,item['name'] )}>
+                                            <img src={btnEdit} alt='Edit' />
+                                    </a>
+                                </div>                               
                                 <p className='description'>{item['description']}</p>
                                 <div className='container-button'>
                                     <button className='btn-add' onClick={() => clickLink(item)}>
                                         Получить ссылку
                                     </button>
+                                    <button className="button" onClick={() => handleAddClickSave(true,item['name'] )}>Дополнить</button>
                                     <button className="button" onClick={() => confirmDelete(item['name'])}>
                                         Удалить документацию
                                     </button>
                                 </div>
+                                {(isEditingSave && item['name']===fileName) && (
+                                    <FormEditDocumentation docName={item['name']} description={item['description']} onClose={handleEditClickSave}/>
+                                    
+                                )}
+                                {(addFile && item['name']===fileName) && (
+                                    <AddDocumentation docName={item['name']} onClose={handleAddClickSave}/>
+                                )}
                             </li>
                         ))}
                     </ul>

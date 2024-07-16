@@ -32,3 +32,25 @@
 .block-all-documentation button{
     font-size: 16px;
 }
+.documentation-list-item .container-edit-file {
+    display: flex;
+    justify-content: space-between;
+}
+.form-container-upload .container-close {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.documentation-list-item .form-container-upload {
+    margin: 0;
+    position: absolute;
+}
+.documentation-list-item .container-edit-file, .container-close {
+    display: flex;
+    justify-content: space-between;
+}
+.link-close img {
+    width: 14px;
+    height: 14px;
+}

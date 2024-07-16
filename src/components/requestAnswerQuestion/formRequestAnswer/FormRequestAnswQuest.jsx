@@ -33,7 +33,7 @@ const RequestsAnswer = (props) => {
         reset({
             question: '',
         });
-        setQuestion(''); 
+        setQuestion('');
     };
 
     const formatAnswer = (answer) => {
@@ -54,15 +54,16 @@ const RequestsAnswer = (props) => {
                 method: 'POST',
                 credentials: 'include',
             });
-            if(response.status===401){
-                setServerError('Чтобы сгенировать тест авторизируйтесь');
+            if (!response.ok) {
+                if (response.status === 401) {
+                    throw new Error('Пожалуйста, авторизируйтесь!');
+                } else {
+                    throw new Error('Произошла ошибка при генерации теста, попробуйте заново');
+                }
             }
-            else if (!response.ok) {
-                setServerError('Произошла ошибка при генерации теста, попробуйте заново');
-            }
-            
+
             const responseData = await response.json();
-            handleCancel(); 
+            handleCancel();
             addItem(responseData['result']); // Получение данных из ответа
             setAswerServer(responseData);
             setId(responseData['request_id']);
@@ -99,9 +100,9 @@ const RequestsAnswer = (props) => {
         <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
                 <h2>Ответы на основе документации <span>{props.param}</span></h2>
-                
+
                 <div className="answers-list" ref={answersListRef}>
-                {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
+                    {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                     {massivAnswer.map((item, index) => (
                         <>
                             <div className="questions-container">
