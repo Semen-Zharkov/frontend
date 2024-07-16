@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import './userComments.css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
@@ -9,8 +9,7 @@ import dislikeIcon from '../../img/dislike.svg';
 import closeForm from '../../img/close.svg';
 
 const schema = yup.object().shape({
-    feedbackText: yup.string()
-    .max(100, 'Максимальная длина 100 символов'),
+    feedbackText: yup.string().max(100, 'Максимальная длина 100 символов'),
 });
 
 export const UserComments = (props) => {
@@ -38,9 +37,9 @@ export const UserComments = (props) => {
         register,
         reset,
         formState: { errors },
-      } = useForm({
+    } = useForm({
         resolver: yupResolver(schema),
-      });
+    });
 
     const handleOnClickLike = () => {
         setFeedback('like');
@@ -116,6 +115,28 @@ export const UserComments = (props) => {
         setIsDragging(false);
     };
 
+    useEffect(() => {
+        const handleMouseMoveDocument = (e) => {
+            if (!isDragging) return;
+            setPosition({
+                x: e.clientX - offset.current.x,
+                y: e.clientY - offset.current.y
+            });
+        };
+
+        const handleMouseUpDocument = () => {
+            setIsDragging(false);
+        };
+
+        document.addEventListener('mousemove', handleMouseMoveDocument);
+        document.addEventListener('mouseup', handleMouseUpDocument);
+
+        return () => {
+            document.removeEventListener('mousemove', handleMouseMoveDocument);
+            document.removeEventListener('mouseup', handleMouseUpDocument);
+        };
+    }, [isDragging]);
+
     return (
         <form className="feedback-container" action="#" method="POST">
             <div className='form-grade'>
@@ -135,9 +156,6 @@ export const UserComments = (props) => {
                     className='form-feedback'
                     style={{ top: `${position.y}px`, left: `${position.x}px`, position: 'absolute' }}
                     onMouseDown={handleMouseDown}
-                    onMouseMove={handleMouseMove}
-                    onMouseUp={handleMouseUp}
-                    onMouseLeave={handleMouseUp}
                 >
                     <div className='form-feedback-block'>
                         <div className='form-feedback-block-title'>

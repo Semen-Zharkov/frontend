@@ -37,7 +37,6 @@ function FormSignUp() {
 
   const {
     register,
-    reset,
     formState: { errors },
     handleSubmit,
   } = useForm({
@@ -70,7 +69,6 @@ function FormSignUp() {
           setTimeout(() => {
             navigate('/logIn'); // Переход на страницу входа после закрытия попапа
           }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
-          reset();
         } else if(response.status===400) {
             setServerError('Эта почта уже зарегистрирована');
         }

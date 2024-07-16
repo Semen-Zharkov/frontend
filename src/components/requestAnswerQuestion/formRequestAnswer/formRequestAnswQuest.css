@@ -125,12 +125,12 @@ textarea#question {
     flex-direction: column;
     gap: 16px;
     margin-bottom: auto;
+    word-wrap: break-word;
     max-height: 70vh;
     overflow-y: auto;
     padding-right: 30px;
     width: 710px;
 }
-
 .block-input button{
     background: rgba(0,0,0,0);
 }

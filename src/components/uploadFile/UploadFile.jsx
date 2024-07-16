@@ -46,11 +46,6 @@ const FormTest = () => {
             else if(response.ok){
                 setIsPopupOpen(true);
                 setMessage('Файл успешно добавлен в базу данных!');
-                setTimeout(() => {
-                    handleCancel();
-                    navigate('/upload_file');
-                      // Переход после закрытия попапа
-                }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
             }
         } catch (error) {
             setStatusRequest(`Ошибка при отправке запроса: ${error}`);
@@ -79,7 +74,7 @@ const FormTest = () => {
         <section className='container-upload'>
             <form className='form-container-upload' action="#" method="POST" onSubmit={handleSubmit(onSubmitDock)}>
                 <h2>Добавление документации</h2>
-                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} />}
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} urlNavigate={'../work_documentation'}/>}
                 <div className='upload-name'>
                     <label htmlFor="dockName">Название</label>
                     <input

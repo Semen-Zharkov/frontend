@@ -38,7 +38,7 @@
     box-shadow: 0px 0px 7px 0px rgba(0, 0, 0, 0.25);
 }
 textarea#feedbackText {
-    width: 459px;
+    width: 458px;
     height: 105px;
     padding: 10px 12px;
     resize: none;
@@ -75,6 +75,9 @@ textarea#feedbackText {
     padding: 10px 30px;
     font-size: 20px;
     border-radius: 7px;
+}
+section.container-work-documentation {
+    overflow-x: hidden;
 }
 /* .close-button {
     position: absolute;

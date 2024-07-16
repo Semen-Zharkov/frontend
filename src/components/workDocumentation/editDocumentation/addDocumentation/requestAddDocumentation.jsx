@@ -4,17 +4,15 @@ export const useRequestAddDocumentation = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const sendRequest = async ({ docName, file }) => {
+    const sendRequest = async ({ docName, file, setFlag, setMessage }) => {
         try {
-            
             const formDatas = new FormData();
             formDatas.append('file', file);
 
             const response = await fetch(`${apiUrl}/docks/add_data?doc_name=${docName}`, {
-                method: 'POST', // Используем POST вместо GET
+                method: 'POST',
                 credentials: 'include',
-                body: formDatas // Отправляем FormData напрямую
-
+                body: formDatas
             });
 
             console.log('Response status:', response.status);
@@ -23,6 +21,8 @@ export const useRequestAddDocumentation = () => {
                 throw new Error('Network response was not ok');
             }
 
+            setMessage('Документ успешно добавлен!');
+            setFlag(true);
             setIsLoggedIn(true);
             return response.json();
         } catch (error) {

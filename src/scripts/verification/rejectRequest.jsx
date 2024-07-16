@@ -1,6 +1,6 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const RejectRequest = async (id) =>{
+export const RejectRequest = async (id, setFlagReject, setMessage) =>{
     try {
         const response = await fetch(`${apiUrl}/admin/reject?request_id=${id}`, {
             method: "POST",
@@ -13,8 +13,8 @@ export const RejectRequest = async (id) =>{
             throw new Error("Network response was not ok");
         }
         else{
-            alert('Заявка отклонена')
-            window.location.reload();
+            setMessage('Заявка на верификацию отклонена!')
+            setFlagReject(true);
         }
 
     } catch (error) {

@@ -30,7 +30,6 @@ const passwordSchema = yup.object().shape({
 });
 
 const InformationUser = () => {
-    const navigate = useNavigate();
     const { userData } = useAuth();
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingSave, setIsEditingSave] = useState(false);
@@ -45,6 +44,7 @@ const InformationUser = () => {
     const [inputConfirmType, setInputConfirmType] = useState('password');
     const [serverErrorEmail, setServerErrorEmail] = useState('');
     const [serverErrorPassword, setServerErrorPassword] = useState('');
+    
     const {
       register: registerEdit,
       handleSubmit: handleSubmitEdit,

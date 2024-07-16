@@ -2,7 +2,9 @@
     display: flex;
 }
 .container-upload .popup{
-    text-align: center;
+    display: flex;
+    left: 50%;
+    transform: translate(-50%, -8%);
 }
 .container-upload::after {
     content: '';

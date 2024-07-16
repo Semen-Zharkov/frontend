@@ -79,7 +79,7 @@
 }
 .user-FIO {
     display: flex;
-    justify-content: start;
+    justify-content: end;
     max-width: 170px;
     flex-wrap: wrap;
     gap: 5px;

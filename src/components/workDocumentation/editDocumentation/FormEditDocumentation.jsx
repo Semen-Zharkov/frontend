@@ -4,6 +4,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import {useRequestEditDocumentation} from './requestEditDocumentation';
 import iconClose from '../../../img/icons/cross.svg';
+import { Popup } from '../../../scripts/popup';
 
 const schema = yup.object().shape({
   dockName: yup.string().required('Название документа обязательно'),
@@ -12,6 +13,8 @@ const schema = yup.object().shape({
 
 const FormEditDocumentation = ({ docName, description, onClose }) => {
   const { sendRequest, isLoggedIn } = useRequestEditDocumentation();
+  const [message, setMessage] = useState('');
+  const [flag, setFlag] = useState(false);
   const [dockName, setDockName] = useState(docName || '');
   const [dockDescription, setDockDescription] = useState(description || '');
 
@@ -26,7 +29,7 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
 
   const onSubmit = async (data) => {
     try {
-      const result = await sendRequest({ currentName: docName, newName: dockName, description: dockDescription });
+      const result = await sendRequest({ currentName: docName, newName: dockName, description: dockDescription, setFlag, setMessage  });
       console.log('Request sent successfully:', result);
     } catch (error) {
       console.error('Failed to send request:', error);
@@ -45,6 +48,7 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
 
   return (
     <form className="form-container-upload" onSubmit={handleSubmit(onSubmit)}>
+      {flag && <Popup isOpen={flag} message={message} onClose={handleClose} useNavigate={'./work_documentation'}/>}
       <div className="container-close">
         <h2>Изменение документации</h2>
         <a className='link-close' onClick={handleClose}>

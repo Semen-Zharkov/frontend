@@ -4,7 +4,7 @@ export const useRequestEditDocumentation = () => {
     const apiUrl = process.env.REACT_APP_API_URL;
     const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-    const sendRequest = async ({ currentName, newName, description }) => {
+    const sendRequest = async ({ currentName, newName, description, setFlag, setMessage }) => {
         try {
             const data = {
               current_name: currentName,
@@ -26,7 +26,8 @@ export const useRequestEditDocumentation = () => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-
+            setMessage('Данные успешно изменены!');
+            setFlag(true);
             setIsLoggedIn(true);
             return response.json();
         } catch (error) {

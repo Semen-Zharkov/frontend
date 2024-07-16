@@ -1,8 +1,8 @@
 import {useForm} from 'react-hook-form';
 import React, { useState} from 'react';
-import {useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { Popup } from '../../../scripts/popup';
 
 const schema = yup.object().shape({
     email: yup
@@ -12,8 +12,8 @@ const schema = yup.object().shape({
 });
 
 function FormForgotPassword(){
-    
-    const navigate = useNavigate();
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [message, setMessage] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const [serverError, setServerError] = useState('');
 
@@ -36,9 +36,8 @@ function FormForgotPassword(){
         body: JSON.stringify(data),
         }).then(response => {
             if(response.ok){
-                alert('Проверьте почту')
-                reset()
-                navigate('/');
+                setIsPopupOpen(true);
+                setMessage('Проверьте почту!');
             }
             else if(response.status===404){
                 setServerError('Пользователя с данной почтой не зарегистрованно');
@@ -48,10 +47,14 @@ function FormForgotPassword(){
           
         })
     }
+    const handleClose = () => {
+        setIsPopupOpen(false);
+    };
 
     return (
         <section className="container-forgot-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} urlNavigate='/' />}
                 <h2>Восстановление пароля</h2>
                 <div className='form-container-brim'>
                     <label for="email">Email</label>

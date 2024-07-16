@@ -1,21 +1,20 @@
 import {useForm} from 'react-hook-form';
 import { useState } from 'react';
-import {useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import btnPass from '../../../img/icons/password/Visibility=True.svg'
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg'
 import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
-
+import { Popup } from '../../../scripts/popup';
 const schema = yup.object().shape({
     password: passwordValidator,
     confirmation_password: confirmPasswordValidator   
 });
 
 function FormResetPassword(){
-
-    const navigate = useNavigate();
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [message, setMessage] = useState('');
     const searchParams = new URLSearchParams(window.location.search);
     const token = searchParams.get('token');
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -29,7 +28,6 @@ function FormResetPassword(){
 
     const {
         register,
-        reset,
         formState: { errors },
         handleSubmit,
     } = useForm({
@@ -59,19 +57,21 @@ function FormResetPassword(){
         credentials: 'include'
         }).then(response => {
             if(response.ok){
-                alert('Пароль успешно изменён')
-                navigate('/logIn');
-                reset()
+                setIsPopupOpen(true);
+                setMessage('Пароль успешно изменён!');
             }
           })
         .catch (error => {
           console.error('Ошибка при изменение пароля:', error);
         })
     }
-
+    const handleClose = () => {
+        setIsPopupOpen(false);
+    };
     return (
         <section class="container-reset-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} urlNavigate='/logIn' />}
                 <h2>Изменение пароля</h2>
                 <div className='form-container-brim'>
                     <div className='block-password password'>
