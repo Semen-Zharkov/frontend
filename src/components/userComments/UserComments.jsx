@@ -155,7 +155,7 @@ export const UserComments = (props) => {
                                 onChange={(e) => setFeedbackTexts(e.target.value)}
                                 id="feedbackText"
                                 name="feedbackText"
-                                maxLength="100"
+                                maxLength="300"
                                 required
                             />
                             <div className="char-count">

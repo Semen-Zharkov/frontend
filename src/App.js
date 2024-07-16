@@ -34,11 +34,7 @@ function App() {
               <Route path="/logIn" element={<LogIn />} />
             </Route>
             <Route path='/leaderboard/DATAPK_VERSION_2_1'  element={<LeaderboardDatapkPage data='DATAPK_VERSION_2_1'  />} />
-<<<<<<< HEAD
             <Route path='/leaderboard/DATAPK_ITM_VERSION_1_7'  element={<LeaderboardDatapkPage data='DATAPK_ITM_VERSION_1_7'  />} />
-=======
-            <Route path='/leaderboard/new_datapk800'  element={<LeaderboardDatapkPage data='new_datapk800'  />} />
->>>>>>> 5c20dd4a1a1f374e451c307c83d9e1b8ad234dec
         </Routes>
       </BrowserRouter>
     </FlagProvider>
