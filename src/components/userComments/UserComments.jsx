@@ -177,7 +177,7 @@ export const UserComments = (props) => {
                                 required
                             />
                             <div className="char-count">
-                                {feedbackTexts.length}/100
+                                {feedbackTexts.length}/300
                             </div>
                         </div>
                         {errors.feedbackText && <p className='form-validation' style={{ color: 'red' }}>{errors.feedbackText.message}</p>}

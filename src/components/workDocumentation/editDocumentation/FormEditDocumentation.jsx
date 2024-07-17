@@ -43,6 +43,7 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
 
   const handleClose = () => {
     onClose(false);
+    window.location.reload();
   };
 
 
