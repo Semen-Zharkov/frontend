@@ -36,7 +36,7 @@ const FormRequestsTest = (props) => {
                 else if (response.status===502) {
                     setServerError('Произошла ошибка при генерации теста, попробуйте заново');
                 }
-                
+                localStorage.removeItem('rightAnswer'); 
                 const responseData = await response.json();
                 localStorage.setItem('storageTest',JSON.stringify(responseData.result))
                 localStorage.setItem('idRequest',JSON.stringify(responseData.request_id))

@@ -11,7 +11,7 @@ import { PrivateRouteAuthorized } from './scripts/PrivateRouteAuthorized';
 import FormForgotPassword from './sitePagesRouting/forgotPassword';
 import FormResetPassword from './sitePagesRouting/resetPassword';
 import LeaderboardDatapkPage from './sitePagesRouting/leaderboardDatapk';
-import WorkDocumentation from './sitePagesRouting/workDocumentation';
+import Work from './sitePagesRouting/Work';
 
 function App() {  
   return (
@@ -20,7 +20,7 @@ function App() {
             <Route path="/" element={<Main /> } />
             {/* Измененный маршрут */}
             <Route path="/request_documentation" element={<Request />} />
-            <Route path="/work_documentation" element={<WorkDocumentation />} />
+            <Route path="/work_documentation" element={<Work  />} />
             <Route path="/forgot_password" element={<FormForgotPassword/>} />
             <Route path="/reset_password" element={<FormResetPassword/>} />
             <Route element={<PrivateRouteUnauthorized />} >
