@@ -41,7 +41,6 @@ form.form-container-test{
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 60px;
 }
 textarea#question {
     min-width: 642px;
@@ -154,4 +153,16 @@ textarea#question {
     text-align: center;
     font-family: 'Montserrat-Medium';
     font-weight: 600;
+}
+.disclaimer {
+    text-align: center;
+    min-width: 1020px;
+    margin-bottom: 2%;
+    margin-top: -30px;
+    opacity: 0.7;
+}
+.form-container-test .disclaimer{
+    position: fixed;
+    bottom: 0%;
+    max-width: 1020px;
 }

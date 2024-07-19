@@ -8,6 +8,7 @@ import { useAuth } from '../../../scripts/usersMe';
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';
+import { Popup } from '../../../scripts/popup';
 
 const schema = yup.object().shape({
     email: emailRegistrationValidator,
@@ -16,7 +17,7 @@ const schema = yup.object().shape({
     .required('Пароль обязателен')    
 });
 
-async function verifyToken(token) {
+async function verifyToken({token, setMessage, setIsPopupOpen}) {
     const apiUrl = process.env.REACT_APP_API_URL;
     // Здесь должна быть логика проверки токена
     // Например, запрос на ваш сервер для проверки токена
@@ -31,7 +32,8 @@ async function verifyToken(token) {
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
-        else alert('Верификация прошла успешно!');
+        setIsPopupOpen(true);
+        setMessage('Верификация прошла успешно!');
     } catch (error) {
         console.error("Error fetching user data:", error);
     } finally {
@@ -41,12 +43,12 @@ async function verifyToken(token) {
 }
 
 
-function VerifyUserComponent({ token, onVerificationComplete }) {
+function VerifyUserComponent({ token, onVerificationComplete, setMessage, setIsPopupOpen }) {
     useEffect(() => {
         const validate = async () => {
-            const isValid = await verifyToken(token);
+            const isValid = await verifyToken({token,setMessage, setIsPopupOpen});
             if (isValid) {
-                alert('Token is valid!');
+                
             }
             onVerificationComplete();
         };
@@ -57,6 +59,8 @@ function VerifyUserComponent({ token, onVerificationComplete }) {
 }
 
 export default function FormLogIn() {
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [message, setMessage] = useState('');
     const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get('token');
@@ -111,12 +115,18 @@ export default function FormLogIn() {
         }
     };
 
+    const handleClose = () => {
+        setIsPopupOpen(false);
+      };
     return (
         <section className='container-log-in'>
+            {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} />}
             {token && !verificationComplete && (
                 <VerifyUserComponent
                     token={token}
                     onVerificationComplete={() => setVerificationComplete(true)}
+                    setIsPopupOpen={setIsPopupOpen}
+                    setMessage={setMessage}
                 />
             )}
             {verificationComplete && (
