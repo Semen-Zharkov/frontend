@@ -11,7 +11,7 @@ import { PrivateRouteAuthorized } from './scripts/PrivateRouteAuthorized';
 import FormForgotPassword from './sitePagesRouting/forgotPassword';
 import FormResetPassword from './sitePagesRouting/resetPassword';
 import LeaderboardDatapkPage from './sitePagesRouting/leaderboardDatapk';
-import WorkDocumentation from './sitePagesRouting/workDocumentation';
+import WorkDocumentation from './sitePagesRouting/WorkDocumentation';
 
 function App() {  
   return (
