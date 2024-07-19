@@ -212,6 +212,8 @@ tbody tr:nth-child(2n) {
     background: #fafafa;
     box-shadow: 0 2px 4px #0000001a;
     top: 8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     font-size: 20px;
     z-index: 5;
 }

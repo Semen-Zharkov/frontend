@@ -11,6 +11,7 @@ export const logout = async () => {
         // Проверка успешности выполнения запроса на выход
         if (response.ok) {
             document.location.reload();
+            localStorage.clear()
         } else {
             console.error('Logout request failed');
         }

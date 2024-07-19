@@ -1,7 +1,6 @@
 
 .main-nav {
-    margin: 0 auto;
-    margin-top: 40px;
+    margin: 40px auto;
     max-width: 1280px;
     color: #222222;
 }
@@ -61,12 +60,12 @@
     font-size: 14px;
 }
 .nav-lk.active{
-    visibility: visible;
+    display: flex;
 }
 .nav-lk {
     align-items: self-start;
     background-color: #fff;
-    display: flex;
+    display: none;
     flex-direction: column;
     gap: 24px;
     width: 140px;
@@ -74,7 +73,6 @@
     position: absolute;
     top: 40px;
     border-radius: 3px;
-    visibility: hidden;
     z-index: 10;
 }
 .user-FIO {

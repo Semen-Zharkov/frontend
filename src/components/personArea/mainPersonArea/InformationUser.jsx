@@ -16,6 +16,7 @@ import { nameValidator } from '../../../scripts/validation/name';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
+import { Popup } from '../../../scripts/popup';
 
 const editSchema = yup.object().shape({
   surname: surnameValidator,
@@ -34,6 +35,11 @@ const InformationUser = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingSave, setIsEditingSave] = useState(false);
     const [password, setPassword] = useState('');
+    const [surname, setSurname] = useState('');
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('')
+    const [flag,setFlag] = useState(false);
+    const [message, setMessage] = useState('');
     const [old_password, setCurrentPassword] = useState('');
     const [confirmation_password, setConfirmPassword] = useState('');
     const [currentImage, setCurrentImage] = useState(btnPass);
@@ -95,11 +101,9 @@ const InformationUser = () => {
     };
 
     const onSubmitEdit = async (data) => {
-        const result = await ResetPasswordLK(data);
+        const result = await ResetPasswordLK({data, setMessage, setFlag});
         if (result && result.error) {
             setServerErrorEmail(result.error);
-        } else {
-            setIsEditingSave(false);
         }
     };
 
@@ -111,6 +115,11 @@ const InformationUser = () => {
             setIsEditing(false);
         }
     };
+    const handleClose = () => {
+        console.log('close')
+        setFlag(false)
+        window.location.reload();
+      };
 
     const onClickEye = () => {
         setCurrentImage(currentImage === btnPass ? btnPassVisib : btnPass);
@@ -129,6 +138,7 @@ const InformationUser = () => {
 
     return (
         <section className='container-person-area'>
+            {flag && <Popup isOpen={flag} message={message} onClose={handleClose}/>}
             <div className='person-area-user'>
                 <h2>Личные данные</h2>
                 {!isEditingSave ? (
@@ -173,17 +183,17 @@ const InformationUser = () => {
                         <div className='form-container-brim'>
                             <div className='block-surname'>
                                 <label htmlFor="last-name">Фамилия</label>
-                                <input {...registerEdit("surname")} type="text" id="last-name" defaultValue={userData.surname || ''} />
+                                <input {...registerEdit("surname")} type="text" id="last-name" defaultValue={userData.surname || ''} onChange={(e)=>setSurname(e.target.value)}/>
                                 {editErrors.surname && <p className='form-validation' style={{ color: 'red' }}>{editErrors.surname.message}</p>}
                             </div>
                             <div className='block-username'>
                                 <label htmlFor="first-name">Имя</label>
-                                <input {...registerEdit("name")} type="text" id="first-name" defaultValue={userData.name || ''} />
+                                <input {...registerEdit("name")} type="text" id="first-name" defaultValue={userData.name || ''} onChange={(e)=>setName(e.target.value)} />
                                 {editErrors.name && <p className='form-validation' style={{ color: 'red' }}>{editErrors.name.message}</p>}
                             </div>
                             <div className='block-email'>
                                 <label htmlFor="email">Почта</label>
-                                <input {...registerEdit("email")} onChange={(e) => setServerErrorEmail('')} type="email" id="email" defaultValue={userData.email || ''} />
+                                <input {...registerEdit("email")} type="email" id="email" defaultValue={userData.email || ''} onChange={(e)=>setEmail(e.target.value)} />
                                 {editErrors.email && <p className='form-validation' style={{ color: 'red' }}>{editErrors.email.message}</p>}
                                 {serverErrorEmail && <p className='form-validation' style={{ color: 'red' }}>{serverErrorEmail}</p>}
                             </div>

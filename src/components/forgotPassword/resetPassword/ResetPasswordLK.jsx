@@ -1,8 +1,8 @@
-import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Popup } from "../../../scripts/popup";
+
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const ResetPasswordLK = async (data) => {
+export const ResetPasswordLK = async ({data, setMessage, setFlag}) => {
     try {
         const response = await fetch(`${apiUrl}/users/me`, {
             method: "PATCH",
@@ -25,8 +25,8 @@ export const ResetPasswordLK = async (data) => {
             }
             throw new Error("Network response was not ok");
         }
-        window.location.reload();
-        alert('Данные успешно изменены');
+        setMessage('Данные успешно изменены')
+        setFlag(true)
     } catch (error) {
         console.error("Error fetching user data:", error);
         return { error: error.message };

@@ -38,6 +38,7 @@ section.container-documentation {
     width: 200px;
     padding: 10px 0;
     background: #31D9AF;
+    border: 1px solid #31d9af;
     border-radius: 5px;
     color: #FFFFFF;
     border: none;

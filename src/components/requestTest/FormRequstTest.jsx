@@ -9,26 +9,23 @@ const Spinner = () => (
     </div>
 );
 
-const RequestsTest = (props) => {
-    const [questionData, setQuestionData] = useState(null);
+const FormRequestsTest = (props) => {
+    const [questionData, setQuestionData] = useState(JSON.parse(localStorage.getItem('storageTest') || null));
     const [selectedAnswer, setSelectedAnswer] = useState('');
-    const [id, setId] = useState('');
+    const [id, setId] = useState(localStorage.getItem('idRequest') ||'');
     const [result, setResult] = useState('');
-    const [isAnswerCorrect, setIsAnswerCorrect] = useState(null);
-    const [answerServer, setAnswerServer] = useState('');
+    const [answerServer, setAnswerServer] = useState(localStorage.getItem('rightAnswer') ||'');
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
-
     const { handleSubmit } = useForm();
-
     const onSubmitTest = async () => {
         setServerError('');
         setLoading(true);
 
         try {
              // Отправляем запрос только если данные еще не загружены
-                const response = await fetch(`${apiUrl}/get_test?filename=${props.param}`, {
+                const response = await fetch(`${apiUrl}/get_test?filename=${props.docName}`, {
                     method: 'POST',
                     credentials: 'include',
                 });
@@ -39,13 +36,14 @@ const RequestsTest = (props) => {
                 else if (response.status===502) {
                     setServerError('Произошла ошибка при генерации теста, попробуйте заново');
                 }
-
+                
                 const responseData = await response.json();
+                localStorage.setItem('storageTest',JSON.stringify(responseData.result))
+                localStorage.setItem('idRequest',JSON.stringify(responseData.request_id))
                 setQuestionData(responseData.result);
                 setId(responseData.request_id);
                 setResult(responseData.result);
                 setSelectedAnswer('');
-                setIsAnswerCorrect(null);
                 setAnswerServer('');
             
         } catch (error) {
@@ -58,7 +56,7 @@ const RequestsTest = (props) => {
     const handleAnswerSelection = async (answer) => {
         setSelectedAnswer(answer);
         setServerError('');
-
+        console.log(answer)
         try {
             if (!answerServer) { // Используем хранящийся правильный ответ, если он уже есть
                 const response = await fetch(`${apiUrl}/check_test`, {
@@ -78,10 +76,9 @@ const RequestsTest = (props) => {
                 }
 
                 const responseData = await response.json();
-                setIsAnswerCorrect(responseData.right_answer === answer);
                 setAnswerServer(responseData.right_answer);
-            } else {
-                setIsAnswerCorrect(answerServer === answer);
+                console.log(responseData.right_answer)
+                localStorage.setItem('rightAnswer', responseData.right_answer)
             }
         } catch (error) {
             setServerError(error.message);
@@ -92,7 +89,7 @@ const RequestsTest = (props) => {
     return (
         <section className='container-work-documentation'>
             <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>
-                <h2>Тесты на основе документации <span>{props.param}</span></h2>
+                <h2>Тесты на основе документации <span>{props.docName}</span></h2>
                 {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <button className='btn-add button-test' type="submit" disabled={loading}>
                     Сгенерировать тест
@@ -124,5 +121,5 @@ const RequestsTest = (props) => {
     );
 };
 
-export default RequestsTest;
+export default FormRequestsTest;
 

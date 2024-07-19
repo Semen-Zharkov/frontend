@@ -10,24 +10,25 @@ const Spinner = () => (
     </div>
 );
 
-const RequestsAnswer = (props) => {
+const FormRequestAnswQuest = ({ docName }) => {
     const formRef = useRef(null);
     const answersListRef = useRef(null); // Reference for the answers list
-    const [massivAnswer, setMassivAnswer] = useState([]);
+    const [massivAnswer, setMassivAnswer] = useState(JSON.parse(localStorage.getItem(`${docName}`)) || []);
     const [id, setId] = useState('');
     const [result, setResult] = useState('');
-    const [filename, setFilename] = useState('');
     const [question, setQuestion] = useState('');
-    const [answerServer, setAswerServer] = useState('');
     const [loading, setLoading] = useState(false);
     const textareaRef = useRef(null);
     const [serverError, setServerError] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
     const { register, reset, handleSubmit } = useForm();
-
     const addItem = (newItem) => {
         setMassivAnswer((prevItems) => [...prevItems, newItem]);
     };
+
+    useEffect(() => {
+        localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
+    }, [massivAnswer, docName]); // Зависимость от massivAnswer и docName
 
     const handleCancel = () => {
         reset({
@@ -50,7 +51,7 @@ const RequestsAnswer = (props) => {
         setServerError('');
         setLoading(true); // Показываем спиннер
         try {
-            const response = await fetch(`${apiUrl}/get_answer?filename=${props.param}&question=${question}`, {
+            const response = await fetch(`${apiUrl}/get_answer?filename=${docName}&question=${question}`, {
                 method: 'POST',
                 credentials: 'include',
             });
@@ -65,7 +66,6 @@ const RequestsAnswer = (props) => {
             const responseData = await response.json();
             handleCancel();
             addItem(responseData['result']); // Получение данных из ответа
-            setAswerServer(responseData);
             setId(responseData['request_id']);
             setResult(responseData['result']);
         } catch (error) {
@@ -96,17 +96,25 @@ const RequestsAnswer = (props) => {
         }
     }, [massivAnswer]); // Scroll to bottom whenever massivAnswer changes
 
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSubmit(onSubmitTest)();
+        }
+    };
+
     return (
         <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
-                <h2>Ответы на основе документации <span>{props.param}</span></h2>
+                <h2>Ответы на основе документации <span>{docName}</span></h2>
 
                 <div className="answers-list" ref={answersListRef}>
                     {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                     {massivAnswer.map((item, index) => (
                         <>
                             <div className="questions-container">
-                                <p>{item.question}</p>
+                                {localStorage.setItem('itemQuestion', item.question)}
+                                <p>{localStorage.getItem('itemQuestion')}</p>
                             </div>
                             <div className="answer-container">
                                 {formatAnswer(item.answer)}
@@ -125,6 +133,7 @@ const RequestsAnswer = (props) => {
                         placeholder='Ваш вопрос'
                         name="question"
                         required
+                        onKeyDown={handleKeyDown} // Добавляем обработчик события onKeyDown
                     />
                     <button type='submit' disabled={loading} style={{ display: loading ? 'none' : 'block' }}>
                         <img src={icomSubmitQuest} className='iconSubmitQuest' alt='' />
@@ -136,4 +145,4 @@ const RequestsAnswer = (props) => {
     );
 };
 
-export default RequestsAnswer;
+export default FormRequestAnswQuest;

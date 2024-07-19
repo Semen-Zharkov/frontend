@@ -76,9 +76,9 @@ textarea#feedbackText {
     font-size: 20px;
     border-radius: 7px;
 }
-section.container-work-documentation {
+/* section.container-work-documentation {
     overflow-x: hidden;
-}
+} */
 /* .close-button {
     position: absolute;
     cursor: pointer;

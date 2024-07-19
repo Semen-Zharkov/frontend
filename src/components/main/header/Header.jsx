@@ -1,19 +1,16 @@
 import { Link, useLocation } from 'react-router-dom';
-import React, { useRef, useContext } from 'react';
+import React, { useRef, useState } from 'react';
 import './header.css';
 import { logout } from '../../../scripts/logOut';
 import { useAuth } from '../../../scripts/usersMe';
 import siteLogo from '../../../img/icons/logo UDV group 1.png';
 import arrow from '../../../img/icons/arrow_drop_down.svg';
-import { FlagContext } from '../../../flagContext';
 
-function Header() {
+function Header({setFlag}) {
   const location = useLocation(); // Получение текущего пути
   const { isLoggedIn, isAuthChecked, userData } = useAuth();
-  const { setFlagBtn } = useContext(FlagContext);
   const arrowClickRef = useRef(null);
   const visibilityListRef = useRef(null);
-
   const btnQuestionRef = useRef(null);
   const btnTestRef = useRef(null);
 
@@ -22,11 +19,11 @@ function Header() {
     if (isQuestion) {
       btnTestRef.current.classList.remove('btn-add');
       btnQuestionRef.current.classList.toggle('btn-add');
-      setFlagBtn(true);
+      setFlag(true);
     } else {
       btnQuestionRef.current.classList.remove('btn-add');
       btnTestRef.current.classList.toggle('btn-add');
-      setFlagBtn(false);
+      setFlag(false);
     }
   };
 
