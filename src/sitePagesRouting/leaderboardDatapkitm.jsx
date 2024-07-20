@@ -4,7 +4,6 @@ import Leaderboard from '../components/leaderboard/Leaderboard.jsx';
 
 
 const LeaderboardDatapkitmPage = () => {
-    console.log('leaderboard')
     return (
         <div>
             <Header />

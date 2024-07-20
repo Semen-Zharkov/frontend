@@ -30,7 +30,6 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
   const onSubmit = async (data) => {
     try {
       const result = await sendRequest({ currentName: docName, newName: dockName, description: dockDescription, setFlag, setMessage  });
-      console.log('Request sent successfully:', result);
     } catch (error) {
       console.error('Failed to send request:', error);
     }

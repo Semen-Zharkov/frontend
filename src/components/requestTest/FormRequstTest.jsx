@@ -56,7 +56,6 @@ const FormRequestsTest = (props) => {
     const handleAnswerSelection = async (answer) => {
         setSelectedAnswer(answer);
         setServerError('');
-        console.log(answer)
         try {
             if (!answerServer) { // Используем хранящийся правильный ответ, если он уже есть
                 const response = await fetch(`${apiUrl}/check_test`, {
@@ -77,7 +76,6 @@ const FormRequestsTest = (props) => {
 
                 const responseData = await response.json();
                 setAnswerServer(responseData.right_answer);
-                console.log(responseData.right_answer)
                 localStorage.setItem('rightAnswer', responseData.right_answer)
             }
         } catch (error) {

@@ -4,7 +4,6 @@ export const useRequastLeaderboard = (docName) => {
   const apiUrl = process.env.REACT_APP_API_URL;
   const [userData, setUserData] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  console.log(docName, '3')
   useEffect(() => {
     const fetchUserData = async () => {
       try {
@@ -18,7 +17,6 @@ export const useRequastLeaderboard = (docName) => {
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
-        console.log(docName, '3')
         const data = await response.json();
         setUserData(data);
         setIsLoggedIn(true);

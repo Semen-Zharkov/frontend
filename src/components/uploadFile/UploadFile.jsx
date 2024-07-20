@@ -39,7 +39,6 @@ const FormTest = () => {
                 body: formDatas
             });
             const responseData = await response.json();
-            console.log('Ответ от сервера:', responseData);
             if (!response.ok) {
                 setServerError(`Возникла ошибка при загрузке документации, повторите загрузку`)
             }

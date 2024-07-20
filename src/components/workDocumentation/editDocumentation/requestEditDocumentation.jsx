@@ -21,8 +21,6 @@ export const useRequestEditDocumentation = () => {
                 },
             });
 
-            console.log('Response status:', response.status);
-
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

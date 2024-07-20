@@ -80,12 +80,10 @@ const SeachForDocumentation = ({ onClick }) => {
         setDocToDelete(null);
     };
     const handleEditClickSave = (flagWindowEdit, fileName) => {
-        console.log("search")
         setIsEditingSave(flagWindowEdit)
         setFileName(fileName)
     }
     const handleAddClickSave = (flagWindowAdd, fileName) => {
-        console.log("add")
         setFileName(fileName)
         setAddFile(flagWindowAdd)
     }

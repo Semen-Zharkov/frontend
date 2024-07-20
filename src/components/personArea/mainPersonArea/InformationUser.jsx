@@ -108,7 +108,7 @@ const InformationUser = () => {
     };
 
     const onSubmitPassword = async (data) => {
-        const result = await ResetPasswordLK(data);
+        const result = await ResetPasswordLK({data, setMessage, setFlag});
         if (result && result.error) {
             setServerErrorPassword(result.error);
         } else {
@@ -116,7 +116,6 @@ const InformationUser = () => {
         }
     };
     const handleClose = () => {
-        console.log('close')
         setFlag(false)
         window.location.reload();
       };

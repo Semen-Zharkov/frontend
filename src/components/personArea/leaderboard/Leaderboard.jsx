@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 const Leaderboard = () => {
   const { userData, isLoading } = useRequestLeaderboardMe();
-  console.log(userData);
 
   if (isLoading) {
     return <div>Загрузка данных...</div>;

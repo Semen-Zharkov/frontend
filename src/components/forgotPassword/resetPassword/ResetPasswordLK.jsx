@@ -1,8 +1,7 @@
-import { Popup } from "../../../scripts/popup";
-
 const apiUrl = process.env.REACT_APP_API_URL;
 
 export const ResetPasswordLK = async ({data, setMessage, setFlag}) => {
+
     try {
         const response = await fetch(`${apiUrl}/users/me`, {
             method: "PATCH",
@@ -14,7 +13,6 @@ export const ResetPasswordLK = async ({data, setMessage, setFlag}) => {
         });
         if (!response.ok) {
             const errorData = await response.json();
-            console.log(errorData.detail)
             if (response.status === 400) {
                 if (errorData.detail === 'UPDATE_USER_EMAIL_ALREADY_EXISTS') {
                     return { error: 'Данный email уже зарегистрирован' };
