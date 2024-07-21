@@ -56,7 +56,15 @@ section.container-person-area {
     justify-content: space-between;
     width: 480px;
 }
-
+a img{
+    cursor: pointer;
+}
+.container-edit-file a{
+    cursor: pointer;
+}
+.btn-download{
+    cursor: pointer;
+}
 .inform-list-item {
     display: flex;
     flex-direction: column;
