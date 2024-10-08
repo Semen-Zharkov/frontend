@@ -31,7 +31,7 @@ const FormRequestsTest = (props) => {
                 });
 
                 if(response.status===401){
-                    setServerError('Чтобы сгенировать тест авторизируйтесь');
+                    throw new Error('Пожалуйста, авторизируйтесь!');
                 }
                 else if (response.status===502) {
                     setServerError('Произошла ошибка при генерации теста, попробуйте заново');

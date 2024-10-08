@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import './informationUser.css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../../../scripts/usersMe';
+
 import UserVerification from '../../../scripts/verification/userVerification';
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
@@ -17,7 +16,6 @@ import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
 import { Popup } from '../../../scripts/popup';
-
 const editSchema = yup.object().shape({
   surname: surnameValidator,
   name: nameValidator,
@@ -31,7 +29,8 @@ const passwordSchema = yup.object().shape({
 });
 
 const InformationUser = () => {
-    const { userData } = useAuth();
+    const userData = JSON.parse(localStorage.getItem('userData')) || null;
+    
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingSave, setIsEditingSave] = useState(false);
     const [password, setPassword] = useState('');
@@ -100,15 +99,15 @@ const InformationUser = () => {
         setServerErrorPassword('');
     };
 
-    const onSubmitEdit = async (data) => {
-        const result = await ResetPasswordLK({data, setMessage, setFlag});
+    const onSubmitEdit = async (userData) => {
+        const result = await ResetPasswordLK({userData, setMessage, setFlag});
         if (result && result.error) {
             setServerErrorEmail(result.error);
         }
     };
 
-    const onSubmitPassword = async (data) => {
-        const result = await ResetPasswordLK({data, setMessage, setFlag});
+    const onSubmitPassword = async (userData) => {
+        const result = await ResetPasswordLK({userData, setMessage, setFlag});
         if (result && result.error) {
             setServerErrorPassword(result.error);
         } else {
@@ -134,7 +133,6 @@ const InformationUser = () => {
         setCurrentCurrentImage(currentCurrentImage === btnPass ? btnPassVisib : btnPass);
         setInputCurrentType(inputCurrentType === 'text' ? 'password' : 'text');
     };
-
     return (
         <section className='container-person-area'>
             {flag && <Popup isOpen={flag} message={message} onClose={handleClose}/>}

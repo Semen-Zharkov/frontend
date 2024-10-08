@@ -9,10 +9,10 @@ const UserVerification = ({ onClick }) => {
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const [flagAccept, setFlagAccept] = useState(false);
+    const [flag, setFlag] = useState(false);
     const [flagReject, setFlagReject] = useState(false);
     const apiUrl = process.env.REACT_APP_API_URL;
-
+    const [disabledButton, setDisabledButton] = useState(false); // Начальное состояние - кнопки не заблокированы
     const{
         handleSubmit,
     } = useForm();
@@ -38,24 +38,25 @@ const UserVerification = ({ onClick }) => {
     };
 
     const acceptRequest = (id) => {
-        AcceptRequest({ id, setFlagAccept, setMessage });
+        setDisabledButton(true)
+        AcceptRequest({ id, setFlag, setMessage });
     }
 
     const rejectRequest = (id) => {
-        RejectRequest(id, setFlagReject, setMessage);
+        setDisabledButton(true)
+        RejectRequest({id, setFlag, setMessage});
     }
 
     const handleClose = () => {
-        setFlagAccept(false);
-        setFlagReject(false);
+        setFlag(false);
         window.location.reload();
     };
 
     return (
         <div className="dropdown-container">
             <div className="dropdown">
-                {flagAccept && <Popup isOpen={flagAccept} message={message} onClose={handleClose} />}
-                {flagReject && <Popup isOpen={flagReject} message={message} onClose={handleClose} />}
+                {flag && <Popup disabled={disabledButton} isOpen={flag} message={message} onClose={()=>handleClose()} setDisabledButton={setDisabledButton} />}
+                {/* {flagReject && <Popup disabled={disabledButton} isOpen={flagReject} message={message} onClose={()=>handleClose()} setDisabledButton={setDisabledButton} />} */}
                 <button className='user-verification' onClick={toggleDropdown}>Пользователи на верификацию</button>
                 {isOpen && data.length > 0 && (
                     <ul className='verf-list'>
@@ -71,8 +72,8 @@ const UserVerification = ({ onClick }) => {
                                     </div>
                                 </div>
                                 <div className='verf-item-block-btn container-button'>
-                                    <button className='button' onClick={() => acceptRequest(item['id'])}>Принять</button>
-                                    <button className='button' onClick={() => rejectRequest(item['id'])}>Отклонить</button>
+                                    <button disabled={disabledButton} className='button' onClick={() => acceptRequest(item['id'])}>Принять</button>
+                                    <button disabled={disabledButton} className='button' onClick={() => rejectRequest(item['id'])}>Отклонить</button>
                                 </div>
                             </li>
                         ))}

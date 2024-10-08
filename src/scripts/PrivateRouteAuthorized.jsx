@@ -1,16 +1,10 @@
 import React from 'react';
-import { Route, Navigate, Outlet} from 'react-router-dom';
-import { useAuth } from './usersMe';
+import { Navigate, Outlet} from 'react-router-dom';
 
 export const PrivateRouteAuthorized = () => {
   // Проверяем аутентификацию пользователя
-  
-    const { isLoggedIn, isAuthChecked } = useAuth();
-    if (!isAuthChecked) {
-        // Если проверка авторизации еще не завершена, ничего не отображаем
-        return null;
-    }
+    const userData = JSON.parse(localStorage.getItem('userData')) || null;
     return(
-        !isLoggedIn? <Outlet /> : <Navigate to="/person_account" />
+        !userData? <Outlet /> : <Navigate to="/person_account" />
     );
 }

@@ -1,7 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 const apiUrl = process.env.REACT_APP_API_URL;
-const navigate = useNavigate;
-export const logout = async () => {
+
+export const logout = async (navigate) => {
+    
     try {
         
         // Отправка запроса на выход пользователя
@@ -11,9 +12,9 @@ export const logout = async () => {
         });
         // Проверка успешности выполнения запроса на выход
         if (response.ok) {
+            navigate('/')
             document.location.reload();
             localStorage.clear()
-            navigate('/')
 
         } else {
             console.error('Logout request failed');

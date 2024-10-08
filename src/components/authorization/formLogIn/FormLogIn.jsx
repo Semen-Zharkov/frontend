@@ -4,7 +4,7 @@ import './formLogIn.css';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import { useAuth } from '../../../scripts/usersMe';
+
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';

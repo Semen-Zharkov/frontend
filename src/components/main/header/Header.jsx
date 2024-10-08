@@ -1,14 +1,23 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
 import './header.css';
-import { logout } from '../../../scripts/logOut';
-import { useAuth } from '../../../scripts/usersMe';
 import siteLogo from '../../../img/icons/logo UDV group 1.png';
 import arrow from '../../../img/icons/arrow_drop_down.svg';
+import { useGetInformationUserQuery } from '../../store/services/users';
+import { useLazyLogOutQuery } from '../../store/services/auth';
 
 function Header({setFlag}) {
+  const navigate = useNavigate()
   const location = useLocation(); // Получение текущего пути
-  const { isLoggedIn, isAuthChecked, userData } = useAuth();
+  const {data, isLoading: isGetInformationLoading, error: isGetInformationError} = useGetInformationUserQuery()
+  const [trigger, {isLoading: isLogOutLodiang, error: isLogOutError}]=useLazyLogOutQuery();
+  if(!isGetInformationLoading && !isGetInformationError) {
+    localStorage.setItem('userData',JSON.stringify(data))
+  }
+  else if(!isGetInformationLoading && isGetInformationError){
+    localStorage.clear('userData')
+  }
+  const userData  = JSON.parse(localStorage.getItem('userData')) || null;
   const arrowClickRef = useRef(null);
   const visibilityListRef = useRef(null);
   const btnQuestionRef = useRef(null);
@@ -26,8 +35,13 @@ function Header({setFlag}) {
       setFlag(false);
     }
   };
-
-  const clickArrowLk = () => {
+  const handleClickLogOut = () =>{
+    trigger();
+    if(!isLogOutError && !isLogOutLodiang){
+      localStorage.clear();     
+    }
+  }
+   const clickArrowLk = () => {
     if (arrowClickRef.current && visibilityListRef.current) {
       arrowClickRef.current.classList.toggle('click-arrow');
       visibilityListRef.current.classList.toggle('active');
@@ -36,12 +50,14 @@ function Header({setFlag}) {
     }
   };
 
-  if (!isAuthChecked) {
+  if (isGetInformationLoading) {
     return null;
   }
 
   return (
+    
     <header className="page-header">
+      {console.log(isGetInformationError, data)}
       <nav className="main-nav">
         <div className="site-navigation">
           <div className="site-navigation-item">
@@ -61,7 +77,7 @@ function Header({setFlag}) {
                   </button>
                 </>
               )}
-              {isLoggedIn ? (
+              {userData ? (
                 <div className='container-lk'>
                   <div className="btn-user-lk" onClick={clickArrowLk}>
                     <div className='user-FIO'>
@@ -73,7 +89,7 @@ function Header({setFlag}) {
                   <div className='nav-lk' ref={visibilityListRef}>
                     <Link to="/person_account" className="btn-signUp button-header">Личные данные</Link>
                     <Link to="/work_documentation" className="btn-signUp button-header">Документация</Link>
-                    <Link className="btn-logOut button-header" onClick={logout}>Выйти</Link>
+                    <Link className="btn-logOut button-header" onClick={handleClickLogOut}>Выйти</Link>
                   </div>
                 </div>
               ) : (

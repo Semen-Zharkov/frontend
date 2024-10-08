@@ -1,13 +1,12 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import './seachForDocumentation.css';
-import { useAuth } from '../../scripts/usersMe';
 import { RemovingDocumentation } from '../../scripts/removingDocumentation';
 import btnEdit from '../../img/edit.svg';
 import FormEditDocumentation from '../workDocumentation/editDocumentation/FormEditDocumentation';
 import { AddDocumentation } from '../workDocumentation/editDocumentation/addDocumentation/addDocumentation';
 const SeachForDocumentation = ({ onClick }) => {
-    const { userData, isAuthChecked } = useAuth(); // Состояние isLoggedIn
+    const userData = JSON.parse(localStorage.getItem('userData')) || null;
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(true);
     const [popupInform, setPopupInform] = useState(''); // Добавленное состояние для попапа
@@ -42,7 +41,6 @@ const SeachForDocumentation = ({ onClick }) => {
     }
 
     useEffect(() => {
-        if (isAuthChecked) {
             const fetchData = async () => {
                 try {
                     // Отправка запроса при загрузке страницы
@@ -61,8 +59,8 @@ const SeachForDocumentation = ({ onClick }) => {
             };
 
             fetchData();
-        }
-    }, [isAuthChecked, apiUrl, userUrl]);
+        
+    }, []);
 
     const confirmDelete = (doc_name) => {
         setDocToDelete(doc_name);
@@ -86,9 +84,6 @@ const SeachForDocumentation = ({ onClick }) => {
     const handleAddClickSave = (flagWindowAdd, fileName) => {
         setFileName(fileName)
         setAddFile(flagWindowAdd)
-    }
-    if (!isAuthChecked) {
-        return null;
     }
 
     return (

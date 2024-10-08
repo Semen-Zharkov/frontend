@@ -12,10 +12,13 @@ import FormForgotPassword from './sitePagesRouting/forgotPassword';
 import FormResetPassword from './sitePagesRouting/resetPassword';
 import LeaderboardDatapkPage from './sitePagesRouting/leaderboardDatapk';
 import Work from './sitePagesRouting/Work';
+import { Provider } from 'react-redux';
+import { store } from './components/store/store';
 
 
 function App() {  
   return (
+    <Provider store={store}>
       <BrowserRouter>
         <Routes>
             <Route path="/" element={<Main /> } />
@@ -36,6 +39,7 @@ function App() {
             <Route path='/leaderboard/DATAPK_ITM_VERSION_1_7'  element={<LeaderboardDatapkPage data='DATAPK_ITM_VERSION_1_7'  />} />
         </Routes>
       </BrowserRouter>
+    </Provider>
   )
 }
 

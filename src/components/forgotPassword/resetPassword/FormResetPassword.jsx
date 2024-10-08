@@ -13,6 +13,7 @@ const schema = yup.object().shape({
 });
 
 function FormResetPassword(){
+    const [disabledButton, setDisabledButton] = useState(false); // Начальное состояние - кнопки не заблокированы
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [message, setMessage] = useState('');
     const searchParams = new URLSearchParams(window.location.search);
@@ -44,6 +45,7 @@ function FormResetPassword(){
     }
 
     const onSubmit = async (data) => {
+        setDisabledButton(true)
         fetch(`${apiUrl}/auth/reset-password/${token}?password=${data['password']}`, {
         method: 'POST',
         headers: {
@@ -71,7 +73,7 @@ function FormResetPassword(){
     return (
         <section class="container-reset-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} urlNavigate='/logIn' />}
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} disabledButton={setDisabledButton} onClose={handleClose} urlNavigate='/logIn' />}
                 <h2>Изменение пароля</h2>
                 <div className='form-container-brim'>
                     <div className='block-password password'>
@@ -87,7 +89,7 @@ function FormResetPassword(){
                         {errors.confirmation_password && <p className='form-validation' style={{ color: 'red' }}>{errors.confirmation_password.message}</p>}
                     </div>
 
-                    <button className='submit-form' type="submit">Изменить пароль</button>
+                    <button disabled={disabledButton} className='submit-form' type="submit">Изменить пароль</button>
                 </div>
             </form>
         </section>

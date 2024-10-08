@@ -1,6 +1,6 @@
 const apiUrl = process.env.REACT_APP_API_URL;
 
-export const RejectRequest = async (id, setFlagReject, setMessage) =>{
+export const RejectRequest = async ({id, setFlag, setMessage}) =>{
     try {
         const response = await fetch(`${apiUrl}/admin/reject?request_id=${id}`, {
             method: "POST",
@@ -14,7 +14,8 @@ export const RejectRequest = async (id, setFlagReject, setMessage) =>{
         }
         else{
             setMessage('Заявка на верификацию отклонена!')
-            setFlagReject(true);
+            setFlag(true);
+            // setDisabledButton(true)
         }
 
     } catch (error) {

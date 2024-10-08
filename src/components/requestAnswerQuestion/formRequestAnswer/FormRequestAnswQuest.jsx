@@ -29,7 +29,14 @@ const FormRequestAnswQuest = ({ docName }) => {
     useEffect(() => {
         localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
     }, [massivAnswer, docName]); // Зависимость от massivAnswer и docName
-
+    useEffect(() => {
+        // Функция, которая будет вызвана перед размонтированием компонента
+        return () => {
+            setMassivAnswer((prevItems) => [...prevItems, JSON.parse(localStorage.getItem(`${docName}last_answer`))]);
+            // Сохраняем состояние в localStorage перед размонтированием
+            localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
+        };
+    }, []);
     const handleCancel = () => {
         reset({
             question: '',
@@ -59,11 +66,12 @@ const FormRequestAnswQuest = ({ docName }) => {
                 if (response.status === 401) {
                     throw new Error('Пожалуйста, авторизируйтесь!');
                 } else {
-                    throw new Error('Произошла ошибка при генерации теста, попробуйте заново');
+                    throw new Error('Произошла ошибка при ответе на вопрос, попробуйте заново');
                 }
             }
 
             const responseData = await response.json();
+            localStorage.setItem(`${docName}last_answer`,  JSON.stringify(responseData['result']))
             handleCancel();
             addItem(responseData['result']); // Получение данных из ответа
             setId(responseData['request_id']);
@@ -95,7 +103,6 @@ const FormRequestAnswQuest = ({ docName }) => {
             answersListRef.current.scrollTop = answersListRef.current.scrollHeight;
         }
     }, [massivAnswer]); // Scroll to bottom whenever massivAnswer changes
-
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
@@ -107,9 +114,9 @@ const FormRequestAnswQuest = ({ docName }) => {
         <section className='container-work-documentation'>
             <form className='form-container-question block-form-request' ref={formRef} action="#" method="POST" onSubmit={handleSubmit(onSubmitTest)}>
                 <h2>Ответы на основе документации <span>{docName}</span></h2>
-
+                {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 <div className="answers-list" ref={answersListRef}>
-                    {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
+                    
                     {massivAnswer.map((item, index) => (
                         <>
                             <div className="questions-container">

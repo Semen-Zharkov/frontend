@@ -12,6 +12,7 @@ const schema = yup.object().shape({
 });
 
 function FormForgotPassword(){
+    const [disabledButton, setDisabledButton] = useState(false); // Начальное состояние - кнопки не заблокированы
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [message, setMessage] = useState('');
     const apiUrl = process.env.REACT_APP_API_URL;
@@ -27,6 +28,7 @@ function FormForgotPassword(){
     });
 
     const onSubmit = async (data) => {
+        setDisabledButton(true)
         setServerError('');
         fetch(`${apiUrl}/auth/forgot-password`, {
         method: 'POST',
@@ -38,6 +40,7 @@ function FormForgotPassword(){
             if(response.ok){
                 setIsPopupOpen(true);
                 setMessage('Проверьте почту!');
+                
             }
             else if(response.status===404){
                 setServerError('Пользователя с данной почтой не зарегистрованно');
@@ -54,7 +57,7 @@ function FormForgotPassword(){
     return (
         <section className="container-forgot-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} urlNavigate='/' />}
+                {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} disabledButton={setDisabledButton} urlNavigate='/' />}
                 <h2>Восстановление пароля</h2>
                 <div className='form-container-brim'>
                     <label for="email">Email</label>
@@ -62,7 +65,7 @@ function FormForgotPassword(){
                     {errors.email && <p className='form-validation' style={{ color: 'red' }}>{errors.email.message}</p>}
                     {serverError && <p style={{ color: 'red' }}>{serverError}</p>}
                 </div>
-                <button className='submit-form' type="submit">Восстановить пароль</button>
+                <button disabled={disabledButton} className='submit-form' type="submit">Восстановить пароль</button>
             </form>
         </section>
     );
