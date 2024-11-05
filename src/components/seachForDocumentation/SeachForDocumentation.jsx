@@ -1,24 +1,24 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import './seachForDocumentation.css';
-import { RemovingDocumentation } from '../../scripts/removingDocumentation';
 import btnEdit from '../../img/edit.svg';
 import FormEditDocumentation from '../workDocumentation/editDocumentation/FormEditDocumentation';
 import { AddDocumentation } from '../workDocumentation/editDocumentation/addDocumentation/addDocumentation';
+import { getDocks, useGetDocksQuery, useRemovingDocumentationMutation } from '../store/services/docks';
 const SeachForDocumentation = ({ onClick }) => {
     const userData = JSON.parse(localStorage.getItem('userData')) || null;
-    const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(true);
     const [popupInform, setPopupInform] = useState(''); // Добавленное состояние для попапа
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [docToDelete, setDocToDelete] = useState(null);
     const [fileName, setFileName] = useState();
-    const apiUrl = process.env.REACT_APP_API_URL;
     const apiUrlFront = process.env.REACT_APP_API_FRONT_URL;
-    const { register, reset, handleSubmit } = useForm();
     const [isEditingSave, setIsEditingSave] = useState(false);
     const [addFile, setAddFile] = useState(false);
-
+    const [removingDocumentation, {
+        status
+    }] = useRemovingDocumentationMutation();
+    
     const copyTextToClipboard = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -35,40 +35,19 @@ const SeachForDocumentation = ({ onClick }) => {
         copyTextToClipboard(`${apiUrlFront}/request_documentation?documentation=${item['name']}`);
     };
 
-    let userUrl = 'my';
-    if (userData.is_superuser) {
-        userUrl = 'all';
+    let userURL = 'my';
+    if (userData?.is_superuser) {
+        userURL = 'all';
     }
-
-    useEffect(() => {
-            const fetchData = async () => {
-                try {
-                    // Отправка запроса при загрузке страницы
-                    const response = await fetch(`${apiUrl}/docks/${userUrl}`, {
-                        method: 'GET',
-                        credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
-                    });
-                    if (response.ok) {
-                        setData(await response.json());
-                    } else {
-                        console.error('Проблема поиска');
-                    }
-                } catch (error) {
-                    console.error('Ошибка:', error);
-                }
-            };
-
-            fetchData();
-        
-    }, []);
+    const {isLoading, error, data: userDataDocumentation} = useGetDocksQuery(userURL)
 
     const confirmDelete = (doc_name) => {
         setDocToDelete(doc_name);
         setShowConfirmation(true);
     };
 
-    const handleDelete = () => {
-        RemovingDocumentation(docToDelete);
+    const handleDelete = async () => {
+        await removingDocumentation(docToDelete)
         setShowConfirmation(false);
         setDocToDelete(null);
     };
@@ -85,14 +64,27 @@ const SeachForDocumentation = ({ onClick }) => {
         setFileName(fileName)
         setAddFile(flagWindowAdd)
     }
-
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            window.location.reload();
+        }
+    }, [ status ])
+    if(isLoading) {
+        return <h1>Происходит загрузка добавленной документации</h1>
+    }
+    else if(!userData){
+        return <h1>Авторизуйтесь, чтобы увидеть свою документацию</h1>
+    }
+    else if(error){
+        return <h1>При разгрузке произошла ошибка, перезагрузите страницу</h1>
+    }
     return (
         <div className="dropdown-container">
             <div className="dropdown">
-                {isOpen && data.length > 0 ? (
+                {isOpen && userDataDocumentation.length > 0 ? (
                     <ul className='documentation-list'>
                         {popupInform && <div className='document-popup'>{popupInform}</div>}
-                        {data.map((item, index) => (
+                        {userDataDocumentation.map((item, index) => (
                             <li key={index} className='documentation-list-item'>
                                 <div className='container-edit-file'>
                                     <h3 className='title'>{item['name']}</h3>

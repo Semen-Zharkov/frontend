@@ -9,6 +9,7 @@ import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { Popup } from '../../../scripts/popup';
+import { useLogInMutation } from '../../store/services/auth';
 
 const schema = yup.object().shape({
     email: emailRegistrationValidator,
@@ -19,8 +20,6 @@ const schema = yup.object().shape({
 
 async function verifyToken({token, setMessage, setIsPopupOpen}) {
     const apiUrl = process.env.REACT_APP_API_URL;
-    // Здесь должна быть логика проверки токена
-    // Например, запрос на ваш сервер для проверки токена
     try {
         const response = await fetch(`${apiUrl}/auth/verify/${token}`, {
             method: "GET",
@@ -70,6 +69,9 @@ export default function FormLogIn() {
     const [password, setPassword] = useState('');
     const [inputType, setInputType] = useState('password');
     const [serverError, setServerError] = useState('');
+    const [logIn, {
+        isLoading, error, status
+    }] = useLogInMutation()
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -87,34 +89,20 @@ export default function FormLogIn() {
     };
 
     const onSubmit = async (data) => {
+        await logIn({data})
         setServerError('');
-        try {
-            const response = await fetch(`${apiUrl}/auth/login`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: new URLSearchParams({
-                    'grant_type': '',
-                    'username': data.email,
-                    'password': data.password,
-                    'scope': '',
-                    'client_id': '',
-                    'client_secret': '',
-                }).toString(),
-                credentials: 'include',
-            });
-            if(response.ok){
-                navigate('/');
-            }
-            else if (response.status===400) {
-                setServerError(`Неверная почта или пароль`)
-            }
-        } catch (error) {
-            console.error('There was a problem with your fetch operation:', error);
-        }
     };
-
+    useEffect(() => {
+        if (error) {
+            setServerError('Возникла ошибка при загрузке документации, повторите загрузку');
+        }
+        if(status==='fulfilled'){
+            navigate('/');
+        }
+        if (error && error.status===400) {
+            setServerError(`Неверная почта или пароль`)
+        }
+    }, [error, status]);
     const handleClose = () => {
         setIsPopupOpen(false);
       };

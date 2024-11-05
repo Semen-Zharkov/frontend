@@ -6,19 +6,7 @@ import iconAdd from '../../../img/icons/Add.svg';
 import { useNavigate } from 'react-router-dom';
 
 const WorkDocumentation = () => {
-    const [flagTestOrAnswer, setFlagTestOrAnswer] = useState(false);
-    const [id, setId] = useState('');
-    const [result, setResult] = useState('');
-    const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
-
-    const onClickTest = () => {
-        setFlagTestOrAnswer(false);
-    };
-    const onClickAnswer = () => {
-        setFlagTestOrAnswer(true);
-    };
-
     const handleUploadClick = () => {
         navigate('/upload_file');
     };

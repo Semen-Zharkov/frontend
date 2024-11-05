@@ -1,9 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './uploadFile.css';
-import axios from 'axios';
 import { Popup } from '../../scripts/popup';
+import { useUploadFileMutation } from '../store/services/docks';
 
 const Spinner = () => (
     <div className="spinner-container">
@@ -18,7 +17,6 @@ const FormTest = () => {
     const [serverError, setServerError] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const navigate = useNavigate();
     const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
@@ -26,32 +24,38 @@ const FormTest = () => {
         handleSubmit,
         formState: { isSubmitSuccessful }
     } = useForm();
-
+    
+    const [uploadFile, {
+        error, isLoading, status
+    }] = useUploadFileMutation()
     const onSubmitDock = async (data) => {
         setServerError('')
         const formDatas = new FormData();
         formDatas.append('file', data.files[0]);
         setLoading(true); // Показываем spinner
-        try {
-            const response = await fetch(`${apiUrl}/docks/upload-dock?dock_name=${dockName}&dock_description=${dockDescription}`, {
-                method: 'POST',
-                credentials: 'include',
-                body: formDatas
-            });
-            const responseData = await response.json();
-            if (!response.ok) {
-                setServerError(`Возникла ошибка при загрузке документации, повторите загрузку`)
-            }
-            else if(response.ok){
-                setIsPopupOpen(true);
-                setMessage('Файл успешно добавлен в базу данных!');
-            }
-        } catch (error) {
-            setStatusRequest(`Ошибка при отправке запроса: ${error}`);
-        } finally {
-            setLoading(false); // Скрываем spinner
-        }
+        await uploadFile({formDatas, dockName, dockDescription})
     };
+    useEffect(() => {
+        if (!isLoading) {
+            setLoading(false); // Останавливаем индикатор загрузки
+        }
+        if(error && (error.status===500 || error.status===502)){
+            setServerError('Произошла ошибка при загрузке документации, попробуйте занового!');
+        }
+        if(error && error.status===401){
+            setServerError('Чтобы добавить файл, пожалуйста, авторизуйтесь');
+        }
+        if (error && error.data.detail ==='Document with this name already exists') {
+            setServerError('Файл с данным названием уже загружен, измените его!');
+        }
+        if (error && error.data.detail ==='Filename can only contain alphanumeric characters, underscores, or hyphens (-).') {
+            setServerError('Файл не должен содержать кириллицу!');
+        }
+        if(status==='fulfilled'){
+            setIsPopupOpen(true);
+            setMessage('Файл успешно добавлен в базу данных!');
+        }
+    }, [isLoading, error, status]);
 
     const handleCancel = () => {
         reset({

@@ -29,8 +29,7 @@ const passwordSchema = yup.object().shape({
 });
 
 const InformationUser = () => {
-    const userData = JSON.parse(localStorage.getItem('userData')) || null;
-    
+    const userData = JSON.parse(localStorage.getItem('userData')) || null;   
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingSave, setIsEditingSave] = useState(false);
     const [password, setPassword] = useState('');

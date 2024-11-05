@@ -4,6 +4,7 @@ import '../../components/personArea/mainPersonArea/informationUser.css';
 import { AcceptRequest } from './acceptRequest';
 import { RejectRequest } from './rejectRequest';
 import { Popup } from '../popup';
+import { useLazyGetListUserVerificationQuery } from '../../components/store/services/admin';
 
 const UserVerification = ({ onClick }) => {
     const [data, setData] = useState([]);
@@ -16,23 +17,11 @@ const UserVerification = ({ onClick }) => {
     const{
         handleSubmit,
     } = useForm();
+    const [trigger, {data: dataListUserVerification, status}] = useLazyGetListUserVerificationQuery()
 
     const toggleDropdown = async () => {
         if (!isOpen) {
-            try {
-                // Отправка запроса при открытии списка
-                const response = await fetch(`${apiUrl}/admin/requests`, {
-                    method: 'GET',
-                    credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
-                });
-                if (response.ok) {
-                    setData(await response.json());
-                } else {
-                    console.error('Проблема поиска');
-                }
-            } catch (error) {
-                console.error('Ошибка:', error);
-            }
+            await trigger()
         }
         setIsOpen(!isOpen);
     };
@@ -51,7 +40,11 @@ const UserVerification = ({ onClick }) => {
         setFlag(false);
         window.location.reload();
     };
-
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            setData(dataListUserVerification)
+        }
+    },[status])
     return (
         <div className="dropdown-container">
             <div className="dropdown">

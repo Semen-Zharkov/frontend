@@ -1,11 +1,14 @@
 import React from 'react';
-import { useRequastLeaderboard } from "./requestLeaderboard";
 import './leaderboard.css';
+import { useGetLeaderboardQuery } from '../store/services/contest';
 
 function Leaderboard({ data }) {
-  const { userData, isLoggedIn } = useRequastLeaderboard(data);
-  if (!isLoggedIn || !userData.length) {
+  const { data: userData, isLoading, error } = useGetLeaderboardQuery(data)
+  if (isLoading) {
     return <h1>Ещё никто не участвовал</h1>;
+  }
+  else if (error) {
+    return <h1>При разгрузке рейтинга произошла ошибка, перезагрузите страницу</h1>;
   }
 
   return (

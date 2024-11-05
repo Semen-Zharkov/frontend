@@ -1,16 +1,13 @@
 import React from "react";
-import { useRequestLeaderboardMe } from "./requestLeaderboardMe";
 import { Link } from 'react-router-dom';
+import { useGetLeaderboardMeQuery } from "../../store/services/contest";
 
 const Leaderboard = () => {
-  const { userData, isLoading } = useRequestLeaderboardMe();
-
+  const {data: isData, isLoading } = useGetLeaderboardMeQuery()
   if (isLoading) {
     return <div>Загрузка данных...</div>;
   }
-
-  // Преобразование userData в массив
-  const leaderboardData = Object.values(userData).map(({ doc_name, leaderboard }) => ({
+  const leaderboardData = Object.values(isData).map(({ doc_name, leaderboard }) => ({
     doc_name,
     leaderboard,
   }));
@@ -21,7 +18,6 @@ const Leaderboard = () => {
         leaderboard.length > 0 && (
           <div key={index} className="container_leaderboard">
             <h2>Рейтинг по документации {doc_name}</h2>
-            {/* Отображение таблицы с данными лидерборда */}
             <table className="table-leaderboard">
               <thead>
                 <tr>

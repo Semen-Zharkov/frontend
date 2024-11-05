@@ -8,8 +8,19 @@ export const usersApi= createApi({
     getInformationUser: builder.query({
       query: ()=>'users/me'
     }),
+    resetPassword: builder.mutation({
+      query: ({data})=>({
+        url: 'users/me',
+        method: "PATCH",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      })
+    })
   }),
 })
 
 
-export const { useGetInformationUserQuery } = usersApi
+export const { useGetInformationUserQuery, useResetPasswordMutation } = usersApi

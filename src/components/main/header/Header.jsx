@@ -1,4 +1,4 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import React, { useRef, useState } from 'react';
 import './header.css';
 import siteLogo from '../../../img/icons/logo UDV group 1.png';
@@ -7,15 +7,16 @@ import { useGetInformationUserQuery } from '../../store/services/users';
 import { useLazyLogOutQuery } from '../../store/services/auth';
 
 function Header({setFlag}) {
-  const navigate = useNavigate()
   const location = useLocation(); // Получение текущего пути
   const {data, isLoading: isGetInformationLoading, error: isGetInformationError} = useGetInformationUserQuery()
   const [trigger, {isLoading: isLogOutLodiang, error: isLogOutError}]=useLazyLogOutQuery();
+  const [stateLogIN, setStateLogIN] = useState(true);
   if(!isGetInformationLoading && !isGetInformationError) {
     localStorage.setItem('userData',JSON.stringify(data))
   }
-  else if(!isGetInformationLoading && isGetInformationError){
+  else if(!isGetInformationLoading && isGetInformationError && localStorage.getItem('userData')){
     localStorage.clear('userData')
+    location.reload();
   }
   const userData  = JSON.parse(localStorage.getItem('userData')) || null;
   const arrowClickRef = useRef(null);
@@ -39,6 +40,7 @@ function Header({setFlag}) {
     trigger();
     if(!isLogOutError && !isLogOutLodiang){
       localStorage.clear();     
+      location.reload();
     }
   }
    const clickArrowLk = () => {
@@ -57,7 +59,6 @@ function Header({setFlag}) {
   return (
     
     <header className="page-header">
-      {console.log(isGetInformationError, data)}
       <nav className="main-nav">
         <div className="site-navigation">
           <div className="site-navigation-item">

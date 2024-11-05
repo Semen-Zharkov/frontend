@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +13,7 @@ import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
 import { nameCompanyValidator } from '../../../scripts/validation/nameCompany';
 import { Popup } from '../../../scripts/popup';
+import { useSignUpMutation } from '../../store/services/auth';
 
 // Определение схемы валидации с использованием yup
 const schema = yup.object().shape({
@@ -34,6 +35,9 @@ function FormSignUp() {
   const [currentConfirmImage, setCurrentConfirmImage] = useState(btnPass);
   const [inputConfirmType, setInputConfirmType] = useState('password');
   const [serverError, setServerError] = useState('');
+  const [signUp, {
+    error, status
+  }] = useSignUpMutation();
 
   const {
     register,
@@ -55,31 +59,22 @@ function FormSignUp() {
 
   const onSubmit = async (data) => {
     setServerError('');
-    fetch(`${apiUrl}/auth/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-      .then((response) => {
-        if (response.ok) {
-          setIsPopupOpen(true);
-          setMessage('Ваша заявка отправлена на верификацию!');
-          setTimeout(() => {
-            navigate('/logIn'); // Переход на страницу входа после закрытия попапа
-          }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
-        } else if(response.status===400) {
-            setServerError('Эта почта уже зарегистрирована');
-        }
-      })
-      .catch((error) => {
-        console.error('Ошибка при регистрации:', error);
-      });
+    await signUp({data})
   };
   const handleClose = () => {
     setIsPopupOpen(false);
   };
+  
+  useEffect(()=>{
+    if(status==='fulfilled'){
+      setIsPopupOpen(true);
+      setMessage('Ваша заявка отправлена на верификацию!');
+      setTimeout(() => {
+        navigate('/logIn'); // Переход на страницу входа после закрытия попапа
+      }, 3100); // Задержка немного больше, чем время закрытия попапа, чтобы гарантировать переход после закрытия
+    }
+    if(error && error.status === 400) setServerError('Эта почта уже зарегистрирована');
+  }, [error, status])
 
   return (
     <section className='container-sign-up'>
