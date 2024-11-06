@@ -5,8 +5,9 @@ import btnEdit from '../../img/edit.svg';
 import FormEditDocumentation from '../workDocumentation/editDocumentation/FormEditDocumentation';
 import { AddDocumentation } from '../workDocumentation/editDocumentation/addDocumentation/addDocumentation';
 import { getDocks, useGetDocksQuery, useRemovingDocumentationMutation } from '../store/services/docks';
+import { useSelector } from 'react-redux';
 const SeachForDocumentation = ({ onClick }) => {
-    const userData = JSON.parse(localStorage.getItem('userData')) || null;
+    const userData = useSelector(state => state.updateUser) || null; 
     const [isOpen, setIsOpen] = useState(true);
     const [popupInform, setPopupInform] = useState(''); // Добавленное состояние для попапа
     const [showConfirmation, setShowConfirmation] = useState(false);

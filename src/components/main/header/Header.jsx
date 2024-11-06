@@ -1,29 +1,27 @@
 import { Link, useLocation } from 'react-router-dom';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './header.css';
 import siteLogo from '../../../img/icons/logo UDV group 1.png';
 import arrow from '../../../img/icons/arrow_drop_down.svg';
 import { useGetInformationUserQuery } from '../../store/services/users';
 import { useLazyLogOutQuery } from '../../store/services/auth';
-import { useDispatch } from 'react-redux';
-import { updateUser } from '../../features/editUserData';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser, clearUser } from '../../features/editUserData';
+import { store } from '../../store/store';
 
 function Header({setFlag}) {
   const location = useLocation(); // Получение текущего пути
   const dispatch = useDispatch()
   const {data, isLoading: isGetInformationLoading, error: isGetInformationError} = useGetInformationUserQuery()
   const [trigger, {isLoading: isLogOutLodiang, error: isLogOutError}]=useLazyLogOutQuery();
-  const [stateLogIN, setStateLogIN] = useState(true);
+  const userData = useSelector(state => state.updateUser)
+  const lengthUserData = Object.keys(userData).length
   if(!isGetInformationLoading && !isGetInformationError) {
     dispatch(updateUser(data))
-    localStorage.setItem('userData',JSON.stringify(data))
   }
-  else if(!isGetInformationLoading && isGetInformationError && localStorage.getItem('userData')){
-    localStorage.clear('userData')
-    location.reload();
+  if(isGetInformationError){
+    dispatch(clearUser())
   }
-  const userData  = JSON.parse(localStorage.getItem('userData')) || null;
   const arrowClickRef = useRef(null);
   const visibilityListRef = useRef(null);
   const btnQuestionRef = useRef(null);
@@ -56,11 +54,9 @@ function Header({setFlag}) {
       console.error('Elements not found');
     }
   };
-
   if (isGetInformationLoading) {
     return null;
   }
-
   return (
     
     <header className="page-header">
@@ -83,7 +79,7 @@ function Header({setFlag}) {
                   </button>
                 </>
               )}
-              {userData ? (
+              {lengthUserData!==0? (
                 <div className='container-lk'>
                   <div className="btn-user-lk" onClick={clickArrowLk}>
                     <div className='user-FIO'>
