@@ -3,19 +3,22 @@ import './informationUser.css';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from '../../features/editUserData';
 import UserVerification from '../../../scripts/verification/userVerification';
 import btnPass from '../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../img/icons/password/Visibility=False.svg';
 import btnEdit from '../../../img/edit.svg';
 import Leaderboard from '../leaderboard/Leaderboard';
-import { ResetPasswordLK } from '../../forgotPassword/resetPassword/ResetPasswordLK';
 import { surnameValidator } from '../../../scripts/validation/surname';
 import { nameValidator } from '../../../scripts/validation/name';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { confirmPasswordValidator } from '../../../scripts/validation/password';
 import { passwordValidator } from '../../../scripts/validation/password';
 import { Popup } from '../../../scripts/popup';
+import { useResetPasswordMutation } from '../../store/services/users';
+import UpdateUserData from './UpdateUserData';
+
 const editSchema = yup.object().shape({
   surname: surnameValidator,
   name: nameValidator,
@@ -33,9 +36,6 @@ const InformationUser = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [isEditingSave, setIsEditingSave] = useState(false);
     const [password, setPassword] = useState('');
-    const [surname, setSurname] = useState('');
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('')
     const [flag,setFlag] = useState(false);
     const [message, setMessage] = useState('');
     const [old_password, setCurrentPassword] = useState('');
@@ -48,15 +48,10 @@ const InformationUser = () => {
     const [inputConfirmType, setInputConfirmType] = useState('password');
     const [serverErrorEmail, setServerErrorEmail] = useState('');
     const [serverErrorPassword, setServerErrorPassword] = useState('');
+    const [userResetDataPassword, {
+        error: errorPassword, status: statusPassword
+    }] = useResetPasswordMutation()
     
-    const {
-      register: registerEdit,
-      handleSubmit: handleSubmitEdit,
-      reset: resetEdit,
-      formState: { errors: editErrors }
-    } = useForm({
-      resolver: yupResolver(editSchema),
-    });
 
     const {
       register: registerPassword,
@@ -75,15 +70,6 @@ const InformationUser = () => {
         setIsEditingSave(true);
     };
 
-    const handleCancelEdit = () => {
-        resetEdit({
-            surname: userData.surname,
-            name: userData.name,
-            email: userData.email,
-        });
-        setIsEditingSave(false);
-        setServerErrorEmail('');
-    };
 
     const handleCancelPassword = () => {
         resetPassword({
@@ -98,18 +84,13 @@ const InformationUser = () => {
         setServerErrorPassword('');
     };
 
-    const onSubmitEdit = async (userData) => {
-        const result = await ResetPasswordLK({userData, setMessage, setFlag});
-        if (result && result.error) {
-            setServerErrorEmail(result.error);
-        }
-    };
 
-    const onSubmitPassword = async (userData) => {
-        const result = await ResetPasswordLK({userData, setMessage, setFlag});
-        if (result && result.error) {
-            setServerErrorPassword(result.error);
-        } else {
+    const onSubmitPassword = async (data) => {
+        await userResetDataPassword({data}); 
+        if (errorPassword) {
+            setServerErrorPassword(errorPassword);
+        }
+        if(statusPassword==='fulfilled'){
             setIsEditing(false);
         }
     };
@@ -175,30 +156,7 @@ const InformationUser = () => {
                         )}
                     </>
                 ) : (
-                    <form className="form-container edit-form" onSubmit={handleSubmitEdit(onSubmitEdit)}>
-                        <div className='form-container-brim'>
-                            <div className='block-surname'>
-                                <label htmlFor="last-name">Фамилия</label>
-                                <input {...registerEdit("surname")} type="text" id="last-name" defaultValue={userData.surname || ''} onChange={(e)=>setSurname(e.target.value)}/>
-                                {editErrors.surname && <p className='form-validation' style={{ color: 'red' }}>{editErrors.surname.message}</p>}
-                            </div>
-                            <div className='block-username'>
-                                <label htmlFor="first-name">Имя</label>
-                                <input {...registerEdit("name")} type="text" id="first-name" defaultValue={userData.name || ''} onChange={(e)=>setName(e.target.value)} />
-                                {editErrors.name && <p className='form-validation' style={{ color: 'red' }}>{editErrors.name.message}</p>}
-                            </div>
-                            <div className='block-email'>
-                                <label htmlFor="email">Почта</label>
-                                <input {...registerEdit("email")} type="email" id="email" defaultValue={userData.email || ''} onChange={(e)=>setEmail(e.target.value)} />
-                                {editErrors.email && <p className='form-validation' style={{ color: 'red' }}>{editErrors.email.message}</p>}
-                                {serverErrorEmail && <p className='form-validation' style={{ color: 'red' }}>{serverErrorEmail}</p>}
-                            </div>
-                            <div className='container-button'>
-                              <button className='submit-form' type="submit">Сохранить</button>
-                              <button type="button" className="button" onClick={handleCancelEdit}>Отменить</button>
-                            </div>
-                        </div>
-                    </form>
+                    <UpdateUserData setIsEditingSave={setIsEditingSave}/>
                 )}
             </div>
             {!isEditing ? (

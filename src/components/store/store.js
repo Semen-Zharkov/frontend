@@ -5,9 +5,11 @@ import { authApi } from './services/auth'
 import { docksApi } from './services/docks'
 import { contestApi } from './services/contest'
 import { adminApi } from './services/admin'
+import reducer from '../features/editUserData'
 
 export const store = configureStore({
   reducer: {
+		updateUser: reducer,
 		[usersApi.reducerPath]: usersApi.reducer,
 		[authApi.reducerPath]: authApi.reducer,
 		[docksApi.reducerPath]: docksApi.reducer,

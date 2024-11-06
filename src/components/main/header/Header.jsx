@@ -5,13 +5,18 @@ import siteLogo from '../../../img/icons/logo UDV group 1.png';
 import arrow from '../../../img/icons/arrow_drop_down.svg';
 import { useGetInformationUserQuery } from '../../store/services/users';
 import { useLazyLogOutQuery } from '../../store/services/auth';
+import { useDispatch } from 'react-redux';
+import { updateUser } from '../../features/editUserData';
+
 
 function Header({setFlag}) {
   const location = useLocation(); // Получение текущего пути
+  const dispatch = useDispatch()
   const {data, isLoading: isGetInformationLoading, error: isGetInformationError} = useGetInformationUserQuery()
   const [trigger, {isLoading: isLogOutLodiang, error: isLogOutError}]=useLazyLogOutQuery();
   const [stateLogIN, setStateLogIN] = useState(true);
   if(!isGetInformationLoading && !isGetInformationError) {
+    dispatch(updateUser(data))
     localStorage.setItem('userData',JSON.stringify(data))
   }
   else if(!isGetInformationLoading && isGetInformationError && localStorage.getItem('userData')){
