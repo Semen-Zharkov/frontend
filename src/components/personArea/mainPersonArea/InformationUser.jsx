@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './informationUser.css';
 import { useDispatch, useSelector } from 'react-redux';
 import UserVerification from '../../../scripts/verification/userVerification';
@@ -23,7 +23,9 @@ const InformationUser = () => {
     const handleEditClickSave = () => {
         setIsEditingSave(true);
     };
-
+    useEffect(()=>{
+        console.log(flag)
+    }, [flag])
     return (
         <section className='container-person-area'>
             {flag && <Popup isOpen={flag} message={message} setFlag={setFlag}/>}

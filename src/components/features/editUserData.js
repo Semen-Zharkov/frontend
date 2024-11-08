@@ -7,7 +7,6 @@ const editUserData = createSlice({
   initialState: {},
   reducers: {
     updateUser: (state, action)=> {
-        console.log(action)
         state.surname =  action.payload.surname
         state.name =  action.payload.name
         state.email =  action.payload.email

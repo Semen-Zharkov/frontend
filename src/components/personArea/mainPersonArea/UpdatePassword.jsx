@@ -76,7 +76,7 @@ const UpdatePassword = ({setIsEditing, setFlag, setMessage}) => {
             setMessage('Пароль успешно изменён')
         }
         if(errorPassword && errorPassword.status===400){
-            serverErrorPassword('Введён неверный пароль')
+            setServerErrorPassword('Введён неверный пароль')
         }
     }, [statusPassword])
     return (
