@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 import { usersApi } from '../store/services/users';
 
 
-const editUserData = createSlice({
+const editUserDataSlice = createSlice({
   name: 'editUser',
   initialState: {},
   reducers: {
@@ -39,5 +39,5 @@ const editUserData = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { updateUser, clearUser } = editUserData.actions
-export default editUserData.reducer
+export const { updateUser, clearUser } = editUserDataSlice.actions
+export default editUserDataSlice.reducer

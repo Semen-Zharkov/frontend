@@ -1,10 +1,10 @@
 import { useForm } from 'react-hook-form';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import {useRequestEditDocumentation} from './requestEditDocumentation';
 import iconClose from '../../../img/icons/cross.svg';
 import { Popup } from '../../../scripts/popup';
+import { useEditDocumentationMutation } from '../../store/services/docks';
 
 const schema = yup.object().shape({
   dockName: yup.string().required('Название документа обязательно'),
@@ -12,12 +12,14 @@ const schema = yup.object().shape({
 });
 
 const FormEditDocumentation = ({ docName, description, onClose }) => {
-  const { sendRequest, isLoggedIn } = useRequestEditDocumentation();
   const [message, setMessage] = useState('');
   const [flag, setFlag] = useState(false);
   const [dockName, setDockName] = useState(docName || '');
   const [dockDescription, setDockDescription] = useState(description || '');
-
+  const [requestEditDocumentation, {
+    status,
+    error
+  }] = useEditDocumentationMutation();
   const {
     register,
     reset,
@@ -27,12 +29,13 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data) => {
-    try {
-      const result = await sendRequest({ currentName: docName, newName: dockName, description: dockDescription, setFlag, setMessage  });
-    } catch (error) {
-      console.error('Failed to send request:', error);
-    }
+  const onSubmit = async () => {
+    const data = {
+      current_name: docName,
+      new_name: dockName,
+      description: dockDescription,
+    };
+    await requestEditDocumentation({data})
   };
 
   const handleCancel = () => {
@@ -45,10 +48,15 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
     window.location.reload();
   };
 
-
+  useEffect(()=>{
+    if(status==='fulfilled'){
+      setFlag(true);
+      setMessage('Данные успешно изменены!');
+  }
+  }, [status])
   return (
     <form className="form-container-upload" onSubmit={handleSubmit(onSubmit)}>
-      {flag && <Popup isOpen={flag} message={message} onClose={handleClose} useNavigate={'./work_documentation'}/>}
+      {flag && <Popup isOpen={true} setFlag={setFlag} message={message} onClose={handleClose} useNavigate={'./work_documentation'}/>}
       <div className="container-close">
         <h2>Изменение документации</h2>
         <a className='link-close' onClick={handleClose}>

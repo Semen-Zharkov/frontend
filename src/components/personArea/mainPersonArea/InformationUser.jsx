@@ -23,9 +23,6 @@ const InformationUser = () => {
     const handleEditClickSave = () => {
         setIsEditingSave(true);
     };
-    useEffect(()=>{
-        console.log(flag)
-    }, [flag])
     return (
         <section className='container-person-area'>
             {flag && <Popup isOpen={flag} message={message} setFlag={setFlag}/>}

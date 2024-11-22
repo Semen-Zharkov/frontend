@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import './formRequestAnswQuest.css';
 import icomSubmitQuest from '../../../img/icons/Icon-color.svg';
 import { UserComments } from '../../userComments/UserComments';
+import { useAnswerToQuestionMutation } from '../../store/services/answerToQuestion';
 
 const Spinner = () => (
     <div className="spinner-container">
@@ -20,23 +21,17 @@ const FormRequestAnswQuest = ({ docName }) => {
     const [loading, setLoading] = useState(false);
     const textareaRef = useRef(null);
     const [serverError, setServerError] = useState('');
-    const apiUrl = process.env.REACT_APP_API_URL;
     const { register, reset, handleSubmit } = useForm();
+    const [requestAnswerToQuestion, {
+        data,
+        status,
+        error
+    }] = useAnswerToQuestionMutation()
     const addItem = (newItem) => {
         setMassivAnswer((prevItems) => [...prevItems, newItem]);
+        console.log(massivAnswer)
     };
 
-    useEffect(() => {
-        localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
-    }, [massivAnswer, docName]); // Зависимость от massivAnswer и docName
-    useEffect(() => {
-        // Функция, которая будет вызвана перед размонтированием компонента
-        return () => {
-            setMassivAnswer((prevItems) => [...prevItems, JSON.parse(localStorage.getItem(`${docName}last_answer`))]);
-            // Сохраняем состояние в localStorage перед размонтированием
-            localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
-        };
-    }, []);
     const handleCancel = () => {
         reset({
             question: '',
@@ -57,29 +52,36 @@ const FormRequestAnswQuest = ({ docName }) => {
     const onSubmitTest = async () => {
         setServerError('');
         setLoading(true); // Показываем спиннер
-        try {
-            const response = await fetch(`${apiUrl}/get_answer?filename=${docName}&question=${question}`, {
-                method: 'POST',
-                credentials: 'include',
-            });
-            if (!response.ok) {
-                if (response.status === 401) {
-                    throw new Error('Пожалуйста, авторизируйтесь!');
-                } else {
-                    throw new Error('Произошла ошибка при ответе на вопрос, попробуйте заново');
-                }
-            }
+        await requestAnswerToQuestion({docName, question})
+        // try {
+        //     const response = await fetch(`${apiUrl}/get_answer?filename=${docName}&question=${question}`, {
+        //         method: 'POST',
+        //         credentials: 'include',
+        //     });
+        //     if (!response.ok) {
+        //         if (response.status === 401) {
+        //             throw new Error('Пожалуйста, авторизируйтесь!');
+        //         } else {
+        //             throw new Error('Произошла ошибка при ответе на вопрос, попробуйте заново');
+        //         }
+        //     }
 
-            const responseData = await response.json();
-            localStorage.setItem(`${docName}last_answer`,  JSON.stringify(responseData['result']))
-            handleCancel();
-            addItem(responseData['result']); // Получение данных из ответа
-            setId(responseData['request_id']);
-            setResult(responseData['result']);
-        } catch (error) {
-            setServerError(error.message);
-        } finally {
-            setLoading(false); // Скрываем спиннер
+        //     const responseData = await response.json();
+        //     localStorage.setItem(`${docName}last_answer`,  JSON.stringify(responseData['result']))
+        //     handleCancel();
+        //     addItem(responseData['result']); // Получение данных из ответа
+        //     setId(responseData['request_id']);
+        //     setResult(responseData['result']);
+        // } catch (error) {
+        //     setServerError(error.message);
+        // } finally {
+        //     setLoading(false); // Скрываем спиннер
+        // }
+    };
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            handleSubmit(onSubmitTest)();
         }
     };
 
@@ -98,17 +100,33 @@ const FormRequestAnswQuest = ({ docName }) => {
         }
     }, [question]);
 
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            const result = data['result']
+            localStorage.setItem(`${docName}last_answer`,  JSON.stringify(result))
+            handleCancel();
+            setLoading(false);
+            addItem(result); // Получение данных из ответа
+            setId(data['request_id']);
+            setResult(result);
+        }
+        if(error){
+            setLoading(false);
+            if (error.data?.status === 401) {
+                setServerError('Пожалуйста, авторизируйтесь!');
+            } 
+            else if(error){
+                setServerError('Произошла ошибка при ответе на вопрос, попробуйте заново');
+            }
+        }
+    },[data, error, status])
+
     useEffect(() => {
-        if (answersListRef.current) {
-            answersListRef.current.scrollTop = answersListRef.current.scrollHeight;
-        }
-    }, [massivAnswer]); // Scroll to bottom whenever massivAnswer changes
-    const handleKeyDown = (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault();
-            handleSubmit(onSubmitTest)();
-        }
-    };
+            localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
+            if (answersListRef.current) {
+                answersListRef.current.scrollTop = answersListRef.current.scrollHeight;
+            }
+    }, [massivAnswer, docName]); // Зависимость от massivAnswer и docName
 
     return (
         <section className='container-work-documentation'>

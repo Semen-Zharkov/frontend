@@ -8,7 +8,7 @@ export const Popup = ({ isOpen, message, urlNavigate, onClose, setFlag}) => {
     if (isOpen) {
       timer = setTimeout(() => {
         if(urlNavigate) navigate(urlNavigate);
-        setFlag(false)
+        setFlag(false);
         onClose(); // Закрытие попапа через 3 секунды
       }, 3000);
     }

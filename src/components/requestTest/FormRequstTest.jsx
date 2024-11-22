@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import '../workDocumentation/workDocumentation/workDocumentation.css';
 import { UserComments } from '../userComments/UserComments';
+import { useCheckTrueAnswerMutation, useGenerateTestMutation } from '../store/services/test';
 
 const Spinner = () => (
     <div className="spinner-container">
@@ -17,73 +18,63 @@ const FormRequestsTest = (props) => {
     const [answerServer, setAnswerServer] = useState(localStorage.getItem('rightAnswer') ||'');
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState('');
-    const apiUrl = process.env.REACT_APP_API_URL;
+    const [flagAnswer, setFlagAnswer] = useState(false);
+    const [ requestGenerateTest,{
+        data: dataGenerateTest,
+        status: statusGenerateTest,
+        error: errorGenerateTest
+    }] = useGenerateTestMutation();
+
+    const [requestCheckTrueAnswer,{
+        data: dataTrueAnswer,
+        status: statusTrueAnswer,
+        error: errorTrueAnswer
+    }] = useCheckTrueAnswerMutation()
     const { handleSubmit } = useForm();
     const onSubmitTest = async () => {
         setServerError('');
         setLoading(true);
-
-        try {
-             // Отправляем запрос только если данные еще не загружены
-                const response = await fetch(`${apiUrl}/get_test?filename=${props.docName}`, {
-                    method: 'POST',
-                    credentials: 'include',
-                });
-
-                if(response.status===401){
-                    throw new Error('Пожалуйста, авторизируйтесь!');
-                }
-                else if (response.status===502) {
-                    setServerError('Произошла ошибка при генерации теста, попробуйте заново');
-                }
-                localStorage.removeItem('rightAnswer'); 
-                const responseData = await response.json();
-                localStorage.setItem('storageTest',JSON.stringify(responseData.result))
-                localStorage.setItem('idRequest',JSON.stringify(responseData.request_id))
-                setQuestionData(responseData.result);
-                setId(responseData.request_id);
-                setResult(responseData.result);
-                setSelectedAnswer('');
-                setAnswerServer('');
-            
-        } catch (error) {
-            setServerError(error.message);
-        } finally {
-            setLoading(false);
-        }
+        requestGenerateTest({docName: props.docName})
     };
 
     const handleAnswerSelection = async (answer) => {
         setSelectedAnswer(answer);
         setServerError('');
-        try {
-            if (!answerServer) { // Используем хранящийся правильный ответ, если он уже есть
-                const response = await fetch(`${apiUrl}/check_test`, {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        request_id: id,
-                        selected_option: answer,
-                    }),
-                });
-
-                if (!response.ok) {
-                    throw new Error('Произошла ошибка при проверке ответа');
-                }
-
-                const responseData = await response.json();
-                setAnswerServer(responseData.right_answer);
-                localStorage.setItem('rightAnswer', responseData.right_answer)
-            }
-        } catch (error) {
-            setServerError(error.message);
-        } finally {
-        }
+        if(flagAnswer) await requestCheckTrueAnswer({id, answer})
     };
+    useEffect(() => {
+        if(statusGenerateTest==='fulfilled'){
+            localStorage.removeItem('rightAnswer'); 
+            localStorage.setItem('storageTest',JSON.stringify(dataGenerateTest.result))
+            localStorage.setItem('idRequest',JSON.stringify(dataGenerateTest.request_id))
+            setQuestionData(dataGenerateTest.result);
+            setId(dataGenerateTest.request_id);
+            setResult(dataGenerateTest.result);
+            setSelectedAnswer('');
+            setAnswerServer('');
+            setLoading(false);
+            setFlagAnswer(true);
+        } 
+        if(errorGenerateTest?.status===401){
+            setServerError('Пожалуйста, авторизируйтесь!')
+        }
+        if(errorGenerateTest?.status===502){
+            setServerError('Произошла ошибка при генерации теста, попробуйте заново');
+        }
+    }, [statusGenerateTest, errorGenerateTest, dataGenerateTest] )
 
+    useEffect(()=>{
+        if(statusTrueAnswer==='fulfilled'){
+            setAnswerServer(dataTrueAnswer.right_answer);
+            localStorage.setItem('rightAnswer', dataTrueAnswer.right_answer)
+            setFlagAnswer(false)
+        }
+        if(errorTrueAnswer){
+            const detailError = errorTrueAnswer.data?.detail
+            setServerError(errorTrueAnswer.data?.detail);
+        }
+    },[statusTrueAnswer, errorTrueAnswer, dataTrueAnswer])
+    
     return (
         <section className='container-work-documentation'>
             <form className='form-container-test block-form-request' onSubmit={handleSubmit(onSubmitTest)}>

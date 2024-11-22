@@ -6,7 +6,7 @@ import arrow from '../../../img/icons/arrow_drop_down.svg';
 import { useGetInformationUserQuery } from '../../store/services/users';
 import { useLazyLogOutQuery } from '../../store/services/auth';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser, clearUser } from '../../features/editUserData';
+import { updateUser, clearUser } from '../../features/editUserDataSlice';
 import { store } from '../../store/store';
 
 function Header({setFlag}) {

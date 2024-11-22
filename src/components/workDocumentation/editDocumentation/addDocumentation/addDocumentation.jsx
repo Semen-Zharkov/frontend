@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { useRequestAddDocumentation } from './requestAddDocumentation';
+import { useEffect, useState } from 'react';
 import iconClose from '../../../../img/icons/cross.svg';
 import { Popup } from '../../../../scripts/popup';
+import { useAddDocumentationMutation } from '../../../store/services/docks';
 
 export const AddDocumentation = ({ docName, onClose }) => {
     const {
@@ -11,11 +11,15 @@ export const AddDocumentation = ({ docName, onClose }) => {
         handleSubmit,
         formState: { errors },
     } = useForm();
-    const { sendRequest, isLoggedIn } = useRequestAddDocumentation();
     const [message, setMessage] = useState('');
     const [flag, setFlag] = useState(false);
+    const [requestAddDocumentation,{
+        error, 
+        status
+    }] = useAddDocumentationMutation()
 
     const handleClose = () => {
+        console.log('close')
         onClose(false);
         reset({
             files: null,
@@ -23,16 +27,23 @@ export const AddDocumentation = ({ docName, onClose }) => {
     };
 
     const onSubmit = async (data) => {
-        try {
-            await sendRequest({ docName, file: data.files[0], setFlag, setMessage });
-        } catch (error) {
-            console.error('Failed to send request:', error);
-        }
+        const formData = new FormData();
+        formData.append('file', data.files[0]);
+        await  requestAddDocumentation({formData, docName})
+        
     };
-
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            setFlag(true);
+            setMessage('Файл успешно добавлен в базу данных!');
+        }
+        if(error?.data?.detail==="File has an unsupported extension"){
+            console.log(error)
+        }
+    }, [status, error] )
     return (
         <form className="form-container-upload" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>
-            {flag && <Popup isOpen={flag} message={message} onClose={handleClose} useNavigate={'./work_documentation'}/>}
+            {flag && <Popup isOpen={true} setFlag={setFlag} message={message} onClose={handleClose} useNavigate={'./work_documentation'}/>}
             <div className='container-close'>
                 <h2>Добавление данных в документацию</h2>
                 <a className='link-close' onClick={handleClose}>

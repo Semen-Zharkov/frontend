@@ -7,7 +7,7 @@ import { nameValidator } from '../../../scripts/validation/name';
 import { emailRegistrationValidator } from '../../../scripts/validation/email';
 import { useResetPasswordMutation } from '../../store/services/users';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from '../../features/editUserData';
+import { updateUser } from '../../features/editUserDataSlice';
 const UpdateUserData = ({setIsEditingSave}) => {
     const userData = useSelector(state => state.updateUser) || null; 
     const [serverErrorEmail, setServerErrorEmail] = useState('');

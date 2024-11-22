@@ -19,7 +19,7 @@ export const docksApi = createApi({
       })
     }),
     removingDocumentation: builder.mutation({
-      query: (doc_name)=>({
+      query: (doc_name) => ({
         url: `/docks/delete-my?doc_name=${doc_name}`,
         method: "DELETE",
         credentials: "include",
@@ -27,9 +27,34 @@ export const docksApi = createApi({
             'Content-Type': 'application/x-www-form-urlencoded',
         }
       })
+    }),
+    editDocumentation: builder.mutation({
+      query: ({data}) => ({
+        url: `/docks/change_data`, 
+        method: 'PATCH',
+        credentials: 'include',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+    }),
+    addDocumentation: builder.mutation({
+      query: ({formData, docName}) => ({
+        url: `/docks/add_data?doc_name=${docName}`,
+          method: 'POST',
+          credentials: 'include',
+          body: formData
+      })
     })
   })
 })
 
 
-export const {useGetDocksQuery, useUploadFileMutation, useRemovingDocumentationMutation} = docksApi
+export const {
+  useGetDocksQuery,
+  useUploadFileMutation, 
+  useRemovingDocumentationMutation, 
+  useEditDocumentationMutation, 
+  useAddDocumentationMutation
+} = docksApi
