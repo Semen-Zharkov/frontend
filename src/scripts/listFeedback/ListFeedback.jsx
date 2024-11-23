@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import '../../components/personArea/mainPersonArea/informationUser.css';
-import { feedbackViewed } from './FeedbackViewed';
 import { useGetListFeedbackMutation, useGetListFeedbackQuery } from '../../components/store/services/admin';
 
 const ListFeedback = () => {
@@ -21,20 +20,6 @@ const ListFeedback = () => {
     const toggleDropdown = async (flag) => {
         if (!isOpen) {
             await setData(getListFeedback(flag))
-            // try {
-            //     // Отправка запроса при открытии списка
-            //     const response = await fetch(`${apiUrl}/admin/get_feedback?all_feedbacks=${flag}`, {
-            //         method: 'POST',
-            //         credentials: 'include', // Убедитесь, что куки прикрепляются к запросу
-            //     });
-            //     if (response.ok) {
-            //         setData(await response.json());
-            //     } else {
-            //         console.error('Проблема поиска');
-            //     }
-            // } catch (error) {
-            //     console.error('Ошибка:', error);
-            // }
         }
         setIsOpen(!isOpen);
     };
@@ -46,7 +31,7 @@ const ListFeedback = () => {
         if(status==='fulfilled'){
             
         }
-    },[ status ])
+    },[status])
 
     return (
         <div className="dropdown-container">
@@ -68,7 +53,7 @@ const ListFeedback = () => {
                     </ul>
                 )}
                 {isOpen && data.length === 0 && (
-                    <div>Нет пользователей на верефикацию</div>
+                    <div>Нет фитбеков от пользователей</div>
                 )}
             </div>
         </div>
