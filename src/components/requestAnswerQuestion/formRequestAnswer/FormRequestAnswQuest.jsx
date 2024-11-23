@@ -4,6 +4,7 @@ import './formRequestAnswQuest.css';
 import icomSubmitQuest from '../../../img/icons/Icon-color.svg';
 import { UserComments } from '../../userComments/UserComments';
 import { useAnswerToQuestionMutation } from '../../store/services/answerToQuestion';
+import { useSelector } from 'react-redux';
 
 const Spinner = () => (
     <div className="spinner-container">
@@ -14,7 +15,8 @@ const Spinner = () => (
 const FormRequestAnswQuest = ({ docName }) => {
     const formRef = useRef(null);
     const answersListRef = useRef(null); // Reference for the answers list
-    const [massivAnswer, setMassivAnswer] = useState(JSON.parse(localStorage.getItem(`${docName}`)) || []);
+    const idUser = useSelector(state => state.updateUser.id) || null; 
+    const [massivAnswer, setMassivAnswer] = useState(JSON.parse(localStorage.getItem(`${idUser}-${docName}`)) || []);
     const [id, setId] = useState('');
     const [result, setResult] = useState('');
     const [question, setQuestion] = useState('');
@@ -29,7 +31,6 @@ const FormRequestAnswQuest = ({ docName }) => {
     }] = useAnswerToQuestionMutation()
     const addItem = (newItem) => {
         setMassivAnswer((prevItems) => [...prevItems, newItem]);
-        console.log(massivAnswer)
     };
 
     const handleCancel = () => {
@@ -38,7 +39,6 @@ const FormRequestAnswQuest = ({ docName }) => {
         });
         setQuestion('');
     };
-
     const formatAnswer = (answer) => {
         if (answer.includes('\n\n')) {
             const steps = answer.split('\n').map((step, index) => {
@@ -53,30 +53,6 @@ const FormRequestAnswQuest = ({ docName }) => {
         setServerError('');
         setLoading(true); // Показываем спиннер
         await requestAnswerToQuestion({docName, question})
-        // try {
-        //     const response = await fetch(`${apiUrl}/get_answer?filename=${docName}&question=${question}`, {
-        //         method: 'POST',
-        //         credentials: 'include',
-        //     });
-        //     if (!response.ok) {
-        //         if (response.status === 401) {
-        //             throw new Error('Пожалуйста, авторизируйтесь!');
-        //         } else {
-        //             throw new Error('Произошла ошибка при ответе на вопрос, попробуйте заново');
-        //         }
-        //     }
-
-        //     const responseData = await response.json();
-        //     localStorage.setItem(`${docName}last_answer`,  JSON.stringify(responseData['result']))
-        //     handleCancel();
-        //     addItem(responseData['result']); // Получение данных из ответа
-        //     setId(responseData['request_id']);
-        //     setResult(responseData['result']);
-        // } catch (error) {
-        //     setServerError(error.message);
-        // } finally {
-        //     setLoading(false); // Скрываем спиннер
-        // }
     };
     const handleKeyDown = (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -103,7 +79,6 @@ const FormRequestAnswQuest = ({ docName }) => {
     useEffect(()=>{
         if(status==='fulfilled'){
             const result = data['result']
-            localStorage.setItem(`${docName}last_answer`,  JSON.stringify(result))
             handleCancel();
             setLoading(false);
             addItem(result); // Получение данных из ответа
@@ -122,7 +97,7 @@ const FormRequestAnswQuest = ({ docName }) => {
     },[data, error, status])
 
     useEffect(() => {
-            localStorage.setItem(`${docName}`, JSON.stringify(massivAnswer));
+            localStorage.setItem(`${idUser}-${docName}`, JSON.stringify(massivAnswer));
             if (answersListRef.current) {
                 answersListRef.current.scrollTop = answersListRef.current.scrollHeight;
             }

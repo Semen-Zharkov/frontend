@@ -6,15 +6,35 @@ export const adminApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: apiUrl}),
   endpoints: (builder) => ({
     getListFeedback: builder.mutation({
-      query: (flag)=>({
+      query: (flag) => ({
         url: `/admin/get_feedback?all_feedbacks=${flag}`,
         method: 'POST'
       })
     }),
-    getListUserVerification: builder.query({
+    getListUserVerification: builder.mutation({
       query: () => `/admin/requests`
+    }),
+    acceptUser: builder.mutation({
+      query: (id) => ({
+        url: `${apiUrl}/admin/accept?request_id=${id}`,
+        method: "POST",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
+    }),
+    rejectUser: builder.mutation({
+      query: (id) => ({
+        url: `${apiUrl}/admin/reject?request_id=${id}`,
+        method: "POST",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      })
     })
   })
 })
 
-export const {useGetListFeedbackMutation, useLazyGetListUserVerificationQuery} = adminApi
+export const {useGetListFeedbackMutation, useGetListUserVerificationMutation, useAcceptUserMutation, useRejectUserMutation} = adminApi

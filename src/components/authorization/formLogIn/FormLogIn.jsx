@@ -72,7 +72,6 @@ export default function FormLogIn() {
     const [logIn, {
         isLoading, error, status
     }] = useLogInMutation()
-    const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
         formState: { errors },
@@ -102,7 +101,10 @@ export default function FormLogIn() {
         if (error && error.status===400) {
             setServerError(`Неверная почта или пароль`)
         }
-    }, [error, status]);
+        if(error?.detail==='LOGIN_USER_NOT_VERIFIED'){
+            setServerError(`Пользователь не верифицирован`)
+        }
+    }, [error, status, navigate]);
     const handleClose = () => {
         setIsPopupOpen(false);
       };

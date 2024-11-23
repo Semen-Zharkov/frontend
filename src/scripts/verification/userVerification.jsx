@@ -1,39 +1,46 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
 import '../../components/personArea/mainPersonArea/informationUser.css';
-import { AcceptRequest } from './acceptRequest';
-import { RejectRequest } from './rejectRequest';
 import { Popup } from '../popup';
-import { useLazyGetListUserVerificationQuery } from '../../components/store/services/admin';
-
+import { useAcceptUserMutation, useGetListUserVerificationMutation, useRejectUserMutation } from '../../components/store/services/admin';
 const UserVerification = ({ onClick }) => {
     const [data, setData] = useState([]);
     const [isOpen, setIsOpen] = useState(false);
     const [message, setMessage] = useState('');
     const [flag, setFlag] = useState(false);
-    const [flagReject, setFlagReject] = useState(false);
-    const apiUrl = process.env.REACT_APP_API_URL;
     const [disabledButton, setDisabledButton] = useState(false); // Начальное состояние - кнопки не заблокированы
     const{
         handleSubmit,
     } = useForm();
-    const [trigger, {data: dataListUserVerification, status}] = useLazyGetListUserVerificationQuery()
+
+    const [requestGetListVerification, {
+        data: dataListUserVerification,
+        status: statusRequestGetListVerification
+    }] = useGetListUserVerificationMutation()
+
+    const [requestAcceptUser,{
+        status: statusRequestAcceptUser
+    }] = useAcceptUserMutation();
+
+    const [requestRejectUser,{
+        status: statusRequestRejectUser
+    }] = useRejectUserMutation();
 
     const toggleDropdown = async () => {
         if (!isOpen) {
-            await trigger()
+            requestGetListVerification()
         }
         setIsOpen(!isOpen);
     };
 
-    const acceptRequest = (id) => {
+    const acceptRequest = async (id) => {
+        await requestAcceptUser(id);
         setDisabledButton(true)
-        AcceptRequest({ id, setFlag, setMessage });
     }
 
-    const rejectRequest = (id) => {
+    const rejectRequest = async (id) => {
         setDisabledButton(true)
-        RejectRequest({id, setFlag, setMessage});
+        await requestRejectUser(id)
     }
 
     const handleClose = () => {
@@ -41,15 +48,29 @@ const UserVerification = ({ onClick }) => {
         window.location.reload();
     };
     useEffect(()=>{
-        if(status==='fulfilled'){
+        if(statusRequestGetListVerification==='fulfilled'){
             setData(dataListUserVerification)
         }
-    },[status])
+    },[statusRequestGetListVerification])
+
+    useEffect(()=>{
+        if(statusRequestAcceptUser==='fulfilled'){
+            setMessage('Заявка на верификацию одобрена!');
+            setFlag(true);
+        }
+    }, [statusRequestAcceptUser])
+
+    useEffect(()=>{
+        if(statusRequestRejectUser==='fulfilled'){
+            setMessage('Заявка на верификацию отклонена!');
+            setFlag(true);
+        }
+    }, [statusRequestRejectUser])
+    
     return (
         <div className="dropdown-container">
             <div className="dropdown">
-                {flag && <Popup disabled={disabledButton} isOpen={flag} message={message} onClose={()=>handleClose()} setDisabledButton={setDisabledButton} />}
-                {/* {flagReject && <Popup disabled={disabledButton} isOpen={flagReject} message={message} onClose={()=>handleClose()} setDisabledButton={setDisabledButton} />} */}
+                {flag && <Popup disabled={disabledButton} isOpen={flag} message={message} onClose={()=>handleClose()} setFlag={setFlag} setDisabledButton={setDisabledButton} />}
                 <button className='user-verification' onClick={toggleDropdown}>Пользователи на верификацию</button>
                 {isOpen && data.length > 0 && (
                     <ul className='verf-list'>

@@ -61,6 +61,9 @@ const FormRequestsTest = (props) => {
         if(errorGenerateTest?.status===502){
             setServerError('Произошла ошибка при генерации теста, попробуйте заново');
         }
+        if(errorGenerateTest){
+            setLoading(false);
+        }
     }, [statusGenerateTest, errorGenerateTest, dataGenerateTest] )
 
     useEffect(()=>{
