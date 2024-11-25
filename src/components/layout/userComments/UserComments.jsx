@@ -6,6 +6,7 @@ import './userComments.css';
 import likeIcon from '../../../img/like.svg';
 import dislikeIcon from '../../../img/dislike.svg';
 import closeForm from '../../../img/close.svg';
+import { useSendFeedbackMutation } from '../../store/services/feedback';
 
 const schema = yup.object().shape({
     feedbackText: yup.string().max(100, 'Максимальная длина 100 символов'),
@@ -13,25 +14,24 @@ const schema = yup.object().shape({
 
 export const UserComments = (props) => {
     const [feedbackTexts, setFeedbackTexts] = useState('');
-    const [data, setData] = useState([]);
     const [feedback, setFeedback] = useState('');
     const [likeClicked, setLikeClicked] = useState(false);
     const [dislikeClicked, setDislikeClicked] = useState(false);
     const [showForm, setShowForm] = useState(false);
-    const [statusRequest, setStatusRequest] = useState('');
     const [showPopup, setShowPopup] = useState(false);
 
     const [position, setPosition] = useState({ x: 100, y: 100 });
     const [isDragging, setIsDragging] = useState(false);
     const offset = useRef({ x: 0, y: 0 });
-
+    const [sendFeedback,{
+        status
+    }] = useSendFeedbackMutation()
     const requestData = {
         value: feedback,
         user_comment: feedbackTexts,
         request_id: props.request_id
     };
 
-    const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
         reset,
@@ -66,32 +66,10 @@ export const UserComments = (props) => {
             feedbackTexts: '',
         });
         setFeedbackTexts('');
-        setStatusRequest('');
     };
 
     const fetchData = async () => {
-        try {
-            const response = await fetch(`${apiUrl}/send_feedback`, {
-                method: 'POST',
-                credentials: 'include',
-                body: JSON.stringify(requestData),
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            if (response.ok) {
-                setData(await response.json());
-                handleOnClickClose();
-                setShowPopup(true);
-                setTimeout(() => {
-                    setShowPopup(false);
-                }, 3000); // Hide the popup after 3 seconds
-            } else {
-                console.error('Feedback request failed');
-            }
-        } catch (error) {
-            console.error('Feedback error:', error);
-        }
+        await sendFeedback(requestData)
     };
 
     const handleMouseDown = (e) => {
@@ -136,6 +114,15 @@ export const UserComments = (props) => {
         };
     }, [isDragging]);
 
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            handleOnClickClose();
+            setShowPopup(true);
+            setTimeout(() => {
+                setShowPopup(false);
+            }, 3000); // Hide the popup after 3 seconds
+        }
+    },[status])
     return (
         <form className="feedback-container" action="#" method="POST">
             <div className='form-grade'>

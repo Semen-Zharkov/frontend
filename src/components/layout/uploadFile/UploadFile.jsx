@@ -12,12 +12,10 @@ const Spinner = () => (
 const FormTest = () => {
     const [dockName, setDockName] = useState('');
     const [dockDescription, setDockDescription] = useState('');
-    const [statusRequest, setStatusRequest] = useState('');
     const [loading, setLoading] = useState(false);
     const [serverError, setServerError] = useState('');
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const apiUrl = process.env.REACT_APP_API_URL;
     const {
         register,
         reset,
@@ -65,7 +63,6 @@ const FormTest = () => {
         });
         setDockName('');
         setDockDescription('');
-        setStatusRequest('');
         document.getElementById('files').value = '';
     };
 

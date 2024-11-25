@@ -22,7 +22,6 @@ const FormEditDocumentation = ({ docName, description, onClose }) => {
   }] = useEditDocumentationMutation();
   const {
     register,
-    reset,
     handleSubmit,
     formState: { errors },
   } = useForm({

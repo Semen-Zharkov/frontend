@@ -1,8 +1,9 @@
-import React, { useState} from 'react';
+import React, { useEffect, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { Popup } from '../../popups/popup';
+import { useForgotPasswordMutation } from '../../../store/services/auth';
 
 const schema = yup.object().shape({
     email: yup
@@ -26,34 +27,28 @@ function FormForgotPassword(){
     } = useForm({
         resolver: yupResolver(schema),
     });
-
+    const [requestForgotPassword,{
+        status,
+        error
+    }] = useForgotPasswordMutation()
     const onSubmit = async (data) => {
         setDisabledButton(true)
         setServerError('');
-        fetch(`${apiUrl}/auth/forgot-password`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-        }).then(response => {
-            if(response.ok){
-                setIsPopupOpen(true);
-                setMessage('Проверьте почту!');
-                
-            }
-            else if(response.status===404){
-                setServerError('Пользователя с данной почтой не зарегистрованно');
-            }
-          })
-        .catch (error => {
-          
-        })
+        await requestForgotPassword(data)
     }
     const handleClose = () => {
         setIsPopupOpen(false);
     };
-
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            setIsPopupOpen(true);
+            setMessage('Проверьте почту!');
+        }
+        if(error?.status===404){
+            setDisabledButton(false)
+            setServerError('Пользователя с данной почтой не зарегистрованно');
+        }
+    }, [status,error])
     return (
         <section className="container-forgot-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>

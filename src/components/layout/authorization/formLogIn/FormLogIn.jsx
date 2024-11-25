@@ -8,7 +8,7 @@ import btnPass from '../../../../img/icons/password/Visibility=True.svg';
 import btnPassVisib from '../../../../img/icons/password/Visibility=False.svg';
 import { emailRegistrationValidator } from '../../../validation/email';
 import { Popup } from '../../popups/popup';
-import { useLogInMutation } from '../../../store/services/auth';
+import { useLogInMutation, useVerifyUserMutation } from '../../../store/services/auth';
 
 const schema = yup.object().shape({
     email: emailRegistrationValidator,
@@ -17,49 +17,30 @@ const schema = yup.object().shape({
     .required('Пароль обязателен')    
 });
 
-async function verifyToken({token, setMessage, setIsPopupOpen}) {
-    const apiUrl = process.env.REACT_APP_API_URL;
-    try {
-        const response = await fetch(`${apiUrl}/auth/verify/${token}`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
-        });
-        if (!response.ok) {
-            throw new Error("Network response was not ok");
-        }
-        setIsPopupOpen(true);
-        setMessage('Верификация прошла успешно!');
-    } catch (error) {
-        console.error("Error fetching user data:", error);
-    } finally {
-        
-    }
-    return false;
-}
+const VerifyUserComponent = async ({ token, onVerificationComplete, setMessage, setIsPopupOpen }) => {
+    const [requestVerifyUser,{
+        status,
+        error
+    }] = useVerifyUserMutation()
+    await requestVerifyUser(token)
 
-
-function VerifyUserComponent({ token, onVerificationComplete, setMessage, setIsPopupOpen }) {
     useEffect(() => {
-        const validate = async () => {
-            const isValid = await verifyToken({token,setMessage, setIsPopupOpen});
-            if (isValid) {
-                
-            }
-            onVerificationComplete();
-        };
-        validate();
-    }, [token, onVerificationComplete]);
+        if(status==='fulfilled'){
+            setIsPopupOpen(true);
+            setMessage('Верификация прошла успешно!');
+            onVerificationComplete()
+        }
+        if(error) console.log(error)
+    },[status, error])
 
     return null;
 }
 
 export default function FormLogIn() {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [message, setMessage] = useState('');
-    const location = useLocation();
     const searchParams = new URLSearchParams(location.search);
     const token = searchParams.get('token');
     const [verificationComplete, setVerificationComplete] = useState(!token);
@@ -69,7 +50,7 @@ export default function FormLogIn() {
     const [inputType, setInputType] = useState('password');
     const [serverError, setServerError] = useState('');
     const [logIn, {
-        isLoading, error, status
+        error, status
     }] = useLogInMutation()
     const {
         register,
@@ -79,21 +60,18 @@ export default function FormLogIn() {
         resolver: yupResolver(schema),
     });
 
-    const navigate = useNavigate();
-
     const onClickEye = () => {
         setCurrentImage(currentImage === btnPass ? btnPassVisib : btnPass);
         setInputType(inputType === 'text' ? 'password' : 'text');
     };
-
+    const handleClose = () => {
+        setIsPopupOpen(false);
+      };
     const onSubmit = async (data) => {
         await logIn({data})
         setServerError('');
     };
     useEffect(() => {
-        if (error) {
-            setServerError('Возникла ошибка при загрузке документации, повторите загрузку');
-        }
         if(status==='fulfilled'){
             navigate('/');
         }
@@ -104,9 +82,7 @@ export default function FormLogIn() {
             setServerError(`Пользователь не верифицирован`)
         }
     }, [error, status, navigate]);
-    const handleClose = () => {
-        setIsPopupOpen(false);
-      };
+
     return (
         <section className='container-log-in'>
             {isPopupOpen && <Popup isOpen={isPopupOpen} message={message} onClose={handleClose} />}

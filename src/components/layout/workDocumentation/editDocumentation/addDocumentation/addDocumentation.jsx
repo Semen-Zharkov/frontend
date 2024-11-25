@@ -20,7 +20,6 @@ export const AddDocumentation = ({ docName, onClose }) => {
     }] = useAddDocumentationMutation()
 
     const handleClose = () => {
-        console.log('close')
         onClose(false);
         reset({
             files: null,

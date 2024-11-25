@@ -26,7 +26,6 @@ const schema = yup.object().shape({
 });
 
 function FormSignUp() {
-  const apiUrl = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const [currentImage, setCurrentImage] = useState(btnPass);
   const [inputType, setInputType] = useState('password');

@@ -1,5 +1,5 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import btnPass from '../../../../img/icons/password/Visibility=True.svg'
@@ -7,6 +7,7 @@ import btnPassVisib from '../../../../img/icons/password/Visibility=False.svg'
 import { confirmPasswordValidator } from '../../../validation/password';
 import { passwordValidator } from '../../../validation/password';
 import { Popup } from '../../popups/popup';
+import { useResetPasswordUserMutation } from '../../../store/services/auth';
 const schema = yup.object().shape({
     password: passwordValidator,
     confirmation_password: confirmPasswordValidator   
@@ -18,7 +19,6 @@ function FormResetPassword(){
     const [message, setMessage] = useState('');
     const searchParams = new URLSearchParams(window.location.search);
     const token = searchParams.get('token');
-    const apiUrl = process.env.REACT_APP_API_URL;
     const [password, setPassword] = useState('');
     const [currentImage, setCurrentImage] = useState(btnPass);
     const [inputType, setInputType] = useState('password');
@@ -34,7 +34,9 @@ function FormResetPassword(){
     } = useForm({
         resolver: yupResolver(schema),
     });
-
+    const [ requestResetPassword ,{
+        status,
+    }] = useResetPasswordUserMutation()
     const onClickEye = () =>{
         setCurrentImage(currentImage === btnPass ? (btnPassVisib): (btnPass));
         setInputType(inputType === 'text' ? 'password' : 'text');
@@ -46,30 +48,17 @@ function FormResetPassword(){
 
     const onSubmit = async (data) => {
         setDisabledButton(true)
-        fetch(`${apiUrl}/auth/reset-password/${token}?password=${data['password']}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            'password': data['password']
-
-
-        }),
-        credentials: 'include'
-        }).then(response => {
-            if(response.ok){
-                setIsPopupOpen(true);
-                setMessage('Пароль успешно изменён!');
-            }
-          })
-        .catch (error => {
-          console.error('Ошибка при изменение пароля:', error);
-        })
+        await requestResetPassword({token, password: data['password']})
     }
     const handleClose = () => {
         setIsPopupOpen(false);
     };
+    useEffect(()=>{
+        if(status==='fulfilled'){
+            setIsPopupOpen(true);
+            setMessage('Пароль успешно изменён!');
+        }
+    },[status])
     return (
         <section class="container-reset-password">
             <form className="form-container" action="#" method="POST" onSubmit={handleSubmit(onSubmit)}>

@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { useResetPasswordMutation } from './users';
 
 const apiUrl = process.env.REACT_APP_API_URL;
 export const authApi = createApi({
@@ -33,8 +34,48 @@ export const authApi = createApi({
         },
         body: JSON.stringify(data)
       })
+    }),
+    resetPasswordUser: builder.mutation({
+      query: ({token, password}) => ({
+        url: `${apiUrl}/auth/reset-password/${token}?password=${password}`, 
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+            'password': password
+        }),
+        credentials: 'include'
+      })
+    }),
+    forgotPassword: builder.mutation({
+      query: (data) => ({
+        url: `${apiUrl}/auth/forgot-password`,
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      })
+    }),
+    verifyUser: builder.mutation({
+      query: (token) => ({
+        url: `${apiUrl}/auth/verify/${token}`, 
+        method: "GET",
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+        }
+      })
     })
   })
 });
 
-export const { useLazyLogOutQuery, useLogInMutation, useSignUpMutation }= authApi;
+export const { 
+  useLazyLogOutQuery,
+  useLogInMutation, 
+  useSignUpMutation,
+  useResetPasswordUserMutation,
+  useForgotPasswordMutation,
+  useVerifyUserMutation
+} = authApi;

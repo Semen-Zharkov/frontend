@@ -7,6 +7,7 @@ import { contestApi } from './services/contest'
 import { adminApi } from './services/admin'
 import { answerToQuestionApi } from './services/answerToQuestion'
 import { testApi } from './services/test'
+import { feedbackApi } from './services/feedback'
 import reducerUser from '../features/editUserDataSlice'
 import reducerDocumentation from '../features/workWithDocumentation'
 
@@ -20,7 +21,8 @@ export const store = configureStore({
 		[contestApi.reducerPath]: contestApi.reducer,
 		[adminApi.reducerPath]: adminApi.reducer,
 		[answerToQuestionApi.reducerPath]: answerToQuestionApi.reducer,
-		[testApi.reducerPath]: testApi.reducer
+		[testApi.reducerPath]: testApi.reducer,
+		[feedbackApi.reducerPath]: feedbackApi.reducer
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware()
@@ -31,6 +33,7 @@ export const store = configureStore({
 			.concat(adminApi.middleware)
 			.concat(answerToQuestionApi.middleware)
 			.concat(testApi.middleware)
+			.concat(feedbackApi.middleware)
 })
 
 
