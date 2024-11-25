@@ -3,12 +3,7 @@ import { useForm } from 'react-hook-form';
 import '../workDocumentation/workDocumentation/workDocumentation.css';
 import { UserComments } from '../userComments/UserComments';
 import { useCheckTrueAnswerMutation, useGenerateTestMutation } from '../../store/services/test';
-
-const Spinner = () => (
-    <div className="spinner-container">
-        <div className="spinner"></div>
-    </div>
-);
+import { Spinner } from '../thirdPartyLayout/Spinner';
 
 const FormRequestsTest = (props) => {
     const [questionData, setQuestionData] = useState(JSON.parse(localStorage.getItem('storageTest') || null));

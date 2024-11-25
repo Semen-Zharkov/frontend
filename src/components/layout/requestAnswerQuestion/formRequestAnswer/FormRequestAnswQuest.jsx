@@ -5,12 +5,7 @@ import './formRequestAnswQuest.css';
 import icomSubmitQuest from '../../../../img/icons/Icon-color.svg';
 import { UserComments } from '../../userComments/UserComments';
 import { useAnswerToQuestionMutation } from '../../../store/services/answerToQuestion';
-
-const Spinner = () => (
-    <div className="spinner-container">
-        <div className="spinner"></div>
-    </div>
-);
+import { Spinner } from '../../thirdPartyLayout/Spinner';
 
 const FormRequestAnswQuest = ({ docName }) => {
     const formRef = useRef(null);
