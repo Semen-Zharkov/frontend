@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
-import btnPass from '../../../../img/icons/password/Visibility=True.svg';
-import btnPassVisib from '../../../../img/icons/password/Visibility=False.svg';
-import { confirmPasswordValidator } from '../../../validation/password';
-import { passwordValidator } from '../../../validation/password';
-import { useResetPasswordMutation } from '../../../store/services/users';
+import btnPass from '../../../../../img/icons/password/Visibility=True.svg';
+import btnPassVisib from '../../../../../img/icons/password/Visibility=False.svg';
+import { confirmPasswordValidator } from '../../../../validation/password';
+import { passwordValidator } from '../../../../validation/password';
+import { useResetPasswordMutation } from '../../../../store/services/users';
 
 const passwordSchema = yup.object().shape({
     old_password: passwordValidator,

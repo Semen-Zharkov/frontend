@@ -14,7 +14,7 @@ export const contestApi = createApi({
       query: ()=>({
         url: `/contest/leaderboard_me`
       })
-    })
+    }),
   })
 })
 

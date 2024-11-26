@@ -1,9 +1,9 @@
 import React from 'react';
 import './leaderboard.css';
 import { useGetLeaderboardQuery } from '../../store/services/contest';
-
+import { useVerifyUserQuery } from '../../store/services/auth';
 function Leaderboard({ data }) {
-  const { data: userData, isLoading, error } = useGetLeaderboardQuery(data)
+  const { data: userData, status, isLoading, error } = useGetLeaderboardQuery(data)
   if (isLoading) {
     return <h1>Ещё никто не участвовал</h1>;
   }

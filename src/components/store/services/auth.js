@@ -58,14 +58,9 @@ export const authApi = createApi({
         body: JSON.stringify(data),
       })
     }),
-    verifyUser: builder.mutation({
+    verifyUser: builder.query({
       query: (token) => ({
-        url: `${apiUrl}/auth/verify/${token}`, 
-        method: "GET",
-        credentials: "include",
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        }
+        url:`${apiUrl}/auth/verify/${token}`
       })
     })
   })
@@ -77,5 +72,5 @@ export const {
   useSignUpMutation,
   useResetPasswordUserMutation,
   useForgotPasswordMutation,
-  useVerifyUserMutation
+  useVerifyUserQuery
 } = authApi;

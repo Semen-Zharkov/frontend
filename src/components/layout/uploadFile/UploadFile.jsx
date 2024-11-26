@@ -3,12 +3,7 @@ import React, { useState, useEffect } from 'react';
 import './uploadFile.css';
 import { Popup } from '../../layout/popups/popup';
 import { useUploadFileMutation } from '../../store/services/docks';
-
-const Spinner = () => (
-    <div className="spinner-container">
-        <div className="spinner"></div>
-    </div>
-);
+import { Spinner } from '../thirdPartyLayout/Spinner';
 const FormTest = () => {
     const [dockName, setDockName] = useState('');
     const [dockDescription, setDockDescription] = useState('');

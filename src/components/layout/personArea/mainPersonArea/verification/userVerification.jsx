@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import React, { useState, useEffect } from 'react';
-import '../../layout/personArea/mainPersonArea/informationUser.css';
-import { Popup } from '../../layout/popups/popup';
-import { useAcceptUserMutation, useGetListUserVerificationMutation, useRejectUserMutation } from '../../store/services/admin';
+import '../../mainPersonArea/informationUser.css';
+import { Popup } from '../../../popups/popup';
+import { useAcceptUserMutation, useGetListUserVerificationMutation, useRejectUserMutation } from '../../../../store/services/admin';
 
 const UserVerification = ({ onClick }) => {
     const [data, setData] = useState([]);
@@ -46,7 +46,7 @@ const UserVerification = ({ onClick }) => {
 
     const handleClose = () => {
         setFlag(false);
-        window.location.reload();
+        setIsOpen(false);
     };
     useEffect(()=>{
         if(statusRequestGetListVerification==='fulfilled'){
